@@ -1,0 +1,137 @@
+####### Entity Software - Ibank Config #########
+---
+server:
+    error:
+        include-message: never
+        include-binding-errors: always
+        include-exception: false
+        include-stacktrace: never
+    tomcat:
+        basedir: C:/TScript/Log
+        accesslog:
+            enabled: true
+    temp:
+        dir: C:\TScript\temp
+    connection-timeout: 120000
+
+        
+#logging:
+#    level:
+#        org:
+#            apache:
+#                tomcat: DEBUG
+#                catalina: DEBUG
+
+logging:
+    file:
+        name: C:/Ibank/logs/ibank.log
+    level:
+        root: INFO
+upload:
+    base:
+        dir: C:/Ibank/bulk/upload
+    max:
+        record: 100
+jwt:
+    security:
+        key: j3H5Ld5nYmGWyULy6xwpOgfSH++NgKXnJMq20vpfd+8=t
+    access:
+        validity: 60000
+             
+spring:
+    cloud:
+        loadbalancer:
+            ribbon:
+                enabled: false
+    config:
+        activate:
+            profile: dev
+    datasource:
+        initialization-mode: always
+        password: Password!23
+        username: accionisservice
+        driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver  
+        url: jdbc:sqlserver://localhost;databaseName=tscript
+        #password: Anaconda1521@
+        #username: entityscdbuser
+        #driverClassName: org.postgresql.Driver
+        #url: jdbc:postgresql://209.159.155.84/qoraaldb
+    jpa:
+        hibernate:
+            ddl-auto: update
+            dialect: org.hibernate.dialect.SQLServer2012Dialect
+            #dialect: org.hibernate.dialect.PostgreSQLDialect
+        show-sql: true
+        
+ibank:
+    default:
+        password: Password12#
+    client:
+        name: Entity Software
+        address: 1 Ebun Otti Estate, Mende, Lagos, Nigeria
+    reset:
+        time: 1
+    otp:
+        expiry:
+            insec: 60
+    encryption:
+        key:
+            mian: FLWSECK-f6be2996841f1da0dfb7e27b9a3bd5bf-X
+            web: yG4b7jm8NHkv8s0vfwaS
+    password:
+        change:
+            days: 30
+        retry:
+            count: 3
+    mail:
+        username: info@entitysc.com
+        password: Anaconda1521@
+        host: smtp.zoho.com
+        port: 587
+        protocol: smtp
+        trust: smtp.zoho.com
+admin:
+    consol:
+        ip: 127.0.0.1,172.20.0.78
+pylon:
+    test:
+        url: http://pylon/api/
+    profile:
+        image:
+            url: http://localhost:8080/pylon/images/profile/
+    qrcode:
+        image:
+            url: http://localhost:8080/pylon/images/qrcode/
+    api:
+        beneficiary:
+            list: http://localhost:8080/pylon/api/v1/funds-transfer/beneficiary/list
+            add: http://localhost:8080/pylon/api/v1/funds-transfer/beneficiary/add
+            remove: http://localhost:8080/pylon/api/v1/funds-transfer/beneficiary/remove
+        dashboard: http://localhost:8080/pylon/api/v1/dashboard
+        signin: http://localhost:8080/pylon/api/v1/signin
+        signup: http://localhost:8080/pylon/api/v1/signup
+        changepassword: http://localhost:8080/pylon/api/v1/change-password
+        activation: http://localhost:8080/pylon/api/v1/signup/activation
+        totp: http://localhost:8080/pylon/api/v1/authenticator/google/otp
+        airtime:
+            single: http://localhost:8080/pylon/api/v1/airtime
+            bulk: http://localhost:8080/pylon/api/v1/airtime/bulk
+            scheduled: http://localhost:8080/pylon/api/v1/airtime/scheduled
+        data:
+            single: http://localhost:8080/pylon/api/v1/data
+            bulk: http://localhost:8080/pylon/api/v1/data/bulk
+            scheduled: http://localhost:8080/pylon/api/v1/data/scheduled
+            plan: http://localhost:8080/pylon/api/v1/data/subscription
+        cabletv:
+            single: http://localhost:8080/pylon/api/v1/cabletv
+            bulk: http://localhost:8080/pylon/api/v1/cabletv/bulk
+            scheduled: http://localhost:8080/pylon/api/v1/cabletv/scheduled
+            plan: http://localhost:8080/pylon/api/v1/cabletv/subscription
+        electricity:
+            single: http://localhost:8080/pylon/api/v1/electricity
+            bulk: http://localhost:8080/pylon/api/v1/electricity/bulk
+            scheduled: http://localhost:8080/pylon/api/v1/electricity/scheduled
+        fundstransfer:
+            single: http://localhost:8080/pylon/api/v1/funds-transfer
+            bulk: http://localhost:8080/pylon/api/v1/funds-transfer/bulk
+            scheduled: http://localhost:8080/pylon/api/v1/funds-transfer/scheduled

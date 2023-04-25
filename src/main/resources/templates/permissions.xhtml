@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <title>Entity Software - SmartPro</title>
+        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    </head>
+    <body class="nk-body bg-lighter npc-default has-sidebar no-touch nk-nio-theme">
+        <div class="main-wrapper">
+            <th:block th:include="~{fragments/entityscFragments :: topmenu}"></th:block>
+            <th:block th:include="~{fragments/entityscFragments :: adminmenu}"></th:block>
+
+            <div class="page-wrapper">
+                <div class="content container-fluid">
+                    <h5 class="text-primary">Permission</h5><hr/>
+
+                </div>
+            </div>
+        </div>
+        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+    </body>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <title>Entity Software - IBank</title>
+        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    </head>
+    <body>
+        <main class="main" id="top">
+            <div class="container-fluid px-0">
+                <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <div class="content">
+                    <div class="row mt-3">
+                        <div class="offset-lg-2 col-lg-8 col-md-12 col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-text text-primary">
+                                        Bulk Data Payment
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <form th:object="${ibankPayload}" th:action="@{/airtime/bulk/pay}" method="POST" class="text-center">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text"><i class="fas fa-phone-office text-primary"></i></span>
+                                            <input type="text" class="form-control form-control-sm" th:field="*{mobileNumber}" pattern="[0-9]{11}" placeholder="Enter Mobile Number" required="required"/>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text"><i class="fas fa-broadcast-tower text-primary"></i></span>
+                                            <select class="form-select" data-choices="data-choices" th:field="*{telco}">
+                                                <option value="">Select Telco...</option>
+                                                <option value="MTN">MTN</option>
+                                                <option value="GLO">GLO</option>
+                                                <option value="Airtel">Airtel</option>
+                                                <option value="9Mobile">9Mobile</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text"><i class="fas fa-coins text-primary"></i></span>
+                                            <input type="number" class="form-control form-control-sm" th:field="*{amount}" min="0.1" step="0.01" placeholder="Enter Amount" required="required"/>
+                                        </div>
+                                        <button class="btn btn-primary w-40 mb-3" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Process request</button>
+                                        <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="btn btn-link btn-close-falcon p-0" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                                                        <h6 class="modal-title text-primary">Entity Software</h6>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h6 class="text-primary">Confirm you want to submit this request</h6><br/>
+                                                        <div class="input-group mb-3">
+                                                            <span class="input-group-text"><i class="fas fa-thumbtack text-primary"></i></span>
+                                                            <input type="text" class="form-control form-control-sm" th:field="*{pin}" pattern="[0-9]{4,6}" title="Enter valid PIN" placeholder="Enter PIN" required="required"/>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-entitysc-primary btn-sm">Process request</button>
+                                                        <button type="button" class="btn btn-entitysc-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
+                    var navbarTop = document.querySelector('.navbar-top');
+                    if (navbarTopStyle === 'darker') {
+                        navbarTop.classList.add('navbar-darker');
+                    }
+
+                    var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
+                    var navbarVertical = document.querySelector('.navbar-vertical');
+                    if (navbarVertical && navbarVerticalStyle === 'darker') {
+                        navbarVertical.classList.add('navbar-darker');
+                    }
+                </script>
+        </main>
+        <th:block th:include="~{fragments/entityscFragments :: settings}"></th:block>
+        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+    </body>
+</html>

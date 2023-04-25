@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <title>Entity Software - IBank</title>
+        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    </head>
+    <body>
+        <main class="main" id="top">
+            <div class="container-fluid px-0">
+                <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <div class="content">
+                    <div class="row mt-3">
+                        <div class="offset-lg-2 col-lg-8 col-md-12 col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-text text-primary">
+                                        Retrieve Electricity Token
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <form th:object="${ibankPayload}" th:action="@{/electricity/token/}" method="POST" class="text-center">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text"><i class="fas fa-user text-primary"></i></span>
+                                            <select class="form-select" data-choices="data-choices" th:field="*{beneficiary}">
+                                                <option value="">Select beneficiary...</option>
+                                                
+                                            </select>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text"><i class="fas fa-user text-primary"></i></span>
+                                            <input type="number" class="form-control form-control-sm" th:field="*{amount}" min="0.1" step="0.01" required="required"/>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text"><i class="fas fa-user text-primary"></i></span>
+                                            <textarea class="form-control form-control-sm" th:field="*{description}" placeholder="Remarks" required="required"></textarea>
+                                        </div>
+                                        <button class="btn btn-primary w-100 mb-3" type="submit">Process request</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
+                    var navbarTop = document.querySelector('.navbar-top');
+                    if (navbarTopStyle === 'darker') {
+                        navbarTop.classList.add('navbar-darker');
+                    }
+
+                    var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
+                    var navbarVertical = document.querySelector('.navbar-vertical');
+                    if (navbarVertical && navbarVerticalStyle === 'darker') {
+                        navbarVertical.classList.add('navbar-darker');
+                    }
+                </script>
+        </main>
+        <th:block th:include="~{fragments/entityscFragments :: settings}"></th:block>
+        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+    </body>
+</html>
