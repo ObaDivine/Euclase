@@ -51,4 +51,5 @@ public class IBankPayload {
     private String months;
     private String subscriptionCode;
     private String airtimeorData;
+    private String dateRange;
 }

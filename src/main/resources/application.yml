@@ -117,21 +117,26 @@ pylon:
             single: http://localhost:8080/pylon/api/v1/airtime
             bulk: http://localhost:8080/pylon/api/v1/airtime/bulk
             scheduled: http://localhost:8080/pylon/api/v1/airtime/scheduled
+            history: http://localhost:8080/pylon/api/v1/airtime/history
         data:
             single: http://localhost:8080/pylon/api/v1/data
             bulk: http://localhost:8080/pylon/api/v1/data/bulk
             scheduled: http://localhost:8080/pylon/api/v1/data/scheduled
             plan: http://localhost:8080/pylon/api/v1/data/subscription
+            history: http://localhost:8080/pylon/api/v1/data/history
         cabletv:
             single: http://localhost:8080/pylon/api/v1/cabletv
             bulk: http://localhost:8080/pylon/api/v1/cabletv/bulk
             scheduled: http://localhost:8080/pylon/api/v1/cabletv/scheduled
             plan: http://localhost:8080/pylon/api/v1/cabletv/subscription
+            history: http://localhost:8080/pylon/api/v1/cabletv/history
         electricity:
             single: http://localhost:8080/pylon/api/v1/electricity
             bulk: http://localhost:8080/pylon/api/v1/electricity/bulk
             scheduled: http://localhost:8080/pylon/api/v1/electricity/scheduled
+            history: http://localhost:8080/pylon/api/v1/electricity/history
         fundstransfer:
             single: http://localhost:8080/pylon/api/v1/funds-transfer
             bulk: http://localhost:8080/pylon/api/v1/funds-transfer/bulk
             scheduled: http://localhost:8080/pylon/api/v1/funds-transfer/scheduled
+            history: http://localhost:8080/pylon/api/v1/funds-transfer/history

@@ -3,7 +3,6 @@ package com.entitysc.ibank.service;
 import com.entitysc.ibank.payload.IBankPayload;
 import com.entitysc.ibank.payload.PylonPayload;
 import com.google.gson.Gson;
-import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,6 +65,16 @@ public class ClientServiceImpl implements ClientService {
     private String ftScheduledUrl;
     @Value("${pylon.api.data.plan}")
     private String dataPlanUrl;
+    @Value("${pylon.api.airtime.history}")
+    private String airtimeHistoryUrl;
+    @Value("${pylon.api.data.history}")
+    private String dataHistoryUrl;
+    @Value("${pylon.api.cabletv.history}")
+    private String cabletvHistoryUrl;
+    @Value("${pylon.api.electricity.history}")
+    private String electricityHistoryUrl;
+    @Value("${pylon.api.fundstransfer.history}")
+    private String fundsTransferHistoryUrl;
 
     @Override
     public PylonPayload processSignin(IBankPayload requestPayload) {
@@ -618,15 +627,94 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public PylonPayload processAirtimeDetails(IBankPayload requestPayload) {
+    public PylonPayload processAirtimeHistory(IBankPayload requestPayload) {
         String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             pylonPayload.setChannel("WEB");
+            pylonPayload.setStartDate(requestPayload.getDateRange());
+            pylonPayload.setEndDate(requestPayload.getDateRange());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
+            pylonPayload.setRequestType("Date Range");
+            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to ibank API
-            String response = genericService.callPylonAPI(dataPlanUrl + "/" + telco, null, token, "Data Plan");
+            String response = genericService.callPylonAPI(requestPayload.getAirtimeorData().equalsIgnoreCase("Airtime") ? airtimeHistoryUrl : dataHistoryUrl, null, token, "Airtime History");
+            pylonPayload = new PylonPayload();
+            pylonPayload = gson.fromJson(response, PylonPayload.class);
+            return pylonPayload;
+        } catch (Exception ex) {
+            PylonPayload pylonPayload = new PylonPayload();
+            pylonPayload.setResponseCode("500");
+            pylonPayload.setResponseMessage(ex.getMessage());
+            return pylonPayload;
+        }
+    }
+
+    @Override
+    public PylonPayload processCableTvHistory(IBankPayload requestPayload) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setStartDate(requestPayload.getDateRange());
+            pylonPayload.setEndDate(requestPayload.getDateRange());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(token);
+            pylonPayload.setRequestType("Date Range");
+            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            //Connect to ibank API
+            String response = genericService.callPylonAPI(cabletvHistoryUrl, null, token, "Cable TV History");
+            pylonPayload = new PylonPayload();
+            pylonPayload = gson.fromJson(response, PylonPayload.class);
+            return pylonPayload;
+        } catch (Exception ex) {
+            PylonPayload pylonPayload = new PylonPayload();
+            pylonPayload.setResponseCode("500");
+            pylonPayload.setResponseMessage(ex.getMessage());
+            return pylonPayload;
+        }
+    }
+
+    @Override
+    public PylonPayload processElectricityHistory(IBankPayload requestPayload) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setStartDate(requestPayload.getDateRange());
+            pylonPayload.setEndDate(requestPayload.getDateRange());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(token);
+            pylonPayload.setRequestType("Date Range");
+            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            //Connect to ibank API
+            String response = genericService.callPylonAPI(electricityHistoryUrl, null, token, "Electricity History");
+            pylonPayload = new PylonPayload();
+            pylonPayload = gson.fromJson(response, PylonPayload.class);
+            return pylonPayload;
+        } catch (Exception ex) {
+            PylonPayload pylonPayload = new PylonPayload();
+            pylonPayload.setResponseCode("500");
+            pylonPayload.setResponseMessage(ex.getMessage());
+            return pylonPayload;
+        }
+    }
+
+    @Override
+    public PylonPayload processFundsTransferHistory(IBankPayload requestPayload) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setStartDate(requestPayload.getDateRange());
+            pylonPayload.setEndDate(requestPayload.getDateRange());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(token);
+            pylonPayload.setRequestType("Date Range");
+            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            //Connect to ibank API
+            String response = genericService.callPylonAPI(fundsTransferHistoryUrl, null, token, "Funds Transfer History");
             pylonPayload = new PylonPayload();
             pylonPayload = gson.fromJson(response, PylonPayload.class);
             return pylonPayload;

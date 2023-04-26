@@ -57,4 +57,7 @@ public class PylonPayload {
     private String otp6;
     private String salutation;
     private String requestBy;
+    private String airtimeorData;
+    private String startDate;
+    private String endDate;
 }

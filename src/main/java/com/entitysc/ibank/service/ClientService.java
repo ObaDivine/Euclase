@@ -53,8 +53,14 @@ public interface ClientService {
     PylonPayload processSingleBulkTransfer(IBankPayload requestPayload);
 
     PylonPayload processScheduledFundsTransfer(IBankPayload requestPayload);
-    
+
     PylonPayload processFetchDataPlan(String telco);
-    
-    PylonPayload processAirtimeDetails(IBankPayload requestPayload);
+
+    PylonPayload processAirtimeHistory(IBankPayload requestPayload);
+
+    PylonPayload processCableTvHistory(IBankPayload requestPayload);
+
+    PylonPayload processElectricityHistory(IBankPayload requestPayload);
+
+    PylonPayload processFundsTransferHistory(IBankPayload requestPayload);
 }

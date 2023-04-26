@@ -118,7 +118,7 @@ public class AirtimeController {
         model.addAttribute("ibankPayload", ibankPayload);
         model.addAttribute("alertMessage", alertMessage);
         resetAlertMessage();
-        return "airtimedetails";
+        return "airtimehistory";
     }
 
     @PostMapping(value = "/details/")
@@ -129,7 +129,7 @@ public class AirtimeController {
         requestPayload.setLastName(userDetails.get(2));
         requestPayload.setSalutation(userDetails.get(3));
         requestPayload.setUsername(principal.getName());
-        PylonPayload response = clientService.processAirtimeDetails(requestPayload);
+        PylonPayload response = clientService.processAirtimeHistory(requestPayload);
         switch (response.getResponseCode()) {
             case "00": {
                 alertMessage = response.getResponseMessage();
@@ -137,12 +137,12 @@ public class AirtimeController {
                 model.addAttribute("dataList", response.getDataList());
                 model.addAttribute("alertMessage", alertMessage);
                 resetAlertMessage();
-                return "airtimedetails";
+                return "airtimehistory";
             }
             default: {
                 model.addAttribute("ibankPayload", requestPayload);
                 model.addAttribute("alertMessage", response.getResponseMessage());
-                return "airtimedetails";
+                return "airtimehistory";
             }
         }
     }

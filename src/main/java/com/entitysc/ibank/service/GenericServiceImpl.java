@@ -263,6 +263,11 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getRequestId().trim());
                 break;
             }
+            case "Date Range": {
+                rawString.add(requestPayload.getStartDate().trim());
+                rawString.add(requestPayload.getEndDate().trim());
+                break;
+            }
         }
 
         return encryptString(rawString.toString(), token);
