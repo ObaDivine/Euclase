@@ -1275,13 +1275,13 @@
 
   const { docReady } = window.phoenix.utils;
 
-  docReady(contactsBySourceChartInit);
-  docReady(contactsCreatedChartInit);
-  docReady(newUsersChartsInit);
-  docReady(newLeadsChartsInit);
-  docReady(addClicksChartInit);
-  docReady(echartsLeadConversiontInit);
-  docReady(echartsRevenueTargetInit);
+//  docReady(contactsBySourceChartInit);
+//  docReady(contactsCreatedChartInit);
+//  docReady(newUsersChartsInit);
+//  docReady(newLeadsChartsInit);
+//  docReady(addClicksChartInit);
+//  docReady(echartsLeadConversiontInit);
+//  docReady(echartsRevenueTargetInit);
 
 }));
 //# sourceMappingURL=crm-dashboard.js.map

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <title>Entity Software - One X</title>
+        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    </head>
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
+            <div class="container-fluid px-0">
+                <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <div class="content">
+                    <div class="row mt-2" th:object="${onexPayload}">
+                        <div class="offset-lg-1 col-lg-10 col-md-12 col-sm-12">
+                            <nav class="mb-3" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Account Details</li>
+                                </ol>
+                            </nav>
+                            <div class="col-auto">
+                                <h4 class="mb-2 text-primary">Account Details</h4>
+                                <h6 class="text-700 fw-semi-bold">Here's your account details</h6>
+                                <hr/>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-7 col-sm-12 col-md-12">
+                                    <p class="text-sm">
+                                        <span>Last Name : </span><span class="text-primary" th:text="${onexPayload.lastName}"></span>
+                                    </p>
+                                    <p class="text-sm">
+                                        <span>First Name : </span><span class="text-primary" th:text="${onexPayload.firstName}"></span>
+                                    </p>
+                                    <p class="text-sm">
+                                        <span>Mobile Number : </span><span class="text-primary" th:text="${onexPayload.mobileNumber}"></span>
+                                    </p>
+                                    <p class="text-sm">
+                                        <span>Mobile Number Verified : </span><span class="text-primary" th:text="${onexPayload.mobileNumberVerified}"></span>
+                                    </p>
+                                    <p class="text-sm">
+                                        <span>Two Factor Authentication : </span><span class="text-primary" th:text="${onexPayload.enableTwoFactorAuth}"></span>
+                                    </p>
+                                    <p class="text-sm">
+                                        <span>Wallet ID : </span><span class="text-primary" th:text="${onexPayload.walletId}"></span>
+                                    </p>
+                                    <p class="text-sm">
+                                        <span>Wallet Balance : </span><span class="text-primary" th:text="${#numbers.formatDecimal(onexPayload.walletBalance,0,'COMMA',2,'POINT')}"></span>
+                                    </p>
+                                </div>
+                                <div class="col-lg-5 col-sm-12 col-md-12">
+                                    <div class="avatar avatar-xl ">
+                                        <img class="rounded-circle img-fluid" th:src="@{'/images/profile/' + ${onexPayload.profileImage}}"  src="" alt="" />
+                                    </div>
+                                    <form th:action="@{/account/image/upload}" th:object="${onexPayload}" method="POST" enctype="multipart/form-data">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="fileUpload">Select profile image</label>
+                                            <input class="form-control form-control-sm" th:field="*{fileUpload}" type="file" accept="image/*" />
+                                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+    </body>
+</html>

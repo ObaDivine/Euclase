@@ -2,11 +2,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
-        <title>Entity Software - IBank</title>
+        <title>Entity Software - One X</title>
         <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
     </head>
-    <body>
-        <main class="main" id="top">
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
             <div class="container-fluid px-0">
                 <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
                 <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
@@ -20,20 +21,20 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <form th:object="${ibankPayload}" th:action="@{/electricity/token/}" method="POST" class="text-center">
+                                    <form th:object="${onexPayload}" th:action="@{/electricity/token/}" method="POST" class="text-center">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text"><i class="fas fa-user text-primary"></i></span>
+                                            <span class="input-group-text text-primary"><i class="fas fa-user text-primary"></i></span>
                                             <select class="form-select" data-choices="data-choices" th:field="*{beneficiary}">
                                                 <option value="">Select beneficiary...</option>
-                                                
+
                                             </select>
                                         </div>
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text"><i class="fas fa-user text-primary"></i></span>
+                                            <span class="input-group-text text-primary"><i class="fas fa-user text-primary"></i></span>
                                             <input type="number" class="form-control form-control-sm" th:field="*{amount}" min="0.1" step="0.01" required="required"/>
                                         </div>
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text"><i class="fas fa-user text-primary"></i></span>
+                                            <span class="input-group-text text-primary"><i class="fas fa-user text-primary"></i></span>
                                             <textarea class="form-control form-control-sm" th:field="*{description}" placeholder="Remarks" required="required"></textarea>
                                         </div>
                                         <button class="btn btn-primary w-100 mb-3" type="submit">Process request</button>
@@ -43,21 +44,8 @@
                         </div>
                     </div>
                 </div>
-                <script>
-                    var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
-                    var navbarTop = document.querySelector('.navbar-top');
-                    if (navbarTopStyle === 'darker') {
-                        navbarTop.classList.add('navbar-darker');
-                    }
-
-                    var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
-                    var navbarVertical = document.querySelector('.navbar-vertical');
-                    if (navbarVertical && navbarVerticalStyle === 'darker') {
-                        navbarVertical.classList.add('navbar-darker');
-                    }
-                </script>
+            </div>
         </main>
-        <th:block th:include="~{fragments/entityscFragments :: settings}"></th:block>
         <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
     </body>
 </html>

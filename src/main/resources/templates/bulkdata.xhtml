@@ -2,11 +2,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
-        <title>Entity Software - IBank</title>
+        <title>Entity Software - One X</title>
         <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
     </head>
-    <body>
-        <main class="main" id="top">
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
             <div class="container-fluid px-0">
                 <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
                 <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
@@ -20,13 +21,13 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <form th:object="${ibankPayload}" th:action="@{/airtime/bulk/pay}" method="POST" class="text-center">
+                                    <form th:object="${onexPayload}" th:action="@{/airtime/bulk/pay}" method="POST" class="text-center">
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text"><i class="fas fa-phone-office text-primary"></i></span>
+                                            <span class="input-group-text text-primary"><i class="fas fa-phone-office text-primary"></i></span>
                                             <input type="text" class="form-control form-control-sm" th:field="*{mobileNumber}" pattern="[0-9]{11}" placeholder="Enter Mobile Number" required="required"/>
                                         </div>
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text"><i class="fas fa-broadcast-tower text-primary"></i></span>
+                                            <span class="input-group-text text-primary"><i class="fas fa-broadcast-tower text-primary"></i></span>
                                             <select class="form-select" data-choices="data-choices" th:field="*{telco}">
                                                 <option value="">Select Telco...</option>
                                                 <option value="MTN">MTN</option>
@@ -36,7 +37,7 @@
                                             </select>
                                         </div>
                                         <div class="input-group mb-3">
-                                            <span class="input-group-text"><i class="fas fa-coins text-primary"></i></span>
+                                            <span class="input-group-text text-primary"><i class="fas fa-coins text-primary"></i></span>
                                             <input type="number" class="form-control form-control-sm" th:field="*{amount}" min="0.1" step="0.01" placeholder="Enter Amount" required="required"/>
                                         </div>
                                         <button class="btn btn-primary w-40 mb-3" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Process request</button>
@@ -50,11 +51,11 @@
                                                     <div class="modal-body">
                                                         <h6 class="text-primary">Confirm you want to submit this request</h6><br/>
                                                         <div class="input-group mb-3">
-                                                            <span class="input-group-text"><i class="fas fa-thumbtack text-primary"></i></span>
+                                                            <span class="input-group-text text-primary"><i class="fas fa-thumbtack text-primary"></i></span>
                                                             <input type="text" class="form-control form-control-sm" th:field="*{pin}" pattern="[0-9]{4,6}" title="Enter valid PIN" placeholder="Enter PIN" required="required"/>
                                                         </div>
-                                                        <button type="submit" class="btn btn-entitysc-primary btn-sm">Process request</button>
-                                                        <button type="button" class="btn btn-entitysc-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                     </div>
                                                 </div>
                                             </div>

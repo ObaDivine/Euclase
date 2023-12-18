@@ -1,4 +1,4 @@
-####### Entity Software - Ibank Config #########
+####### Entity Software - OneX Config #########
 ---
 server:
     error:
@@ -7,29 +7,21 @@ server:
         include-exception: false
         include-stacktrace: never
     tomcat:
-        basedir: C:/TScript/Log
+        basedir: C:/OneX/Log
         accesslog:
             enabled: true
     temp:
-        dir: C:\TScript\temp
+        dir: C:\OneX\temp
     connection-timeout: 120000
-
-        
-#logging:
-#    level:
-#        org:
-#            apache:
-#                tomcat: DEBUG
-#                catalina: DEBUG
 
 logging:
     file:
-        name: C:/Ibank/logs/ibank.log
+        name: C:/OneX/logs/onex.log
     level:
         root: INFO
 upload:
     base:
-        dir: C:/Ibank/bulk/upload
+        dir: C:/OneX/bulk/upload
     max:
         record: 100
 jwt:
@@ -47,23 +39,24 @@ spring:
         activate:
             profile: dev
     datasource:
-        initialization-mode: always
+        initialization-mode: ALWAYS
         password: Password!23
         username: accionisservice
         driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver  
-        url: jdbc:sqlserver://localhost;databaseName=tscript
-        #password: Anaconda1521@
-        #username: entityscdbuser
+        url: jdbc:sqlserver://localhost;databaseName=pylon;;encrypt=true;trustServerCertificate=true
         #driverClassName: org.postgresql.Driver
-        #url: jdbc:postgresql://209.159.155.84/qoraaldb
+        #url: jdbc:postgresql://209.159.155.84/pylon
     jpa:
         hibernate:
             ddl-auto: update
             dialect: org.hibernate.dialect.SQLServer2012Dialect
             #dialect: org.hibernate.dialect.PostgreSQLDialect
         show-sql: true
+        open-in-view: false
         
-ibank:
+onex:
+    image:
+        dir: C:\Apps\EntitySC\Web\onex\target\onex-1.0\WEB-INF\classes\images\profile
     default:
         password: Password12#
     client:
@@ -77,7 +70,7 @@ ibank:
     encryption:
         key:
             mian: FLWSECK-f6be2996841f1da0dfb7e27b9a3bd5bf-X
-            web: yG4b7jm8NHkv8s0vfwaS
+            web: onLi8HHFXqFwWBeh
     password:
         change:
             days: 30
@@ -100,43 +93,101 @@ pylon:
         image:
             url: http://localhost:8080/pylon/images/profile/
     qrcode:
+        issuer: Entity Software OneX
         image:
             url: http://localhost:8080/pylon/images/qrcode/
     api:
+        account:
+            statement: http://localhost:8080/pylon/api/v1/wallet/history
+        twofactor:
+            enable: http://localhost:8080/pylon/api/v1/user/twofa
+            validate: http://localhost:8080/pylon/api/v1/user/validate/twofa
+        banklist: http://localhost:8080/pylon/api/v1/banks
+        validate:
+            pin: http://localhost:8080/pylon/api/v1/app/user/validate/pin
+            securityquestion: http://localhost:8080/pylon/api/v1/app/user/validate/security-question
+        otp: http://localhost:8080/pylon/api/v1/notification/otp
+        qrcode:
+            generate: http://localhost:8080/pylon/api/v1/qrcode
         beneficiary:
             list: http://localhost:8080/pylon/api/v1/funds-transfer/beneficiary/list
             add: http://localhost:8080/pylon/api/v1/funds-transfer/beneficiary/add
-            remove: http://localhost:8080/pylon/api/v1/funds-transfer/beneficiary/remove
+            delete: http://localhost:8080/pylon/api/v1/funds-transfer/beneficiary/delete
         dashboard: http://localhost:8080/pylon/api/v1/dashboard
-        signin: http://localhost:8080/pylon/api/v1/signin
-        signup: http://localhost:8080/pylon/api/v1/signup
-        changepassword: http://localhost:8080/pylon/api/v1/change-password
-        activation: http://localhost:8080/pylon/api/v1/signup/activation
+        signin: http://localhost:8080/pylon/api/v1/app/user/signin
+        signup: http://localhost:8080/pylon/api/v1/app/user/signup/web
+        changepassword: http://localhost:8080/pylon/api/v1/app/user/change-password
+        forgotpassword: http://localhost:8080/pylon/api/v1/app/user/forgot-password
+        changepin: http://localhost:8080/pylon/api/v1/app/user/change-pin
+        changesecurityquestion: http://localhost:8080/pylon/api/v1/app/user/change-security-question
+        activation: http://localhost:8080/pylon/api/v1/app/user/signup/activation
         totp: http://localhost:8080/pylon/api/v1/authenticator/google/otp
+        profile:
+            details: http://localhost:8080/pylon/api/v1/dashboard
         airtime:
             single: http://localhost:8080/pylon/api/v1/airtime
             bulk: http://localhost:8080/pylon/api/v1/airtime/bulk
-            scheduled: http://localhost:8080/pylon/api/v1/airtime/scheduled
+            scheduled:
+                create: http://localhost:8080/pylon/api/v1/airtime/schedule
+                list: http://localhost:8080/pylon/api/v1/airtime/schedule/list
+                record: http://localhost:8080/pylon/api/v1/airtime/schedule/record
+                update: http://localhost:8080/pylon/api/v1/airtime/schedule/update
+                delete: http://localhost:8080/pylon/api/v1/airtime/schedule/delete
+                status: http://localhost:8080/pylon/api/v1/airtime/schedule/status
             history: http://localhost:8080/pylon/api/v1/airtime/history
         data:
             single: http://localhost:8080/pylon/api/v1/data
             bulk: http://localhost:8080/pylon/api/v1/data/bulk
-            scheduled: http://localhost:8080/pylon/api/v1/data/scheduled
+            scheduled:
+                create: http://localhost:8080/pylon/api/v1/data/schedule
+                list: http://localhost:8080/pylon/api/v1/data/schedule/list
+                record: http://localhost:8080/pylon/api/v1/data/schedule/record
+                update: http://localhost:8080/pylon/api/v1/data/schedule/update
+                delete: http://localhost:8080/pylon/api/v1/data/schedule/delete
+                status: http://localhost:8080/pylon/api/v1/data/schedule/status
             plan: http://localhost:8080/pylon/api/v1/data/subscription
             history: http://localhost:8080/pylon/api/v1/data/history
         cabletv:
             single: http://localhost:8080/pylon/api/v1/cabletv
             bulk: http://localhost:8080/pylon/api/v1/cabletv/bulk
-            scheduled: http://localhost:8080/pylon/api/v1/cabletv/scheduled
+            scheduled:
+                create: http://localhost:8080/pylon/api/v1/cabletv/schedule
+                list: http://localhost:8080/pylon/api/v1/cabletv/schedule/list
+                record: http://localhost:8080/pylon/api/v1/cabletv/schedule/record
+                update: http://localhost:8080/pylon/api/v1/cabletv/schedule/update
+                delete: http://localhost:8080/pylon/api/v1/cabletv/schedule/delete
+                status: http://localhost:8080/pylon/api/v1/cabletv/schedule/status
             plan: http://localhost:8080/pylon/api/v1/cabletv/subscription
             history: http://localhost:8080/pylon/api/v1/cabletv/history
+            lookup:
+                smartcard: http://localhost:8080/pylon/api/v1/cabletv/smartcard/lookup
+                subscription: http://localhost:8080/pylon/api/v1/cabletv/subscription
         electricity:
             single: http://localhost:8080/pylon/api/v1/electricity
             bulk: http://localhost:8080/pylon/api/v1/electricity/bulk
-            scheduled: http://localhost:8080/pylon/api/v1/electricity/scheduled
+            scheduled:
+                create: http://localhost:8080/pylon/api/v1/electricity/schedule
+                list: http://localhost:8080/pylon/api/v1/electricity/schedule/list
+                record: http://localhost:8080/pylon/api/v1/electricity/schedule/record
+                update: http://localhost:8080/pylon/api/v1/electricity/schedule/update
+                delete: http://localhost:8080/pylon/api/v1/electricity/schedule/delete
+                status: http://localhost:8080/pylon/api/v1/electricity/schedule/status
             history: http://localhost:8080/pylon/api/v1/electricity/history
+            lookup:
+                meter: http://localhost:8080/pylon/api/v1/electricity/meter/lookup
         fundstransfer:
-            single: http://localhost:8080/pylon/api/v1/funds-transfer
+            single: http://localhost:8080/pylon/api/v1/funds-transfer/single
             bulk: http://localhost:8080/pylon/api/v1/funds-transfer/bulk
-            scheduled: http://localhost:8080/pylon/api/v1/funds-transfer/scheduled
+            scheduled:
+                create: http://localhost:8080/pylon/api/v1/funds-transfer/schedule
+                list: http://localhost:8080/pylon/api/v1/funds-transfer/schedule/list
+                record: http://localhost:8080/pylon/api/v1/funds-transfer/schedule/record
+                update: http://localhost:8080/pylon/api/v1/funds-transfer/schedule/update
+                delete: http://localhost:8080/pylon/api/v1/funds-transfer/schedule/delete
+                status: http://localhost:8080/pylon/api/v1/funds-transfer/schedule/status
             history: http://localhost:8080/pylon/api/v1/funds-transfer/history
+        wallet:
+            fund:
+                card: http://localhost:8080/pylon/api/v1/wallet/fund
+                callback: http://localhost:8080/onex/callback/wallet/fund
+                notify: http://localhost:8080/pylon/api/v1/wallet/fund/confirm

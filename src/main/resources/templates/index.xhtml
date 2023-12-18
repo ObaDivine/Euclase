@@ -1,15 +1,359 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
--->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Entity Software - One X</title>
+        <th:block th:include="~{fragments/entityscFragments :: homeheaderfiles}"></th:block>
     </head>
     <body>
-        <div>TODO write content</div>
+        <header id="header" class="fixed-top d-flex align-items-center">
+            <div class="container d-flex align-items-center justify-content-between">
+                <div class="logo">
+                    <a th:href="@{/}">
+                        <img th:src="@{/images/logo.png}" src="" alt="" class="img-fluid" />Entity One-X
+                    </a>
+                </div>
+                <nav id="navbar" class="navbar">
+                    <ul>
+                        <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                        <li><a class="nav-link scrollto" href="#about">About</a></li>
+                        <li><a class="nav-link scrollto" href="#services">Services</a></li>
+                        <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                        <li><a class="getstarted scrollto btn btn-sm" th:href="@{/signup}">Sign Up</a></li>
+                        <li><a class="getstarted scrollto" th:href="@{/login}">Login</a></li>
+                    </ul>
+                    <i class="fas fa-list mobile-nav-toggle"></i>
+                </nav>
+            </div>
+        </header>
+
+        <section id="hero" class="d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
+                        <h1 data-aos="fade-up" class="text-primary">Grow your business with One-X</h1>
+                        <h2 data-aos="fade-up" data-aos-delay="400">One-X is your one-stop shop for bills, airtime and funds transfer services.
+                            Our model enables quick time to market and rapid product development.
+                        </h2>
+                        <div data-aos="fade-up" data-aos-delay="800">
+                            <a href="#about" class="btn-get-started scrollto">Sign Up</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
+                        <img th:src="@{/images/hero-img.png}" class="img-fluid animated" alt="" src=""/>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <main id="main">
+            <section id="clients" class="clients clients">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img th:src="@{/images/client-1.png}" class="img-fluid" src="" alt="" data-aos="zoom-in" />
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img th:src="@{/images/client-2.png}" class="img-fluid" src="" alt="" data-aos="zoom-in" data-aos-delay="100" />
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img th:src="@{/images/client-3.png}" class="img-fluid" src="" alt="" data-aos="zoom-in" data-aos-delay="200" />
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img th:src="@{/images/client-4.png}" class="img-fluid" src="" alt="" data-aos="zoom-in" data-aos-delay="300" />
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img th:src="@{/images/client-5.png}" class="img-fluid" src="" alt="" data-aos="zoom-in" data-aos-delay="400" />
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img th:src="@{/images/client-6.png}" class="img-fluid" src="" alt="" data-aos="zoom-in" data-aos-delay="500" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" class="about">
+                <div class="container">
+                    <div class="section-title" data-aos="fade-up">
+                        <h2 class="text-primary text-capitalize">About One-X</h2>
+                    </div>
+                    <div class="row content">
+                        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="150">
+                            <p>
+                                One-X is an all-in-one digital service platform from Entity Software providing daily business need of buying airtime, data and bills payment.
+                            </p>
+                            <ul>
+                                <li><i class="fas fa-check-circle"></i> Buy your airtime for all telcos</li>
+                                <li><i class="fas fa-check-circle"></i> Subscribe for mobile data for all network</li>
+                                <li><i class="fas fa-check-circle"></i> Pay for your cable television subscription</li>
+                                <li><i class="fas fa-check-circle"></i> Pay for your electricity subscription on all DISCOs</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6 pt-4 pt-lg-0" data-aos="fade-up" data-aos-delay="300">
+                            <p>
+                                One-X offers a set of connected digital services with built in business support system to deliver real time processing, omni-channel experience with auto fail over.
+                                
+                            </p>
+                            <a href="#" class="btn-learn-more">Download One-X Brochure</a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="counts" class="counts">
+                <div class="container">
+                    <div class="row">
+                        <div class="image col-xl-5 d-flex align-items-stretch justify-content-center justify-content-xl-start" data-aos="fade-right" data-aos-delay="150">
+                            <img th:src="@{/images/services.jpg}" src="" alt="" class="img-fluid" />
+                        </div>
+                        <div class="col-xl-7 d-flex align-items-stretch pt-4 pt-xl-0" data-aos="fade-left" data-aos-delay="300">
+                            <div class="content d-flex flex-column justify-content-center">
+                                <div class="row">
+                                    <div class="col-md-6 d-md-flex align-items-md-stretch">
+                                        <div class="count-box">
+                                            <i class="fas fa-smile"></i>
+                                            <span data-purecounter-start="0" data-purecounter-end="3" data-purecounter-duration="1" class="purecounter"></span>
+                                            <p><strong>Happy Clients</strong> who has signed up on One-X platform.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-md-flex align-items-md-stretch">
+                                        <div class="count-box">
+                                            <i class="fas fa-journal-richtext"></i>
+                                            <span data-purecounter-start="0" data-purecounter-end="20" data-purecounter-duration="1" class="purecounter"></span>
+                                            <p><strong>Bills Payment</strong> successfully processed using One-X</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-md-flex align-items-md-stretch">
+                                        <div class="count-box">
+                                            <i class="fas fa-money-bill"></i>
+                                            <span data-purecounter-start="0" data-purecounter-end="18" data-purecounter-duration="1" class="purecounter"></span>
+                                            <p><strong>Funds Transfer</strong> using our reliable payment gateway done</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-md-flex align-items-md-stretch">
+                                        <div class="count-box">
+                                            <i class="fas fa-award"></i>
+                                            <span data-purecounter-start="0" data-purecounter-end="20" data-purecounter-duration="1" class="purecounter"></span>
+                                            <p><strong>Airtime and Data</strong> transactions executed using One-X platform</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="services" class="services">
+                <div class="container">
+                    <div class="section-title" data-aos="fade-up">
+                        <h2 class="text-primary text-capitalize">Services</h2>
+                        <p>One-X is integrated with payment gateway and value-added vendors to provide reliable, secured and omni-channel user experience. Our catalog of services includes the following</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+                            <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                                <div class="icon"><i class="fas fa-broadcast-tower"></i></div>
+                                <h4 class="title"><a href="">Airtime</a></h4>
+                                <p class="description">Buy MTN, GLO, Airtel and 9Mobile airtime for yourself and third party </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+                            <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
+                                <div class="icon"><i class="fas fa-wifi"></i></div>
+                                <h4 class="title"><a href="">Data Subscription</a></h4>
+                                <p class="description">Buy MTN, GLO, Airtel and 9Mobile data subscription for yourself and third party </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+                            <div class="icon-box" data-aos="fade-up" data-aos-delay="300">
+                                <div class="icon"><i class="fas fa-satellite"></i></div>
+                                <h4 class="title"><a href="">Cable TV</a></h4>
+                                <p class="description">Buy DSTV, GoTV, Startimes and Showmax cable television subscription for yourself and third party</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+                            <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
+                                <div class="icon"><i class="fas fa-lightbulb"></i></div>
+                                <h4 class="title"><a href="">Electricity</a></h4>
+                                <p class="description">Buy electricity token for pre-paid and post-paid meters from all Discos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="features" class="features">
+                <div class="container">
+                    <div class="section-title" data-aos="fade-up">
+                        <h2 class="text-primary text-capitalize">Features</h2>
+                        <p>For many reasons, One-X is uniquely different and stands out from competition for many great reasons.</p>
+                    </div>
+                    <div class="row" data-aos="fade-up" data-aos-delay="300">
+                        <div class="col-lg-3 col-md-4">
+                            <div class="icon-box">
+                                <i class="fas fa-book-reader" style="color: #ffbb2c;"></i>
+                                <h3><a href="">Easy to use</a></h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
+                            <div class="icon-box">
+                                <i class="fas fa-minus-square" style="color: #5578ff;"></i>
+                                <h3><a href="">Lower transaction fees</a></h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
+                            <div class="icon-box">
+                                <i class="fas fa-percent" style="color: #e80368;"></i>
+                                <h3><a href="">99.9% up time</a></h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 mt-4 mt-lg-0">
+                            <div class="icon-box">
+                                <i class="fas fa-stream" style="color: #e361ff;"></i>
+                                <h3><a href="">Auto service fail over</a></h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 mt-4">
+                            <div class="icon-box">
+                                <i class="fas fa-shield-alt" style="color: #47aeff;"></i>
+                                <h3><a href="">Two factor authentication</a></h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 mt-4">
+                            <div class="icon-box">
+                                <i class="fas fa-clock" style="color: #ffa76e;"></i>
+                                <h3><a href="">Scheduled transactions</a></h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 mt-4">
+                            <div class="icon-box">
+                                <i class="fas fa-code" style="color: #11dbcf;"></i>
+                                <h3><a href="">API driven</a></h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 mt-4">
+                            <div class="icon-box">
+                                <i class="fas fa-check-double" style="color: #4233ff;"></i>
+                                <h3><a href="">Customer smart card validation</a></h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 mt-4">
+                            <div class="icon-box">
+                                <i class="fas fa-check-double" style="color: #b2904f;"></i>
+                                <h3><a href="">Meter number validation</a></h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 mt-4">
+                            <div class="icon-box">
+                                <i class="fas fa-user-shield" style="color: #b20969;"></i>
+                                <h3><a href="">Highly secured</a></h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 mt-4">
+                            <div class="icon-box">
+                                <i class="fas fa-cubes" style="color: #ff5828;"></i>
+                                <h3><a href="">Highly parameterized</a></h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 mt-4">
+                            <div class="icon-box">
+                                <i class="fas fa-code-branch" style="color: #29cc61;"></i>
+                                <h3><a href="">Very stable version</a></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======= Contact Section ======= -->
+            <section id="contact" class="contact">
+                <div class="container">
+                    <div class="section-title" data-aos="fade-up">
+                        <h2 class="text-primary text-capitalize">Contact Us</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                            <div class="contact-about">
+                                <h3 class="text-primary">Entity Software</h3>
+                                <p>.</p>
+                                <div class="social-links">
+                                    <a href="https://twitter.com/entity_sc" class="twitter" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                                    <a href="https://" class="facebook" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                                    <a href="https://www.instagram.com/entity_sc" class="instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                                    <a href="https://www.linkedin.com/company/entity-software-company" class="linkedin" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mt-4 mt-md-0" data-aos="fade-up" data-aos-delay="200">
+                            <div class="info">
+                                <div>
+                                    <i class="fas fa-map"></i>
+                                    <p class="text-secondary">#1 Ebun Otti Street<br>Mende Maryland, Lagos 100232</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-envelope"></i>
+                                    <p class="text-secondary">info@entitysc.com</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-phone"></i>
+                                    <p class="text-secondary">+234 (803) 772 7138</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-5 col-md-12" data-aos="fade-up" data-aos-delay="300">
+                            <form th:action="@{/contact}" th:object="${onexPayload}" method="post" role="form" class="php-email-form">
+                                <div class="form-group">
+                                    <input type="text" name="name" class="form-control form-control-sm" id="name" placeholder="Your Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control form-control-sm" name="email" id="email" placeholder="Your Email" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-sm" name="subject" id="subject" placeholder="Subject" required>
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control form-control-sm" name="message" rows="3" placeholder="Message" required></textarea>
+                                </div>
+                                <div class="my-3">
+                                    <div class="loading">Loading</div>
+                                    <div class="error-message"></div>
+                                    <div class="sent-message">Your message has been sent. Thank you!</div>
+                                </div>
+                                <div class="text-center"><button type="submit">Send Message</button></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer id="footer">
+            <div class="container">
+                <div class="row d-flex align-items-center">
+                    <div class="col-lg-6 text-lg-left text-center">
+                        <div class="copyright">
+                            &copy; Copyright <strong class="text-primary">Entity Software</strong>. All Rights Reserved
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
+                            <a href="#intro" class="scrollto">Home</a>
+                            <a href="#about" class="scrollto">About</a>
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">Terms of Use</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </footer>
+<!--        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="fas fa-arrow-up-short"></i></a>-->
+        <th:block th:include="~{fragments/entityscFragments :: homescriptfiles}"></th:block>
     </body>
 </html>

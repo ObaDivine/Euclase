@@ -2,96 +2,95 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
-        <title>Entity Software - IBank</title>
+        <title>Entity Software - One X</title>
         <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
     </head>
-    <body>
-        <main class="main" id="top">
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
             <div class="container-fluid px-0">
                 <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
                 <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
-                    <div class="row mt-3">
-                        <div class="offset-lg-2 col-lg-8 col-md-12 col-sm-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="card-text text-primary">
-                                        Electricity Bill Payment
-                                    </div>
+                    <div class="row mt-2">
+                        <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
+                            <nav class="mb-3" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Single Electricity</li>
+                                </ol>
+                            </nav>
+                            <form th:object="${onexPayload}" th:action="@{/electricity/single/}" method="POST">
+                                <div class="col-auto">
+                                    <h4 class="mb-2 text-primary">Single Electricity Subscription</h4>
+                                    <h6 class="text-700 fw-semi-bold">All Discos supported. Subscribe for self and third party</h6>
+                                    <hr/>
                                 </div>
-                                <div class="card-body">
-                                    <form th:object="${ibankPayload}" th:action="@{/electricity/pay}" method="POST" class="text-center">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text"><i class="fas fa-tachometer text-primary"></i></span>
-                                            <input type="text" class="form-control form-control-sm" th:field="*{meternumber}" placeholder="Enter Meter Number" required="required"/>
-                                        </div>
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text"><i class="fas fa-outlet text-primary"></i></span>
-                                            <select class="form-select" data-choices="data-choices" th:field="*{discos}">
-                                                <option value="">Select Meter Type...</option>
-                                                <option value="Abuja">Prepaid</option>
-                                                <option value="Eko">Post Paid</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text"><i class="fas fa-outlet text-primary"></i></span>
-                                            <select class="form-select" data-choices="data-choices" th:field="*{discos}">
-                                                <option value="">Select Disco...</option>
-                                                <option value="Abuja">Abuja Disco</option>
-                                                <option value="Eko">Eko Disco</option>
-                                                <option value="Enugu">Enugu Disco</option>
-                                                <option value="Ibadan">Ibandan Disco</option>
-                                                <option value="Ikeja">Ikeja Disco</option>                                                
-                                                <option value="Jos">Jos Disco</option>
-                                                <option value="Kaduna">Kaduna Disco</option>
-                                                <option value="Kano">Kano Disco</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text"><i class="fas fa-coins text-primary"></i></span>
-                                            <input type="number" class="form-control form-control-sm" th:field="*{amount}" min="0.1" step="0.01" placeholder="Enter Amount" required="required"/>
-                                        </div>
-                                        <button class="btn btn-primary w-40 mb-3" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Process request</button>
-                                        <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="btn btn-link btn-close-falcon p-0" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h6 class="modal-title text-primary">Entity Software</h6>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <h6 class="text-primary">Confirm you want to submit this request</h6><br/>
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text"><i class="fas fa-thumbtack text-primary"></i></span>
-                                                            <input type="password" class="form-control form-control-sm" th:field="*{pin}" pattern="[0-9]{4,6}" title="Enter valid PIN" placeholder="Enter PIN" required="required"/>
-                                                        </div>
-                                                        <button type="submit" class="btn btn-entitysc-primary btn-sm">Process request</button>
-                                                        <button type="button" class="btn btn-entitysc-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                                    </div>
+                                <div class="form-icon-container">
+                                    <select class="form-select form-icon-input" data-choices="data-choices" th:field="*{disco}" th:onchange="|meterLookup()|" required="required">
+                                        <option value="">---Select Disco---</option>
+                                        <option value="Abuja">Abuja Disco</option>
+                                        <option value="Eko">Eko Disco</option>
+                                        <option value="Enugu">Enugu Disco</option>
+                                        <option value="Ibadan">Ibandan Disco</option>
+                                        <option value="Ikeja">Ikeja Disco</option>                                                
+                                        <option value="Jos">Jos Disco</option>
+                                        <option value="Kaduna">Kaduna Disco</option>
+                                        <option value="Kano">Kano Disco</option>
+                                        <option value="Yola">Yola Disco</option>
+                                    </select>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-tower-broadcast text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <div class="form-icon-container">
+                                    <select class="form-select form-icon-input" data-choices="data-choices" th:field="*{billType}" required="required">
+                                        <option value="">---Select Meter Type---</option>
+                                        <option value="Prepaid">Prepaid</option>
+                                        <option value="Postpaid">Post Paid</option>
+                                    </select>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-bolt text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <div class="form-icon-container">
+                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{meterNumber}" placeholder="Enter Meter Number" required="required" th:onchange="|meterLookup()|"/>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-bars text-900 fs--1 form-icon text-primary"></span>
+                                    <h6 class="pt-3 pb-3">
+                                        <span class="text-secondary">Customer Name : </span>
+                                        <span class="text-primary" id="customerName"></span>
+                                    </h6>
+                                </div>
+                                <div class="form-icon-container">
+                                    <input type="number" class="form-control form-control-sm form-icon-input" th:field="*{amount}" min="0.1" step="0.01" placeholder="Enter Amount" required="required"/>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-coins text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Process request</button>
+                                <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">One X</span></h6>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h6  class="text-secondary mb-2">Enter your PIN to confirm transaction</h6>
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text text-primary"><i class="fas fa-thumbtack text-primary"></i></span>
+                                                    <input type="password" class="form-control form-control-sm" th:field="*{pin}" pattern="[0-9]{4,6}" title="Enter valid PIN" placeholder="Enter PIN" required="required"/>
                                                 </div>
+                                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-                <script>
-                    var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
-                    var navbarTop = document.querySelector('.navbar-top');
-                    if (navbarTopStyle === 'darker') {
-                        navbarTop.classList.add('navbar-darker');
-                    }
-
-                    var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
-                    var navbarVertical = document.querySelector('.navbar-vertical');
-                    if (navbarVertical && navbarVerticalStyle === 'darker') {
-                        navbarVertical.classList.add('navbar-darker');
-                    }
-                </script>
+            </div>
         </main>
-        <th:block th:include="~{fragments/entityscFragments :: settings}"></th:block>
         <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
     </body>
 </html>

@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
-        <title>Entity Software - SmartPro</title>
+        <title>Entity Software - One X</title>
         <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
     </head>
-    <body class="nk-body bg-lighter npc-default has-sidebar no-touch nk-nio-theme">
-        <div class="main-wrapper">
+    <body onload="preloaderFunction()" style="margin: 0;" class="nk-body bg-lighter npc-default has-sidebar no-touch nk-nio-theme">
+        <div class="main-wrapper" id="top" style="display:none;">
             <th:block th:include="~{fragments/entityscFragments :: topmenu}"></th:block>
             <th:block th:include="~{fragments/entityscFragments :: adminmenu}"></th:block>
 
