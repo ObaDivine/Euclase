@@ -13,49 +13,21 @@
                 <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
                     <div class="row">
-                        <div class="col-lg-8 col-sm-12 col-md-12">
+                        <div class="col-lg-12 col-sm-12 col-md-12">
                             <div class="mb-8">
-                                <h3 class="mb-2 text-primary">One X Dashboard</h3>
-                                <h6 class="text-700 fw-semi-bold">Here's what's going on at your business right now</h6>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-12 col-md-12">
-                            <div class="card mb-2">
-                                <div class="card-body">
-                                    <div class="input-group">
-                                        <p th:if="${onexPayload.mobileNumberVerified == 'true'}"> <span class="badge badge-entitysc fs--2 badge-entitysc-success">
-                                                <span class="badge-label">Mobile Number Verified</span>
-                                                <span class="ms-1" data-feather="check" style="height:12.8px;width:12.8px;"></span>
-                                            </span>
-                                        </p>
-                                        <p th:if="${onexPayload.mobileNumberVerified == 'false'}"> <span class="badge badge-entitysc fs--2 badge-entitysc-danger">
-                                                <span class="badge-label">Mobile Number Not Verified</span>
-                                                <span class="ms-1" data-feather="x" style="height:12.8px;width:12.8px;"></span>
-                                            </span>
-                                        </p>&nbsp;
-                                        <span th:if="${onexPayload.mobileNumberVerified == 'false'}">
-                                            <button class="btn btn-secondary btn-sm" th:onclick="verifyMobileNumber([[${onexPayload.mobileNumber}]])" style="height:12.8px;width:auto;padding: 3px 20px 17px 20px;">Verify</button>
-                                        </span>
-                                    </div>
-                                    <form id="mobileNumberVerificationOTP" th:object="${onexPayload}" th:action="@{/signup/activation}" method="POST" style="display: none;">
-                                        <div class="input-group">
-                                            <input class="form-control form-control-sm" th:field="*{otp}" type="text" placeholder="Enter OTP" required="required" pattern="[0-9]{4,6}"/>
-                                            <button class="btn btn-sm btn-primary" type="submit">Validate</button>
-                                        </div>
-                                        <input  th:field="*{mobileNumber}" type="hidden" th:value="${onexPayload.mobileNumber}" />
-                                    </form>
-                                </div>
+                                <h4 class="mb-2 text-primary">Euclase Dashboard</h4>
+                                <h6 class="text-700 fw-semi-bold">Electronic Document Management Solution</h6>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-8 col-md-12 col-sm-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="row g-4 mb-5">
                                 <div class="col-lg-3 col-sm-6 col-md-6">
                                     <a th:href="@{/airtime/transaction}">
                                         <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/18.png}" alt="" height="46" width="46" />
                                             <div class="ms-3">
-                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${onexPayload.itemCounts[0]} + ')'"></span>&nbsp;<span>Airtime</span></h6>
+                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${euclasePayload.itemCounts[0]} + ')'"></span>&nbsp;<span>Airtime</span></h6>
                                                 <p class="text-800 fs--1 mb-0">Mobile recharge</p>
                                             </div>
                                         </div>
@@ -65,7 +37,7 @@
                                     <a th:href="@{/data/transaction}">
                                         <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/19.png}" alt="" height="46" width="46" />
                                             <div class="ms-3">
-                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${onexPayload.itemCounts[1]} + ')'"></span>&nbsp;<span>Data</span></h6>
+                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${euclasePayload.itemCounts[1]} + ')'"></span>&nbsp;<span>Data</span></h6>
                                                 <p class="text-800 fs--1 mb-0">Subscribe for data</p>
                                             </div>
                                         </div>
@@ -75,7 +47,7 @@
                                     <a th:href="@{/cabletv/transaction}">
                                         <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/26.png}" alt="" height="46" width="46" />
                                             <div class="ms-3">
-                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${onexPayload.itemCounts[2]} + ')'"></span>&nbsp;<span>Cable TV</span></h6>
+                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${euclasePayload.itemCounts[2]} + ')'"></span>&nbsp;<span>Cable TV</span></h6>
                                                 <p class="text-800 fs--1 mb-0">Renew TV subscription</p>
                                             </div>
                                         </div>
@@ -85,7 +57,7 @@
                                     <a th:href="@{/education/transaction}">
                                         <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/14.png}" alt="" height="46" width="46" />
                                             <div class="ms-3">
-                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${onexPayload.itemCounts[5]} + ')'"></span>&nbsp;<span>Education</span></h6>
+                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${euclasePayload.itemCounts[5]} + ')'"></span>&nbsp;<span>Education</span></h6>
                                                 <p class="text-800 fs--1 mb-0">Pay for tuition</p>
                                             </div>
                                         </div>
@@ -98,7 +70,7 @@
                                     <a th:href="@{/electricity/transaction}">
                                         <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/14.png}" alt="" height="46" width="46" />
                                             <div class="ms-3">
-                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${onexPayload.itemCounts[3]} + ')'"></span>&nbsp;<span>Electricity</span></h6>
+                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${euclasePayload.itemCounts[3]} + ')'"></span>&nbsp;<span>Electricity</span></h6>
                                                 <p class="text-800 fs--1 mb-0">Recharge meter</p>
                                             </div>
                                         </div>
@@ -108,7 +80,7 @@
                                     <a th:href="@{/insurance/transaction}">
                                         <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/26.png}" alt="" height="46" width="46" />
                                             <div class="ms-3">
-                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${onexPayload.itemCounts[6]} + ')'"></span>&nbsp;<span>Insurance</span></h6>
+                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${euclasePayload.itemCounts[6]} + ')'"></span>&nbsp;<span>Insurance</span></h6>
                                                 <p class="text-800 fs--1 mb-0">Buy any insurance</p>
                                             </div>
                                         </div>
@@ -118,7 +90,7 @@
                                     <a th:href="@{/funds-transfer/transaction}">
                                         <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/18.png}" alt="" height="46" width="46" />
                                             <div class="ms-3">
-                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${onexPayload.itemCounts[4]} + ')'"></span>&nbsp;<span>Funds Transfer</span></h6>
+                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${euclasePayload.itemCounts[4]} + ')'"></span>&nbsp;<span>Funds Transfer</span></h6>
                                                 <p class="text-800 fs--1 mb-0">Instant transfer</p>
                                             </div>
                                         </div>
@@ -128,45 +100,11 @@
                                     <a th:href="@{/betting/transaction}">
                                         <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/19.png}" alt="" height="46" width="46" />
                                             <div class="ms-3">
-                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${onexPayload.itemCounts[7]} + ')'"></span>&nbsp;<span>Betting</span></h6>
+                                                <h6 class="mb-0"><span class="text-primary" th:text="'(' + ${euclasePayload.itemCounts[7]} + ')'"></span>&nbsp;<span>Betting</span></h6>
                                                 <p class="text-800 fs--1 mb-0">Bet live</p>
                                             </div>
                                         </div>
                                     </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-12 col-sm-12">
-                            <div class="card mt-2">
-                                <div class="card-body">
-                                    <h6 class="mb-1">Wallet ID :&nbsp;<span th:text="${onexPayload.walletId}" class="text-primary"></span></h6>
-                                    <h6 class="mb-1">Wallet Balance :&nbsp;<span th:text="${#numbers.formatDecimal(onexPayload.walletBalance,0,'COMMA',2,'POINT')}" class="text-primary"></span></h6>
-                                    <br/>
-                                    <form th:object="${onexPayload}" th:action="@{/wallet/fund}" method="POST">
-                                        <div class="input-group mb-3">
-                                            <input class="form-control form-control-sm" th:field="*{amount}" type="number" placeholder="Amount" required="required" min="100" step="100" />
-                                            <a class="btn btn-sm btn-secondary" type="button" data-bs-target="#fundWalletModal" data-bs-toggle="modal">Add Funds</a>
-                                        </div>
-                                        <input  th:field="*{walletId}" type="hidden" th:value="${onexPayload.walletId}" />
-                                        <div class="modal fade" id="fundWalletModal" tabindex="-1" role="dialog" aria-labelledby="fundWalletModal" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">One X</span></h6>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <h6 class="text-secondary mb-2">Enter your PIN to confirm transaction</h6>
-                                                        <div class="input-group mb-3">
-                                                            <span class="input-group-text text-primary"><i class="fas fa-thumbtack text-primary"></i></span>
-                                                            <input type="password" class="form-control form-control-sm" th:field="*{pin}" pattern="[0-9]{4,6}" title="Enter valid PIN" placeholder="Enter PIN" required="required"/>
-                                                        </div>
-                                                        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>

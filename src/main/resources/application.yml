@@ -1,4 +1,4 @@
-####### Entity Software - OneX Config #########
+####### Entity Software - Euclase Config #########
 ---
 server:
     error:
@@ -7,21 +7,21 @@ server:
         include-exception: false
         include-stacktrace: never
     tomcat:
-        basedir: C:/OneX/Log
+        basedir: C:/Euclase/Log
         accesslog:
             enabled: true
     temp:
-        dir: C:\OneX\temp
+        dir: C:\Euclase\temp
     connection-timeout: 120000
 
 logging:
     file:
-        name: C:/OneX/logs/onex.log
+        name: C:/Euclase/logs/euclase.log
     level:
         root: INFO
 upload:
     base:
-        dir: C:/OneX/bulk/upload
+        dir: C:/Euclase/bulk/upload
     max:
         record: 100
 jwt:
@@ -43,7 +43,7 @@ spring:
         password: Password!23
         username: accionisservice
         driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver  
-        url: jdbc:sqlserver://localhost;databaseName=pylon;;encrypt=true;trustServerCertificate=true
+        url: jdbc:sqlserver://localhost;databaseName=euclase;;encrypt=true;trustServerCertificate=true
         #driverClassName: org.postgresql.Driver
         #url: jdbc:postgresql://209.159.155.84/pylon
     jpa:
@@ -54,9 +54,19 @@ spring:
         show-sql: true
         open-in-view: false
         
-onex:
+euclase:
+    document:
+        prefix:
+            usegeneric: true
+            loan: LN
+            leave: LV
+            expense: EX
+            service: SR
+            generic: DOC
+        id:
+            allowuser: false
     image:
-        dir: C:\Apps\EntitySC\Web\onex\target\onex-1.0\WEB-INF\classes\images\profile
+        dir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\images\profile
     default:
         password: Password12#
     client:
@@ -93,7 +103,7 @@ pylon:
         image:
             url: http://localhost:8080/pylon/images/profile/
     qrcode:
-        issuer: Entity Software OneX
+        issuer: Entity Software Euclase
         image:
             url: http://localhost:8080/pylon/images/qrcode/
     api:
@@ -102,7 +112,6 @@ pylon:
         twofactor:
             enable: http://localhost:8080/pylon/api/v1/user/twofa
             validate: http://localhost:8080/pylon/api/v1/user/validate/twofa
-        banklist: http://localhost:8080/pylon/api/v1/banks
         validate:
             pin: http://localhost:8080/pylon/api/v1/app/user/validate/pin
             securityquestion: http://localhost:8080/pylon/api/v1/app/user/validate/security-question
@@ -124,70 +133,81 @@ pylon:
         totp: http://localhost:8080/pylon/api/v1/authenticator/google/otp
         profile:
             details: http://localhost:8080/pylon/api/v1/dashboard
-        airtime:
-            single: http://localhost:8080/pylon/api/v1/airtime
-            bulk: http://localhost:8080/pylon/api/v1/airtime/bulk
-            scheduled:
-                create: http://localhost:8080/pylon/api/v1/airtime/schedule
-                list: http://localhost:8080/pylon/api/v1/airtime/schedule/list
-                record: http://localhost:8080/pylon/api/v1/airtime/schedule/record
-                update: http://localhost:8080/pylon/api/v1/airtime/schedule/update
-                delete: http://localhost:8080/pylon/api/v1/airtime/schedule/delete
-                status: http://localhost:8080/pylon/api/v1/airtime/schedule/status
-            history: http://localhost:8080/pylon/api/v1/airtime/history
-        data:
-            single: http://localhost:8080/pylon/api/v1/data
-            bulk: http://localhost:8080/pylon/api/v1/data/bulk
-            scheduled:
-                create: http://localhost:8080/pylon/api/v1/data/schedule
-                list: http://localhost:8080/pylon/api/v1/data/schedule/list
-                record: http://localhost:8080/pylon/api/v1/data/schedule/record
-                update: http://localhost:8080/pylon/api/v1/data/schedule/update
-                delete: http://localhost:8080/pylon/api/v1/data/schedule/delete
-                status: http://localhost:8080/pylon/api/v1/data/schedule/status
-            plan: http://localhost:8080/pylon/api/v1/data/subscription
-            history: http://localhost:8080/pylon/api/v1/data/history
-        cabletv:
-            single: http://localhost:8080/pylon/api/v1/cabletv
-            bulk: http://localhost:8080/pylon/api/v1/cabletv/bulk
-            scheduled:
-                create: http://localhost:8080/pylon/api/v1/cabletv/schedule
-                list: http://localhost:8080/pylon/api/v1/cabletv/schedule/list
-                record: http://localhost:8080/pylon/api/v1/cabletv/schedule/record
-                update: http://localhost:8080/pylon/api/v1/cabletv/schedule/update
-                delete: http://localhost:8080/pylon/api/v1/cabletv/schedule/delete
-                status: http://localhost:8080/pylon/api/v1/cabletv/schedule/status
-            plan: http://localhost:8080/pylon/api/v1/cabletv/subscription
-            history: http://localhost:8080/pylon/api/v1/cabletv/history
-            lookup:
-                smartcard: http://localhost:8080/pylon/api/v1/cabletv/smartcard/lookup
-                subscription: http://localhost:8080/pylon/api/v1/cabletv/subscription
-        electricity:
-            single: http://localhost:8080/pylon/api/v1/electricity
-            bulk: http://localhost:8080/pylon/api/v1/electricity/bulk
-            scheduled:
-                create: http://localhost:8080/pylon/api/v1/electricity/schedule
-                list: http://localhost:8080/pylon/api/v1/electricity/schedule/list
-                record: http://localhost:8080/pylon/api/v1/electricity/schedule/record
-                update: http://localhost:8080/pylon/api/v1/electricity/schedule/update
-                delete: http://localhost:8080/pylon/api/v1/electricity/schedule/delete
-                status: http://localhost:8080/pylon/api/v1/electricity/schedule/status
-            history: http://localhost:8080/pylon/api/v1/electricity/history
-            lookup:
-                meter: http://localhost:8080/pylon/api/v1/electricity/meter/lookup
-        fundstransfer:
-            single: http://localhost:8080/pylon/api/v1/funds-transfer/single
-            bulk: http://localhost:8080/pylon/api/v1/funds-transfer/bulk
-            scheduled:
-                create: http://localhost:8080/pylon/api/v1/funds-transfer/schedule
-                list: http://localhost:8080/pylon/api/v1/funds-transfer/schedule/list
-                record: http://localhost:8080/pylon/api/v1/funds-transfer/schedule/record
-                update: http://localhost:8080/pylon/api/v1/funds-transfer/schedule/update
-                delete: http://localhost:8080/pylon/api/v1/funds-transfer/schedule/delete
-                status: http://localhost:8080/pylon/api/v1/funds-transfer/schedule/status
-            history: http://localhost:8080/pylon/api/v1/funds-transfer/history
-        wallet:
-            fund:
-                card: http://localhost:8080/pylon/api/v1/wallet/fund
-                callback: http://localhost:8080/onex/callback/wallet/fund
-                notify: http://localhost:8080/pylon/api/v1/wallet/fund/confirm
+        department:
+            list: http://localhost:8080/pylon/api/v1/department/list
+            create: http://localhost:8080/pylon/api/v1/department
+            update: http://localhost:8080/pylon/api/v1/department/update
+            delete: http://localhost:8080/pylon/api/v1/department/delete
+            fetch: http://localhost:8080/pylon/api/v1/department
+        designation:
+            list: http://localhost:8080/pylon/api/v1/designation/list
+            create: http://localhost:8080/pylon/api/v1/designation
+            update: http://localhost:8080/pylon/api/v1/designation/update
+            delete: http://localhost:8080/pylon/api/v1/designation/delete
+            fetch: http://localhost:8080/pylon/api/v1/designation
+        departmentunit:
+            list: http://localhost:8080/pylon/api/v1/department/unit/list
+            create: http://localhost:8080/pylon/api/v1/department/unit
+            update: http://localhost:8080/pylon/api/v1/department/unit/update
+            delete: http://localhost:8080/pylon/api/v1/department/unit/delete
+            fetch: http://localhost:8080/pylon/api/v1/department/unit
+        branch:
+            list: http://localhost:8080/pylon/api/v1/branch/list
+            create: http://localhost:8080/pylon/api/v1/branch
+            update: http://localhost:8080/pylon/api/v1/branch/update
+            delete: http://localhost:8080/pylon/api/v1/branch/delete
+            fetch: http://localhost:8080/pylon/api/v1/branch
+        gradelevel:
+            list: http://localhost:8080/pylon/api/v1/grade-level/list
+            create: http://localhost:8080/pylon/api/v1/grade-level
+            update: http://localhost:8080/pylon/api/v1/grade-level/update
+            delete: http://localhost:8080/pylon/api/v1/grade-level/delete
+            fetch: http://localhost:8080/pylon/api/v1/grade-level
+        leave:
+            type:
+                list: http://localhost:8080/pylon/api/v1/leave/type/list
+                create: http://localhost:8080/pylon/api/v1/leave/type
+                update: http://localhost:8080/pylon/api/v1/leave/type/update
+                delete: http://localhost:8080/pylon/api/v1/leave/type/delete
+                fetch: http://localhost:8080/pylon/api/v1/leave/type
+            list: http://localhost:8080/pylon/api/v1/leave/list
+            create: http://localhost:8080/pylon/api/v1/leave
+            update: http://localhost:8080/pylon/api/v1/leave/update
+            delete: http://localhost:8080/pylon/api/v1/leave/delete
+        loan:
+            type:
+                list: http://localhost:8080/pylon/api/v1/loan/type/list
+                create: http://localhost:8080/pylon/api/v1/loan/type
+                update: http://localhost:8080/pylon/api/v1/loan/type/update
+                delete: http://localhost:8080/pylon/api/v1/loan/type/delete
+                fetch: http://localhost:8080/pylon/api/v1/loan/type
+            list: http://localhost:8080/pylon/api/v1/loan/list
+            create: http://localhost:8080/pylon/api/v1/loan
+            update: http://localhost:8080/pylon/api/v1/loan/update
+            delete: http://localhost:8080/pylon/api/v1/loan/delete
+        expense:
+            type:
+                list: http://localhost:8080/pylon/api/v1/expense/type/list
+                create: http://localhost:8080/pylon/api/v1/expense/type
+                update: http://localhost:8080/pylon/api/v1/expense/type/update
+                delete: http://localhost:8080/pylon/api/v1/expense/type/delete
+                fetch: http://localhost:8080/pylon/api/v1/expense/type
+            list: http://localhost:8080/pylon/api/v1/expense/list
+            create: http://localhost:8080/pylon/api/v1/expense
+            update: http://localhost:8080/pylon/api/v1/expense/update
+            delete: http://localhost:8080/pylon/api/v1/expense/delete
+        service:
+            request:
+                list: http://localhost:8080/pylon/api/v1/service/request/list
+                create: http://localhost:8080/pylon/api/v1/service/request
+                update: http://localhost:8080/pylon/api/v1/service/request/update
+                delete: http://localhost:8080/pylon/api/v1/service/request/delete
+                fetch: http://localhost:8080/pylon/api/v1/service/request
+            list: http://localhost:8080/pylon/api/v1/service/request/list
+            create: http://localhost:8080/pylon/api/v1/expense
+            update: http://localhost:8080/pylon/api/v1/expense/update
+            delete: http://localhost:8080/pylon/api/v1/expense/delete
+        document:
+            template:
+                fetch: http://localhost:8080/pylon/api/v1/document/template/record
+                create: http://localhost:8080/pylon/api/v1/document/template

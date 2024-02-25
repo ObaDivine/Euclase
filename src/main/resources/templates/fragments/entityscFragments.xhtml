@@ -6,7 +6,11 @@
     </head>
     <body>
         <div th:fragment="homeheaderfiles">
-            <!-- Favicons -->
+            <meta charset="utf-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"/>
+            <meta name="description" content="Entity Software Euclaseperience" />
+            <meta name="keywords" content="Entity, Entity Software, Software, Technology, VAS, Airtime, Data, Bills, Funds Transfer, Electricity, Cable TV, Insurance" />
             <link href="assets/img/favicon.png" rel="icon"></link>
             <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"></link>
             <link href="https://fonts.googleapis.com/css2?family=Montserrat" rel="stylesheet"></link>
@@ -24,7 +28,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"/>
             <meta name="msapplication-TileImage" th:content="@{/images/favicons/mstile-150x150.png}" />
             <meta name="theme-color" content="#ffffff" />
-            <meta name="description" content="Entity Software One Xperience" />
+            <meta name="description" content="Entity Software Euclaseperience" />
             <meta name="keywords" content="Entity, Entity Software, Software, Technology, VAS, Airtime, Data, Bills, Funds Transfer, Electricity, Cable TV, Insurance" />
             <link rel="apple-touch-icon" sizes="180x180" th:href="@{/images/favicons/apple-touch-icon.png}"></link>
             <link rel="icon" type="image/png" sizes="32x32" th:href="@{/images/favicons/favicon-32x32.png}"></link>
@@ -93,12 +97,6 @@
                         title: message
                     });
                 }
-
-                const eventSource = new EventSource('http://localhost:8080/onex/events/subscribe');
-                eventSource.addEventListener("callback", function (event) {
-                    var jsonData = JSON.parse(event.data);
-                    showAlert(jsonData.responseMessage, jsonData.responseCode === '00' ? 'success' : 'error');
-                });
             </script>
         </div>
 
@@ -112,7 +110,7 @@
                         <a class="navbar-brand me-1 me-sm-3" th:href="@{/}">
                             <div class="d-flex align-items-center">
                                 <div class="d-flex align-items-center"><img th:src="@{/images/logo_nobg.png}" alt="Entity" width="27" />
-                                    <p class="logo-text ms-2 d-none d-sm-block">Entity One X</p>
+                                    <p class="logo-text ms-2 d-none d-sm-block">Entity Euclase</p>
                                 </div>
                             </div>
                         </a>
@@ -126,7 +124,7 @@
                     <ul class="navbar-nav navbar-nav-icons flex-row">
                         <li class="nav-item">
                             <div class="theme-control-toggle fa-icon-wait px-2">
-                                <h5 class="mb-2 text-1100 text-primary" th:text="${onexPayload.firstName == null} ? 'Hi' : ${'Hi ' + onexPayload.firstName}">Name</h5>
+                                <h5 class="mb-2 text-1100 text-primary" th:text="${euclasePayload.firstName == null} ? 'Hi' : ${'Hi ' + euclasePayload.firstName}">Name</h5>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -171,7 +169,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                                 <div class="avatar avatar-l">
-                                    <img class="rounded-circle img-fluid" th:src="@{'/images/profile/' + ${onexPayload.profileImage}}"  src="" alt="" />
+                                    <img class="rounded-circle img-fluid" th:src="@{'/images/profile/' + ${euclasePayload.profileImage}}"  src="" alt="" />
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border border-300" aria-labelledby="navbarDropdownUser">
@@ -179,9 +177,9 @@
                                     <div class="card-body p-0">
                                         <div class="text-center pt-4 pb-3">
                                             <div class="avatar avatar-xl ">
-                                                <img class="rounded-circle img-fluid" th:src="@{'/images/profile/' + ${onexPayload.profileImage}}"  src="" alt="" />
+                                                <img class="rounded-circle img-fluid" th:src="@{'/images/profile/' + ${euclasePayload.profileImage}}"  src="" alt="" />
                                             </div>
-                                            <h6 class="mt-2 text-black" th:text="${onexPayload.firstName + ' ' + onexPayload.lastName}">Entity Software</h6>
+                                            <h6 class="mt-2 text-black" th:text="${euclasePayload.firstName + ' ' + euclasePayload.lastName}">Entity Software</h6>
                                         </div>
                                     </div>
                                     <div class="overflow-auto scrollbar" style="height: 10rem;">
@@ -267,54 +265,47 @@
                             </li>
                             <li class="nav-item">
                                 <!-- label-->
-                                <p class="navbar-vertical-label text-primary">Funds Transfer</p>
+                                <p class="navbar-vertical-label text-primary">Document</p>
                                 <hr class="navbar-vertical-line" />
                                 <!-- parent pages-->
                                 <div class="nav-item-wrapper">
-                                    <a class="nav-link dropdown-indicator label-1" href="#FundsTransfer" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="FundsTransfer">
+                                    <a class="nav-link dropdown-indicator label-1" href="#Document" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="Document">
                                         <div class="d-flex align-items-center">
                                             <div class="dropdown-indicator-icon">
                                                 <span class="fas fa-caret-right"></span>
                                             </div>
-                                            <span class="nav-link-icon"><span class="fa fa-exchange text-primary"></span></span>
-                                            <span class="nav-link-text">Funds Transfer</span>
+                                            <span class="nav-link-icon"><span class="fa fa-file-alt text-primary"></span></span>
+                                            <span class="nav-link-text">Document</span>
                                         </div>
                                     </a>
                                     <div class="parent-wrapper label-1">
-                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="FundsTransfer">
-                                            <li class="collapsed-nav-item-title d-none text-secondary">Funds Transfer</li>
+                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="Document">
+                                            <li class="collapsed-nav-item-title d-none text-secondary">Document & File</li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/funds-transfer/beneficiary/}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/document/new}" data-bs-toggle="modal" data-bs-target="#newDoc" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Beneficiary List</span>
+                                                        <span class="nav-link-text">New Document</span>
                                                     </div>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/funds-transfer/single}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/document/approve}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Single Transfer</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <!--                                            <li class="nav-item">
-                                                                                            <a class="nav-link" th:href="@{/funds-transfer/bulk}" data-bs-toggle="" aria-expanded="false">
-                                                                                                <div class="d-flex align-items-center">
-                                                                                                    <span class="nav-link-text">Bulk Transfer</span>
-                                                                                                </div>
-                                                                                            </a>
-                                                                                        </li>-->
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/funds-transfer/schedule}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Schedule Transfers</span>
+                                                        <span class="nav-link-text">Approve Document</span>
                                                     </div>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/funds-transfer/transaction}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/document/my}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Transaction History</span>
+                                                        <span class="nav-link-text">My Document</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/document/signature}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">Manage Signature</span>
                                                     </div>
                                                 </a>
                                             </li>
@@ -324,74 +315,39 @@
                             </li>
                             <li class="nav-item">
                                 <!-- label-->
-                                <p class="navbar-vertical-label text-primary">Airtime & Data Bundle</p>
+                                <p class="navbar-vertical-label text-primary">Workflow & Template</p>
                                 <hr class="navbar-vertical-line" />
                                 <div class="nav-item-wrapper">
-                                    <a class="nav-link dropdown-indicator label-1" href="#Airtime" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="Airtime">
+                                    <a class="nav-link dropdown-indicator label-1" href="#Workflow" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="Workflow">
                                         <div class="d-flex align-items-center">
                                             <div class="dropdown-indicator-icon">
                                                 <span class="fas fa-caret-right"></span>
                                             </div>
                                             <span class="nav-link-icon"><span class="fa fa-phone text-primary"></span></span>
-                                            <span class="nav-link-text">Airtime & Data</span>
+                                            <span class="nav-link-text">Workflow & Template</span>
                                         </div>
                                     </a>
                                     <div class="parent-wrapper label-1">
-                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="Airtime">
-                                            <li class="collapsed-nav-item-title d-none text-secondary">Airtime & Data</li>
+                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="Workflow">
+                                            <li class="collapsed-nav-item-title d-none text-secondary">Workflow & Template</li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/airtime/single}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/workflow/new}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Single Airtime</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <!--                                            <li class="nav-item">
-                                                                                            <a class="nav-link" th:href="@{/airtime/bulk}" data-bs-toggle="" aria-expanded="false">
-                                                                                                <div class="d-flex align-items-center">
-                                                                                                    <span class="nav-link-text">Bulk Airtime</span>
-                                                                                                </div>
-                                                                                            </a>
-                                                                                        </li>-->
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/airtime/schedule}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Schedule Airtime</span>
+                                                        <span class="nav-link-text">Manage Workflow</span>
                                                     </div>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/airtime/transaction}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/template/manage}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Airtime Transactions</span>
+                                                        <span class="nav-link-text">Manage Template</span>
                                                     </div>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/data/single}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/template/listing}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Data Bundle</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <!--                                            <li class="nav-item">
-                                                                                            <a class="nav-link" th:href="@{/data/bulk}" data-bs-toggle="" aria-expanded="false">
-                                                                                                <div class="d-flex align-items-center">
-                                                                                                    <span class="nav-link-text">Bulk Data</span>
-                                                                                                </div>
-                                                                                            </a>
-                                                                                        </li>-->
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/data/schedule}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Schedule Data</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/data/transaction}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Data Transactions</span>
+                                                        <span class="nav-link-text">Template Listing</span>
                                                     </div>
                                                 </a>
                                             </li>
@@ -401,46 +357,74 @@
                             </li>
                             <li class="nav-item">
                                 <!-- label-->
-                                <p class="navbar-vertical-label text-primary">Bills Payment</p>
+                                <p class="navbar-vertical-label text-primary">Setup & System User</p>
                                 <hr class="navbar-vertical-line" />
                                 <div class="nav-item-wrapper">
-                                    <a class="nav-link dropdown-indicator label-1" href="#CableTV" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="CableTV">
+                                    <a class="nav-link dropdown-indicator label-1" href="#Setup" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="Setup">
                                         <div class="d-flex align-items-center">
                                             <div class="dropdown-indicator-icon">
                                                 <span class="fas fa-caret-right"></span>
                                             </div>
                                             <span class="nav-link-icon"><span class="fa fa-television text-primary"></span></span>
-                                            <span class="nav-link-text">Cable TV</span>
+                                            <span class="nav-link-text">Setup</span>
                                         </div>
                                     </a>
                                     <div class="parent-wrapper label-1">
-                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="CableTV">
-                                            <li class="collapsed-nav-item-title d-none text-secondary">Cable TV</li>
+                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="Setup">
+                                            <li class="collapsed-nav-item-title d-none text-secondary">Setup</li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/cabletv/single}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/setup/department}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Cable TV</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <!--                                            <li class="nav-item">
-                                                                                            <a class="nav-link" th:href="@{/cabletv/bulk}" data-bs-toggle="" aria-expanded="false">
-                                                                                                <div class="d-flex align-items-center">
-                                                                                                    <span class="nav-link-text">Bulk Cable TV</span>
-                                                                                                </div>
-                                                                                            </a>
-                                                                                        </li>-->
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/cabletv/schedule}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Schedule Cable TV</span>
+                                                        <span class="nav-link-text">Department</span>
                                                     </div>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/cabletv/transaction}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/setup/designation}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Cable TV Transactions</span>
+                                                        <span class="nav-link-text">Designation</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/setup/grade-level}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">Grade Level</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/setup/department/unit}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">Unit</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/setup/expense}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">Expense Type</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/setup/loan}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">Loan Type</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/setup/leave}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">Leave Type</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/setup/service-request}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">Service Request</span>
                                                     </div>
                                                 </a>
                                             </li>
@@ -448,87 +432,44 @@
                                     </div>
                                 </div>
                                 <div class="nav-item-wrapper">
-                                    <a class="nav-link dropdown-indicator label-1" href="#Electricity" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="Electricity">
+                                    <a class="nav-link dropdown-indicator label-1" href="#User" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="User">
                                         <div class="d-flex align-items-center">
                                             <div class="dropdown-indicator-icon">
                                                 <span class="fas fa-caret-right"></span>
                                             </div>
-                                            <span class="nav-link-icon"><span class="fa fa-bolt text-primary"></span></span>
-                                            <span class="nav-link-text">Electricity</span>
+                                            <span class="nav-link-icon"><span class="fa fa-credit-card text-primary"></span></span>
+                                            <span class="nav-link-text">User</span>
+                                            <span class="badge ms-2 badge badge-phoenix badge-phoenix-info nav-link-badge">New</span>
                                         </div>
                                     </a>
                                     <div class="parent-wrapper label-1">
-                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="Electricity">
-                                            <li class="collapsed-nav-item-title d-none text-secondary">Electricity</li>
+                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="User">
+                                            <li class="collapsed-nav-item-title d-none text-secondary">Users</li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/electricity/single}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/user/}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Single Meter Recharge</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <!--                                            <li class="nav-item">
-                                                                                            <a class="nav-link" th:href="@{/electricity/bulk}" data-bs-toggle="" aria-expanded="false">
-                                                                                                <div class="d-flex align-items-center">
-                                                                                                    <span class="nav-link-text">Bulk Meter Recharge</span>
-                                                                                                </div>
-                                                                                            </a>
-                                                                                        </li>-->
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/electricity/schedule}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Schedule Meter Recharge</span>
+                                                        <span class="nav-link-text">New User</span>
                                                     </div>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/electricity/token}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/user/listing}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Retrieve Token</span>
+                                                        <span class="nav-link-text">User Listing</span>
                                                     </div>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/electricity/transaction}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/user/update}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Electricity Transaction</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="nav-item-wrapper">
-                                    <a class="nav-link dropdown-indicator label-1" href="#Insurance" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="Bulk">
-                                        <div class="d-flex align-items-center">
-                                            <div class="dropdown-indicator-icon">
-                                                <span class="fas fa-caret-right"></span>
-                                            </div>
-                                            <span class="nav-link-icon"><span class="fa fa-car-crash text-primary"></span></span>
-                                            <span class="nav-link-text">Insurance Payment</span>
-                                        </div>
-                                    </a>
-                                    <div class="parent-wrapper label-1">
-                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="Insurance">
-                                            <li class="collapsed-nav-item-title d-none text-secondary">Insurance Payment</li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/insurance/motor}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Motor Insurance</span>
+                                                        <span class="nav-link-text">User Update</span>
                                                     </div>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/insurance/life}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/user/role}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Health Insurance</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/insurance/home}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Home Cover Insurance</span>
+                                                        <span class="nav-link-text">Roles</span>
                                                     </div>
                                                 </a>
                                             </li>
@@ -536,142 +477,6 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="nav-item">
-                                <!-- label-->
-                                <p class="navbar-vertical-label text-primary">Capital Market</p>
-                                <hr class="navbar-vertical-line" />
-                                <!-- parent pages-->
-                                <div class="nav-item-wrapper">
-                                    <a class="nav-link dropdown-indicator label-1" href="#CapitalMarket" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="CapitalMarket">
-                                        <div class="d-flex align-items-center">
-                                            <div class="dropdown-indicator-icon">
-                                                <span class="fas fa-caret-right"></span>
-                                            </div>
-                                            <span class="nav-link-icon"><span class="fa fa-chart-bar text-primary"></span></span>
-                                            <span class="nav-link-text">Capital Market</span>
-                                        </div>
-                                    </a>
-                                    <div class="parent-wrapper label-1">
-                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="CapitalMarket">
-                                            <li class="collapsed-nav-item-title d-none text-secondary">Capital Market</li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/capital-market/account}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Open Stock Account</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/capital-market/listed-companies}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Listed Companies</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/capital-market/gainers-losers}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Top Gainers/Losers</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/capital-market/capitalization}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Market Capitalization</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <!-- label-->
-                                <p class="navbar-vertical-label text-primary">Account Details</p>
-                                <hr class="navbar-vertical-line" />
-                                <!-- parent pages-->
-                                <div class="nav-item-wrapper">
-                                    <a class="nav-link dropdown-indicator label-1" href="#Account" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="Account">
-                                        <div class="d-flex align-items-center">
-                                            <div class="dropdown-indicator-icon">
-                                                <span class="fas fa-caret-right"></span>
-                                            </div>
-                                            <span class="nav-link-icon"><span class="fa fa-briefcase text-primary"></span></span>
-                                            <span class="nav-link-text">Accounts</span>
-                                        </div>
-                                    </a>
-                                    <div class="parent-wrapper label-1">
-                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="Account">
-                                            <li class="collapsed-nav-item-title d-none text-secondary">Accounts</li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/account/details/}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Account Details</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/account/statement}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Account Statement</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/account/upgrade}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Account Upgrade</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-                            <!--                            <li class="nav-item">
-                                                             label
-                                                            <p class="navbar-vertical-label text-primary">Card Transactions</p>
-                                                            <hr class="navbar-vertical-line" />
-                                                            <div class="nav-item-wrapper">
-                                                                <a class="nav-link dropdown-indicator label-1" href="#Card" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="Card">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <div class="dropdown-indicator-icon">
-                                                                            <span class="fas fa-caret-right"></span>
-                                                                        </div>
-                                                                        <span class="nav-link-icon"><span class="fa fa-credit-card text-primary"></span></span>
-                                                                        <span class="nav-link-text">Card</span>
-                                                                        <span class="badge ms-2 badge badge-phoenix badge-phoenix-info nav-link-badge">New</span>
-                                                                    </div>
-                                                                </a>
-                                                                <div class="parent-wrapper label-1">
-                                                                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="Card">
-                                                                        <li class="collapsed-nav-item-title d-none text-secondary">Card</li>
-                                                                        <li class="nav-item">
-                                                                            <a class="nav-link" th:href="@{/card/}" data-bs-toggle="" aria-expanded="false">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <span class="nav-link-text">Card Request</span>
-                                                                                </div>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a class="nav-link" th:href="@{/card/block}" data-bs-toggle="" aria-expanded="false">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <span class="nav-link-text">Block Card</span>
-                                                                                </div>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a class="nav-link" th:href="@{/airtime/bulk}" data-bs-toggle="" aria-expanded="false">
-                                                                                <div class="d-flex align-items-center">
-                                                                                    <span class="nav-link-text">Unblock Card</span>
-                                                                                </div>
-                                                                            </a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </li>-->
                         </ul>
                     </div>
                 </div>
@@ -702,13 +507,13 @@
             <script th:src="@{/js/crm-dashboard.js}"></script>
             <script th:src="@{/js/dhtmlxgantt.js}"></script>
             <script th:src="@{/js/sweetalert2.min.js}"></script>
-            <script th:src="@{/js/onex.js}"></script>
+            <script th:src="@{/js/euclase.js}"></script>
             <form id="logoutForm" th:action="@{/admin/logout}" method="POST">
                 <div class="modal fade" id="confirmLogout" tabindex="-1" role="dialog" aria-labelledby="confirmLogout" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">One X</span></h6>
+                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
                             </div>
                             <div class="modal-body">
                                 <h6>Confirm you want to logout</h6><br/>
@@ -719,6 +524,35 @@
                     </div>
                 </div>
             </form>
+            <div class="modal fade" th:id="newDoc" tabindex="-1" role="dialog" th:aria-labelledby="newDoc" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>                                                                   
+                        </div>
+                        <div class="modal-body">
+                            <form class="mb-2" th:object="${euclasePayload}" th:action="@{/document/}" method="POST">
+                                <div class="col-auto">
+                                    <h5 class="mb-2 text-primary">New Document</h5>
+                                    <h6 class="text-700 fw-semi-bold">Select from the list of document category</h6>
+                                </div>
+                                <div class="form-icon-container mt-2">
+                                    <select class="form-select form-icon-input" data-choices="data-choices" th:field="*{documentType}" required="required">
+                                        <option value="">---Select document---</option>
+                                        <option value="Expense">Expense Request</option>
+                                        <option value="Leave">Leave Request</option>
+                                        <option value="Loan">Loan Request</option>
+                                        <option value="Service">Service Request</option>
+                                    </select>
+                                    <span class="fas fa-list text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="submit">Process request</button>
+                                <button type="button" class="btn btn-secondary btn-sm w-40 mb-3 mt-2" data-bs-dismiss="modal">Close</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <script type="text/javascript">
                     var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                     (function () {
@@ -729,26 +563,6 @@
                         s1.setAttribute('crossorigin', '*');
                         s0.parentNode.insertBefore(s1, s0);
                     })();
-            </script>
-        </div>
-
-        <div th:fragment="homescriptfiles">      
-            <script th:src="@{/js/purecounter_vanilla.js}"></script>
-            <script th:src="@{/js/aos.js}"></script>
-            <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-            <script th:src="@{/js/glightbox.min.js}"></script>
-            <script th:src="@{/js/swiper-bundle.min.js}"></script>
-            <script th:src="@{/js/main.js}"></script>
-            <script type="text/javascript">
-                var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-                (function () {
-                    var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                    s1.async = true;
-                    s1.src = 'https://embed.tawk.to/65528542cec6a912820f7c3c/1hf55h3eg';
-                    s1.charset = 'UTF-8';
-                    s1.setAttribute('crossorigin', '*');
-                    s0.parentNode.insertBefore(s1, s0);
-                })();
             </script>
         </div>
     </body>

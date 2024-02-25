@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <title>Entity Software - Euclase</title>
+        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    </head>
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
+            <div class="container-fluid px-0">
+                <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <div class="content">
+                    <div class="row mt-2">
+                        <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
+                            <nav class="mb-3" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Expense Document</li>
+                                </ol>
+                            </nav>
+                            <form th:object="${euclasePayload}" th:action="@{/document/expense}" method="POST">
+                                <input type="hidden" th:field="*{id}" />
+                                <div class="col-auto">
+                                    <h4 class="mb-2 text-primary">New Expense Document</h4>
+                                    <h6 class="text-700 fw-semi-bold">Expense document for managing the document</h6>
+                                    <hr/>
+                                </div>
+                                <div class="form-icon-container">
+                                    <select class="form-select form-control-sm form-icon-input" aria-label="documentType" th:field="*{documentType}" required="required">
+                                        <option value="">---Select expense type---</option>
+                                        <option th:each="fa : ${expenseTypeList}" th:value="${fa.expenseTypeCode}" th:text="${fa.expenseTypeName}"></option>
+                                    </select>
+                                    <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <div class="form-icon-container">
+                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{documentId}"  required="required" th:attr="readonly=${allowUserDocumentId == 'true' ? ' ' : 'readonly'}"/>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-terminal text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <div class="form-icon-container">
+                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{uniqueId}" placeholder="Enter reference ids like account, mobile" required="required"/>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-list text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <div class="form-icon-container">
+                                    <input type="number" class="form-control form-control-sm form-icon-input" th:field="*{amount}" placeholder="Enter amount" required="required" min="1" step="0.01"/>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-coins text-900 fs--1 form-icon text-primary"></span>
+                                </div>              
+                                <div class="form-icon-container">
+                                    <select class="form-select form-control-sm form-icon-input" aria-label="paymentMethod" th:field="*{paymentMethod}" required="required">
+                                        <option value="">---Select payment method---</option>
+                                        <option value="Card">Card</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Transfer">Transfer</option>
+                                    </select>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-credit-card text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <div class="form-icon-container">
+                                    <select class="form-select form-control-sm form-icon-input" aria-label="priority" th:field="*{priority}" required="required">
+                                        <option value="">---Select document priority---</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Urgent">Urgent</option>
+                                        <option value="Critical">Critical</option>
+                                    </select>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-credit-card text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <div class="form-icon-container">
+                                    <textarea class="form-control form-control-sm form-icon-input" th:field="*{narration}" placeholder="Enter narration" required="required"></textarea>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-comments text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Process request</button>
+                                <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
+                                            </div>
+                                            <div class="modal-body">
+                                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+    </body>
+</html>

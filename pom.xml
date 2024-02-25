@@ -10,12 +10,12 @@
     </parent>
     
     <groupId>com.entitysc</groupId>
-    <artifactId>onex</artifactId>
+    <artifactId>euclase</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
     
-    <name>onex</name>
-    <description>Entity Software Enterprise Platform</description>
+    <name>euclase</name>
+    <description>Entity Software Document Management System</description>
     
     <properties>
         <java.version>11</java.version>

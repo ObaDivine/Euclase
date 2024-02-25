@@ -3513,7 +3513,7 @@ progress {
 }
 
 .table-group-divider {
-    border-top: 2px solid inherit
+    border-top: 2px solid inherit;
 }
 
 .caption-top {
@@ -22309,8 +22309,8 @@ fieldset:disabled [data-list] .page,
 .tox .btn-group-sm>.tox-button-secondary,
 .tox .btn-group-sm>.tox-button,
 [data-list] .btn-group-sm>.page {
-    --entitysc-btn-padding-y: 0.5rem;
-    --entitysc-btn-padding-x: 1rem;
+    --entitysc-btn-padding-y: 0.3rem;
+    --entitysc-btn-padding-x: 0.5rem;
     --entitysc-btn-font-size: 0.8rem;
     --entitysc-btn-border-radius: 0.375rem
 }
