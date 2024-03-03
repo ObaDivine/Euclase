@@ -1,2 +1,2 @@
-# OneX
-Entity Software One Xperience
+# Euclase
+Entity Software Document Management System
