@@ -18,47 +18,48 @@
                                 <ol class="breadcrumb mb-0">
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Expense Document</li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/document/new}">Document</a></li>
+                                    <li class="breadcrumb-item active">Loan Document</li>
                                 </ol>
                             </nav>
-                            <form th:object="${euclasePayload}" th:action="@{/document/expense}" method="POST">
+                            <form th:object="${euclasePayload}" th:action="@{/document/loan/}" method="POST">
                                 <input type="hidden" th:field="*{id}" />
                                 <div class="col-auto">
-                                    <h4 class="mb-2 text-primary">New Expense Document</h4>
-                                    <h6 class="text-700 fw-semi-bold">Expense document for managing the document</h6>
+                                    <h4 class="mb-2 text-primary">New Loan Document</h4>
+                                    <h6 class="text-700 fw-semi-bold">Loan document for managing the document</h6>
                                     <hr/>
                                 </div>
                                 <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="documentType" th:field="*{documentType}" required="required">
-                                        <option value="">---Select expense type---</option>
-                                        <option th:each="fa : ${expenseTypeList}" th:value="${fa.expenseTypeCode}" th:text="${fa.expenseTypeName}"></option>
+                                    <select class="form-select form-control-sm form-icon-input" aria-label="loanType" th:field="*{loanType}" required="required">
+                                        <option value="">---Select loan type---</option>
+                                        <option th:each="fa : ${loanTypeList}" th:value="${fa.loanTypeCode}" th:text="${fa.loanTypeName}"></option>
                                     </select>
                                     <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
                                 </div>
                                 <div class="form-icon-container">
-                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{documentId}"  required="required" th:attr="readonly=${allowUserDocumentId == 'true' ? ' ' : 'readonly'}"/>
+                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{documentId}"  required="required" th:readonly="${allowUserDocumentId == 'true' ? ' ' : 'readonly'}"/>
                                     <span class="text-primary asterisk">*</span>
                                     <span class="fas fa-terminal text-900 fs--1 form-icon text-primary"></span>
                                 </div>
                                 <div class="form-icon-container">
-                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{uniqueId}" placeholder="Enter reference ids like account, mobile" required="required"/>
+                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{uniqueId}" placeholder="Enter reference id like account, customer, mobile" required="required"/>
                                     <span class="text-primary asterisk">*</span>
                                     <span class="fas fa-list text-900 fs--1 form-icon text-primary"></span>
                                 </div>
                                 <div class="form-icon-container">
-                                    <input type="number" class="form-control form-control-sm form-icon-input" th:field="*{amount}" placeholder="Enter amount" required="required" min="1" step="0.01"/>
+                                    <input type="date" class="form-control form-control-sm form-icon-input" th:field="*{requestDate}" placeholder="Enter request date" required="required"/>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-calendar-alt text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <div class="form-icon-container">
+                                    <input type="number" class="form-control form-control-sm form-icon-input" th:field="*{loanAmount}" placeholder="Enter loan amount" required="required" min="1" step="0.01"/>
                                     <span class="text-primary asterisk">*</span>
                                     <span class="fas fa-coins text-900 fs--1 form-icon text-primary"></span>
-                                </div>              
+                                </div>
                                 <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="paymentMethod" th:field="*{paymentMethod}" required="required">
-                                        <option value="">---Select payment method---</option>
-                                        <option value="Card">Card</option>
-                                        <option value="Cash">Cash</option>
-                                        <option value="Transfer">Transfer</option>
-                                    </select>
+                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{loanPurpose}" placeholder="Enter purpose for loan" required="required"/>
                                     <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-credit-card text-900 fs--1 form-icon text-primary"></span>
+                                    <span class="fas fa-comment-dots text-900 fs--1 form-icon text-primary"></span>
                                 </div>
                                 <div class="form-icon-container">
                                     <select class="form-select form-control-sm form-icon-input" aria-label="priority" th:field="*{priority}" required="required">
@@ -68,12 +69,18 @@
                                         <option value="Critical">Critical</option>
                                     </select>
                                     <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-credit-card text-900 fs--1 form-icon text-primary"></span>
+                                    <span class="fas fa-list-ol text-900 fs--1 form-icon text-primary"></span>
                                 </div>
                                 <div class="form-icon-container">
                                     <textarea class="form-control form-control-sm form-icon-input" th:field="*{narration}" placeholder="Enter narration" required="required"></textarea>
                                     <span class="text-primary asterisk">*</span>
                                     <span class="fas fa-comments text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <h6 class="text-700 fw-semi-bold text-secondary mt-2">Carbon Copy Notification</h6>
+                                <div class="form-icon-container">
+                                    <textarea class="form-control form-control-sm form-icon-input" th:field="*{copyEmails}" placeholder="Enter emails to copy" required="required"></textarea>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-envelope text-900 fs--1 form-icon text-primary"></span>
                                 </div>
                                 <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Process request</button>
                                 <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">

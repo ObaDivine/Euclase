@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -49,15 +50,20 @@ public class EuclasePayload {
     private String ordinalValue;
     private String leaveTypeCode;
     private String leaveTypeName;
+    private String leaveType;
     private String leaveDays;
     private String leaveReason;
     private String loanTypeCode;
     private String loanTypeName;
+    private String loanType;
     private String loanPurpose;
+    private String expenseDate;
     private String expenseTypeCode;
     private String expenseTypeName;
+    private String expenseType;
     private String serviceRequestCode;
     private String serviceRequestName;
+    private String serviceType;
     private String hod;
     private String uniqueId;
     private String documentType;
@@ -74,4 +80,7 @@ public class EuclasePayload {
     private String editorData;
     private String documentTemplateName;
     private String documentTemplateBody;
+    private String copyEmails;
+    private String comment;
+    private MultipartFile file;
 }

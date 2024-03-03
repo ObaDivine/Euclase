@@ -53,17 +53,26 @@ public class TemplateController {
         requestPayload.setFirstName(userDetails.get(1));
         requestPayload.setLastName(userDetails.get(2));
         requestPayload.setUsername(userDetails.get(8));
-//        PylonResponsePayload response = euclaseService.processCreateDepartment(requestPayload);
-//        if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
-//            alertMessage = response.getResponseMessage();
-//            alertMessageType = "success";
-//            return "redirect:/template/department";
-//        }
-        requestPayload.setEditor("<figure class=\"table\"><table><tbody><tr><td>Request Date</td><td>{{REQUEST_DATE}}</td></tr><tr><td>Request By</td><td>{{REQUEST_BY}}</td></tr></tbody></table></figure>");
-        model.addAttribute("euclasePayload", requestPayload);
-//        model.addAttribute("alertMessage", response.getResponseMessage());
-        model.addAttribute("alertMessageType", "error");
-        return "template";
+        PylonResponsePayload response = euclaseService.processCreateDocumentTemplate(requestPayload);
+
+        //Check the type of document
+        if (requestPayload.getDocumentTemplateName().equalsIgnoreCase("Expense")) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
+            return "redirect:/template/expense";
+        } else if (requestPayload.getDocumentTemplateName().equalsIgnoreCase("Leave")) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
+            return "redirect:/template/leave";
+        } else if (requestPayload.getDocumentTemplateName().equalsIgnoreCase("Loan")) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
+            return "redirect:/template/loan";
+        } else {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
+            return "redirect:/template/service-request";
+        }
     }
 
     @GetMapping("/expense")
@@ -73,6 +82,7 @@ public class TemplateController {
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             requestPayload.setEditorData(response.getData().getDocumentTemplateBody());
             requestPayload.setEditor(response.getData().getDocumentTemplateBody());
+            requestPayload.setDocumentTemplateName(response.getData().getDocumentTemplateName());
             model.addAttribute("euclasePayload", requestPayload);
         } else if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.RECORD_NOT_EXIST_CODE.getResponseCode())) {
             model.addAttribute("euclasePayload", requestPayload);
@@ -94,13 +104,14 @@ public class TemplateController {
         return "templateexpense";
     }
 
-    @GetMapping("/service")
+    @GetMapping("/service-request")
     public String templateService(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, Principal principal, HttpSession session) {
         PylonResponsePayload response = euclaseService.processFetchDocumentTemplate("Service");
         EuclasePayload requestPayload = new EuclasePayload();
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             requestPayload.setEditorData(response.getData().getDocumentTemplateBody());
             requestPayload.setEditor(response.getData().getDocumentTemplateBody());
+            requestPayload.setDocumentTemplateName(response.getData().getDocumentTemplateName());
             model.addAttribute("euclasePayload", requestPayload);
         } else if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.RECORD_NOT_EXIST_CODE.getResponseCode())) {
             model.addAttribute("euclasePayload", new EuclasePayload());
@@ -129,6 +140,7 @@ public class TemplateController {
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             requestPayload.setEditorData(response.getData().getDocumentTemplateBody());
             requestPayload.setEditor(response.getData().getDocumentTemplateBody());
+            requestPayload.setDocumentTemplateName(response.getData().getDocumentTemplateName());
             model.addAttribute("euclasePayload", requestPayload);
         } else if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.RECORD_NOT_EXIST_CODE.getResponseCode())) {
             model.addAttribute("euclasePayload", new EuclasePayload());
@@ -157,6 +169,7 @@ public class TemplateController {
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             requestPayload.setEditorData(response.getData().getDocumentTemplateBody());
             requestPayload.setEditor(response.getData().getDocumentTemplateBody());
+            requestPayload.setDocumentTemplateName(response.getData().getDocumentTemplateName());
             model.addAttribute("euclasePayload", requestPayload);
         } else if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.RECORD_NOT_EXIST_CODE.getResponseCode())) {
             model.addAttribute("euclasePayload", new EuclasePayload());

@@ -191,57 +191,43 @@ public class GenericServiceImpl implements GenericService {
             case "Document Template": {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getDocumentTemplateName().trim());
-                rawString.add(requestPayload.getDocumentTemplateBody().trim());
                 break;
             }
-            case "CableTv": {
+            case "Leave Document": {
                 rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getBiller().trim());
-                rawString.add(requestPayload.getSmartcard().trim());
-                rawString.add(requestPayload.getSubscriptionCode().trim());
-                rawString.add(requestPayload.getSubscriptionName().trim());
-                rawString.add(requestPayload.getSubscriptionType().trim());
-                rawString.add(requestPayload.getSubscriptionAmount().trim());
-                rawString.add(requestPayload.getViewingMonths().trim());
-                rawString.add(requestPayload.getRequestId().trim());
-                break;
-            }
-            case "CableTv Bulk": {
-                rawString.add(requestPayload.getMobileNumber().trim());
-                rawString.add(requestPayload.getBiller().trim());
-                rawString.add(requestPayload.getSmartcard().trim());
-                rawString.add(requestPayload.getSubscriptionCode().trim());
-                rawString.add(requestPayload.getSubscriptionName().trim());
-                rawString.add(requestPayload.getSubscriptionType().trim());
-                rawString.add(requestPayload.getViewingMonths().trim());
-                rawString.add(requestPayload.getRequestId().trim());
-                break;
-            }
-            case "CableTv Schedule": {
-                rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getBiller().trim());
-                rawString.add(requestPayload.getSmartcard().trim());
-                rawString.add(requestPayload.getSubscriptionCode().trim());
-                rawString.add(requestPayload.getSubscriptionName().trim());
-                rawString.add(requestPayload.getSubscriptionType().trim());
-                rawString.add(requestPayload.getSubscriptionAmount().trim());
-                rawString.add(requestPayload.getViewingMonths().trim());
+                rawString.add(requestPayload.getDocumentId().trim());
+                rawString.add(requestPayload.getUniqueId().trim());
+                rawString.add(requestPayload.getLeaveType().trim());
+                rawString.add(requestPayload.getLeaveReason().trim());
                 rawString.add(requestPayload.getStartDate().trim());
                 rawString.add(requestPayload.getEndDate().trim());
-                rawString.add(requestPayload.getFrequency().trim());
-                rawString.add(requestPayload.getExecuteTime().trim());
-                if (requestPayload.getId() != 0) {
-                    rawString.add(String.valueOf(requestPayload.getId()));
-                }
                 break;
             }
-            case "Electricity": {
+            case "Loan Document": {
                 rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getDisco().trim());
-                rawString.add(requestPayload.getMeterNumber().trim());
-                rawString.add(requestPayload.getBillType().trim());
+                rawString.add(requestPayload.getDocumentId().trim());
+                rawString.add(requestPayload.getUniqueId().trim());
+                rawString.add(requestPayload.getLoanType().trim());
+                rawString.add(requestPayload.getLoanAmount().trim());
+                rawString.add(requestPayload.getLoanPurpose().trim());
+                rawString.add(requestPayload.getLoanRequestBy().trim());
+                break;
+            }
+            case "Expense Document": {
+                rawString.add(requestPayload.getUsername().trim());
+                rawString.add(requestPayload.getDocumentId().trim());
+                rawString.add(requestPayload.getUniqueId().trim());
+                rawString.add(requestPayload.getExpenseType().trim());
+                rawString.add(requestPayload.getExpenseDate().trim());
                 rawString.add(requestPayload.getAmount().trim());
-                rawString.add(requestPayload.getRequestId().trim());
+                rawString.add(requestPayload.getPaymentMethod().trim());
+                break;
+            }
+            case "Service Document": {
+                rawString.add(requestPayload.getUsername().trim());
+                rawString.add(requestPayload.getDocumentId().trim());
+                rawString.add(requestPayload.getUniqueId().trim());
+                rawString.add(requestPayload.getServiceType().trim());
                 break;
             }
             case "Electricity Bulk": {

@@ -19,23 +19,20 @@
                                 <ol class="breadcrumb mb-0">
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/template/manage}">Template</a></li>
                                     <li class="breadcrumb-item active">Document Template</li>
                                 </ol>
                             </nav>
                             <form th:object="${euclasePayload}" th:action="@{/template/create}" method="POST" th:onsubmit="|fetchEditorData()|">
                                 <input type="hidden" th:field="*{id}" />
+                                <input type="hidden" th:field="*{documentTemplateName}" />
                                 <div class="col-auto">
-                                    <h4 class="mb-2 text-primary">New Document Template</h4>
-                                    <h6 class="text-700 fw-semi-bold">Leave document for managing the document</h6>
+                                    <h4 class="mb-2 text-primary">Expense Document Template</h4>
+                                    <h6 class="text-700 fw-semi-bold">Template for managing expense document</h6>
                                     <hr/>
-                                </div>
-                                <div class="form-icon-container">
-                                    <input type="text" th:field="*{documentTemplateName}" />
-                                    <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
                                 </div>
                                 <div id="toolbar-container"></div>
                                 <textarea th:field="*{editor}"></textarea>
-                                <input type="hidden" th:field="*{editorData}" />
                                 <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Process request</button>
                                 <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -75,7 +72,8 @@
                     table: {title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable'},
                     help: {title: 'Help', items: 'help'}
                 },
-                menubar: 'favs file edit view insert format tools table help'
+                menubar: 'favs file edit view insert format tools table help',
+                noneditable_class: 'uneditable'
             });
         </script>
     </body>

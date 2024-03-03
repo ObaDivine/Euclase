@@ -19,25 +19,17 @@
                                 <ol class="breadcrumb mb-0">
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/template/manage}">Template</a></li>
                                     <li class="breadcrumb-item active">Document Template</li>
                                 </ol>
                             </nav>
                             <form th:object="${euclasePayload}" th:action="@{/template/create}" method="POST" th:onsubmit="|fetchEditorData()|">
                                 <input type="hidden" th:field="*{id}" />
+                                <input type="hidden" th:field="*{documentTemplateName}" />
                                 <div class="col-auto">
-                                    <h4 class="mb-2 text-primary">New Document Template</h4>
-                                    <h6 class="text-700 fw-semi-bold">Leave document for managing the document</h6>
+                                    <h4 class="mb-2 text-primary">Loan Document Template</h4>
+                                    <h6 class="text-700 fw-semi-bold">Template for managing loan document</h6>
                                     <hr/>
-                                </div>
-                                <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="templateType" th:field="*{templateType}" required="required">
-                                        <option value="">---Select template type---</option>
-                                        <option value="Expense">Expense</option>
-                                        <option value="Leave">Leave</option>
-                                        <option value="Loan">Loan</option>
-                                        <option value="Service Request">Service Request</option>
-                                    </select>
-                                    <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
                                 </div>
                                 <div id="toolbar-container"></div>
                                 <textarea th:field="*{editor}"></textarea>
@@ -81,7 +73,8 @@
                     table: {title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable'},
                     help: {title: 'Help', items: 'help'}
                 },
-                menubar: 'favs file edit view insert format tools table help'
+                menubar: 'favs file edit view insert format tools table help',
+                noneditable_class: 'uneditable'
             });
         </script>
     </body>

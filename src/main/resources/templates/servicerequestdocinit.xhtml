@@ -18,6 +18,7 @@
                                 <ol class="breadcrumb mb-0">
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/document/new}">Document</a></li>
                                     <li class="breadcrumb-item active">Service Request Document</li>
                                 </ol>
                             </nav>
@@ -29,7 +30,7 @@
                                     <hr/>
                                 </div>
                                 <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="documentType" th:field="*{documentType}" required="required">
+                                    <select class="form-select form-control-sm form-icon-input" aria-label="serviceType" th:field="*{serviceType}" required="required">
                                         <option value="">---Select loan type---</option>
                                         <option th:each="fa : ${serviceTypeList}" th:value="${fa.serviceRequestCode}" th:text="${fa.serviceRequestName}"></option>
                                     </select>
@@ -53,12 +54,18 @@
                                         <option value="Critical">Critical</option>
                                     </select>
                                     <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-credit-card text-900 fs--1 form-icon text-primary"></span>
+                                    <span class="fas fa-list-ol text-900 fs--1 form-icon text-primary"></span>
                                 </div>
                                 <div class="form-icon-container">
                                     <textarea class="form-control form-control-sm form-icon-input" th:field="*{narration}" placeholder="Enter narration" required="required"></textarea>
                                     <span class="text-primary asterisk">*</span>
                                     <span class="fas fa-comments text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <h6 class="text-700 fw-semi-bold text-secondary mt-2">Carbon Copy Notification</h6>
+                                <div class="form-icon-container">
+                                    <textarea class="form-control form-control-sm form-icon-input" th:field="*{copyEmails}" placeholder="Enter emails to copy" required="required"></textarea>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-envelope text-900 fs--1 form-icon text-primary"></span>
                                 </div>
                                 <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Process request</button>
                                 <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">

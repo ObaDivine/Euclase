@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -157,4 +158,20 @@ public class PylonPayload {
     private String priority;
     private String documentTemplateName;
     private String documentTemplateBody;
+    private String uniqueId;
+    private String serviceType;
+    private String documentId;
+    private String leaveType;
+    private String leaveReason;
+    private String loanPurpose;
+    private String expenseType;
+    private String loanType;
+    private String loanReason;
+    private String loanRequestBy;
+    private String loanAmount;
+    private String expenseDate;
+    private String paymentMethod;
+    private String copyEmails;
+    private String comment;
+    private MultipartFile file;
 }
