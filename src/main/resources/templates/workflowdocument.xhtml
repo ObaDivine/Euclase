@@ -3,6 +3,7 @@
     <head>
         <title>Entity Software - Euclase</title>
         <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
+        <!--        <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>-->
         <script src="https://cdn.tiny.cloud/1/l6x0x029codgczussxzl6kr49suvrl95ckbjoup3ry6u42kt/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     </head>
     <body onload="preloaderFunction()" style="margin: 0;">
@@ -19,51 +20,36 @@
                                     <ol class="breadcrumb mb-0">
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/template/manage}">Template</a></li>
-                                        <li class="breadcrumb-item active">Leave Request</li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/document/pending}">Pending Document</a></li>
+                                        <li class="breadcrumb-item active">Document Workflow</li>
                                     </ol>
                                 </nav>
-                                <h4 class="mb-2 text-secondary">Leave Document Template</h4>
-                                <h6 class="text-700 fw-semi-bold">Template for managing leave document</h6>
+                                <h4 class="mb-2 text-secondary">Document Workflow History</h4>
+                                <h6 class="text-700 fw-semi-bold">View history of document workflow</h6>
                             </div>
-                            <form th:object="${euclasePayload}" th:action="@{/document/leave/process}" method="POST"  enctype="multipart/form-data">
-                                <input type="hidden" th:field="*{documentId}" />
-                                <input type="hidden" th:field="*{documentTemplateName}" />
-                                <div id="toolbar-container"></div>
-                                <textarea th:field="*{editor}"></textarea>
-                                <input type="hidden" th:field="*{editorData}" />
-                                <h6 class="text-700 fw-semi-bold text-secondary mt-3">Attach Files</h6>
-                                <div class="form-icon-container mt-2" id="uploadFiles">
-                                    <div class="row">
-                                        <div class="col-lg-10 col-md-12 col-sm-10">
-                                            <input type="file" class="form-control form-control-sm" id="uploadedFiles" name="uploadedFiles"/>
-                                        </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-2">
-                                            <button class="btn btn-success btn-sm w-100 add_file" type="button">Add file</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <h6 class="text-700 fw-semi-bold text-secondary mt-3">Note to Approver</h6>
-                                <div class="form-icon-container mt-1">
-                                    <textarea class="form-control form-control-sm form-icon-input" th:field="*{comment}" placeholder="Note to approver" required="required"></textarea>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-comments text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
-                                <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
+                            <div class="timeline-vertical">
+                                <div class="timeline-item" th:each="rec : ${workflowList}">
+                                    <div class="row g-md-3 align-items-center mb-8 mb-lg-10">
+                                        <div class="col-12 col-md-auto d-flex">
+                                            <div class="timeline-item-date text-end order-1 order-md-0 me-md-4">
+                                                <p class="fs--2 fw-semi-bold text-700 mb-0"><span th:text="${rec.createdAt}">23 August, 2023</span><br class="d-none d-md-block" /> <span th:text="${rec.executeTime}">10:30 AM</span></p>
                                             </div>
-                                            <div class="modal-body">
-                                                <button id="submitForm" type="submit" class="btn btn-primary btn-sm">Submit</button>
-                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                            <div class="timeline-item-bar position-relative me-3 me-md-0 border-400">
+                                                <div class="icon-item icon-item-sm bg-success dark__bg-success">
+                                                    <span class="fa-solid fa-check text-white dark__text-white fs--2"></span>
+                                                </div>
+                                                <span class="timeline-bar border-end border-success"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="timeline-item-content ps-6 ps-md-3">
+                                                <h4 th:text="${rec.commentFrom}">Order is processing</h4>
+                                                <p class="fs--1 text-800 mb-0" th:text="${rec.comment}">Your package is ready for the seller to prepare.</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>

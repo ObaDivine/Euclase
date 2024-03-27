@@ -127,6 +127,12 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.5</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>com.mashape.unirest</groupId>
             <artifactId>unirest-java</artifactId>
             <version>1.4.9</version>

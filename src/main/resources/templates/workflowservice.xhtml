@@ -3,8 +3,6 @@
     <head>
         <title>Entity Software - Euclase</title>
         <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
-        <!--        <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>-->
-        <script src="https://cdn.tiny.cloud/1/l6x0x029codgczussxzl6kr49suvrl95ckbjoup3ry6u42kt/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     </head>
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
@@ -14,25 +12,27 @@
                 <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
                     <div class="row">
-                        <div class="offset-lg-1 col-lg-10 col-md-12 col-sm-12">
+                        <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">                            
                             <div class="col-auto mb-3">
                                 <nav class="mb-3" aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/template/manage}">Template</a></li>
-                                        <li class="breadcrumb-item active">Document Template</li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/workflow/manage}">Workflow</a></li>
+                                        <li class="breadcrumb-item active">Service Request Workflow</li>
                                     </ol>
                                 </nav>
-                                <h4 class="mb-2 text-secondary">Leave Document Template</h4>
-                                <h6 class="text-700 fw-semi-bold">Template for managing leave document</h6>
+                                <h4 class="mb-2 text-secondary">Service Request Workflow</h4>
+                                <h6 class="text-700 fw-semi-bold">Create and Manage different document templates</h6>
                             </div>
-                            <form th:object="${euclasePayload}" th:action="@{/template/create}" method="POST" th:onsubmit="|fetchEditorData()|">
+                            <form th:object="${euclasePayload}" th:action="@{/workflow/create}" method="POST">
                                 <input type="hidden" th:field="*{id}" />
                                 <input type="hidden" th:field="*{documentTemplateName}" />
-                                <div id="toolbar-container"></div>
-                                <textarea th:field="*{editor}"></textarea>
-                                <input type="hidden" th:field="*{editorData}" />
+                                <div class="form-icon-container">
+                                    <textarea class="form-control form-control-sm form-icon-input" th:field="*{documentTemplateBody}" required="required" cols="10" rows="18" style="overflow-y: auto;"></textarea>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-terminal text-900 fs--1 form-icon text-primary"></span>
+                                </div>
                                 <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
                                 <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">View placeholders</button>
                                 <div class="offcanvas offcanvas-end" id="offcanvasRight" tabindex="-1" aria-labelledby="offcanvasRightLabel">
@@ -46,33 +46,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody class="list">
-                                                    <tr>
-                                                        <td class="align-middle ps-3 name">{{COMPANY_NAME}}</td>
-                                                        <td class="align-middle email">Name of company</td>                                                      
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="align-middle ps-3 name">{{COMPANY_ADDRESS}}</td>
-                                                        <td class="align-middle email">Address of company</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="align-middle ps-3 name">{{COMPANY_EMAIL}}</td>
-                                                        <td class="align-middle email">Official email of company</td>
-                                                    </tr><tr>
-                                                        <td class="align-middle ps-3 name">{{COMPANY_PHONE}}</td>
-                                                        <td class="align-middle email">Contact number of company</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="align-middle ps-3 name">{{COMPANY_LOGO}}</td>
-                                                        <td class="align-middle email">Link to company logo</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="align-middle ps-3 name">{{COMPANY_RC}}</td>
-                                                        <td class="align-middle email">Company RC number</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="align-middle ps-3 name">{{DURATION}}</td>
-                                                        <td class="align-middle email">Time elapse between dates</td>
-                                                    </tr>
                                                     <tr>
                                                         <td class="align-middle ps-3 name">{{START_DATE}}</td>
                                                         <td class="align-middle email">Start date</td>
@@ -110,24 +83,8 @@
                                                         <td class="align-middle email">Comment to approving officer</td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="align-middle ps-3 name">{{SIGNATURE}}</td>
-                                                        <td class="align-middle email">Link to inputter signature</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="align-middle ps-3 name">{{AMOUNT}}</td>
-                                                        <td class="align-middle email">Single amount</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="align-middle ps-3 name">{{TOTAL}}</td>
-                                                        <td class="align-middle email">Cummulative total</td>
-                                                    </tr>
-                                                    <tr>
                                                         <td class="align-middle ps-3 name">{{PURPOSE}}</td>
                                                         <td class="align-middle email">Purpose for transaction</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="align-middle ps-3 name">{{READONLY}}</td>
-                                                        <td class="align-middle email">Set field to read only</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="align-middle ps-3 name">{{RECIPIENT}}</td>
@@ -145,7 +102,7 @@
                                                 <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
                                             </div>
                                             <div class="modal-body">
-                                                <button id="submitForm" type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                             </div>
                                         </div>
@@ -159,26 +116,7 @@
         </main>
         <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
         <script>
-            tinymce.init({
-                selector: '#editor',
-                plugins: [
-                    'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
-                    'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code', 'fullscreen', 'insertdatetime',
-                    'media', 'table', 'emoticons', 'template', 'help'
-                ],
-                menu: {
-                    file: {title: 'File', items: 'newdocument restoredraft | preview | export print | deleteallconversations'},
-                    edit: {title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace'},
-                    view: {title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments'},
-                    insert: {title: 'Insert', items: 'image link media addcomment pageembed template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime'},
-                    format: {title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat'},
-                    tools: {title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount'},
-                    table: {title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable'},
-                    help: {title: 'Help', items: 'help'}
-                },
-                menubar: 'favs file edit view insert format tools table help',
-                noneditable_class: 'uneditable'
-            });
+
         </script>
     </body>
 </html>

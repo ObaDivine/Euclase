@@ -53,11 +53,16 @@ spring:
             #dialect: org.hibernate.dialect.PostgreSQLDialect
         show-sql: true
         open-in-view: false
+    servlet:
+        multipart:
+            max-file-size: 200MB
+            max-request-size: 250MB
+            file-size-threshold: 5MB
         
 euclase:
     document:
         prefix:
-            usegeneric: true
+            usegeneric: false
             loan: LN
             leave: LV
             expense: EX
@@ -176,6 +181,7 @@ pylon:
             delete: http://localhost:8080/pylon/api/v1/leave/delete
             doc:
                 create: http://localhost:8080/pylon/api/v1/leave/doc
+                process: http://localhost:8080/pylon/api/v1/leave/doc/process
         loan:
             type:
                 list: http://localhost:8080/pylon/api/v1/loan/type/list
@@ -189,6 +195,7 @@ pylon:
             delete: http://localhost:8080/pylon/api/v1/loan/delete
             doc:
                 create: http://localhost:8080/pylon/api/v1/loan/doc
+                process: http://localhost:8080/pylon/api/v1/loan/doc/process
         expense:
             type:
                 list: http://localhost:8080/pylon/api/v1/expense/type/list
@@ -202,6 +209,7 @@ pylon:
             delete: http://localhost:8080/pylon/api/v1/expense/delete
             doc:
                 create: http://localhost:8080/pylon/api/v1/expense/doc
+                process: http://localhost:8080/pylon/api/v1/expense/doc/process
         service:
             request:
                 list: http://localhost:8080/pylon/api/v1/service/request/list
@@ -215,7 +223,25 @@ pylon:
             delete: http://localhost:8080/pylon/api/v1/service/request/delete
             doc:
                 create: http://localhost:8080/pylon/api/v1/service/request/doc
+                process: http://localhost:8080/pylon/api/v1/service/request/doc/process
         document:
+            search: http://localhost:8080/pylon/api/v1/document/search
+            signature: http://localhost:8080/pylon/api/v1/document/signature
+            approve:
+                leave: http://localhost:8080/pylon/api/v1/document/leave/approve
+                loan: http://localhost:8080/pylon/api/v1/document/loan/approve
+                expense: http://localhost:8080/pylon/api/v1/document/expense/approve
+                service: http://localhost:8080/pylon/api/v1/document/service/approve
+            details: http://localhost:8080/pylon/api/v1/document/details
+            self: http://localhost:8080/pylon/api/v1/document/self
+            pending: http://localhost:8080/pylon/api/v1/document/pending
+            draft:
+                fetch: http://localhost:8080/pylon/api/v1/document/draft
+                delete: http://localhost:8080/pylon/api/v1/document/draft/delete
             template:
                 fetch: http://localhost:8080/pylon/api/v1/document/template/record
                 create: http://localhost:8080/pylon/api/v1/document/template
+            workflow:
+                fetch: http://localhost:8080/pylon/api/v1/document/workflow/record
+                create: http://localhost:8080/pylon/api/v1/document/workflow
+                history: http://localhost:8080/pylon/api/v1/document/workflow/history

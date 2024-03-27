@@ -13,28 +13,132 @@
                 <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
                 <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
-                    <div class="row mt-2">
+                    <div class="row">
                         <div class="offset-lg-1 col-lg-10 col-md-12 col-sm-12">
-                            <nav class="mb-3" aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/template/manage}">Template</a></li>
-                                    <li class="breadcrumb-item active">Document Template</li>
-                                </ol>
-                            </nav>
+                            <div class="col-auto mb-3">
+                                <nav class="mb-3" aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/template/manage}">Template</a></li>
+                                        <li class="breadcrumb-item active">Document Template</li>
+                                    </ol>
+                                </nav>
+                                <h4 class="mb-2 text-secondary">Service Request Document Template</h4>
+                                <h6 class="text-700 fw-semi-bold">Template for managing service request document</h6>
+                            </div>
                             <form th:object="${euclasePayload}" th:action="@{/template/create}" method="POST" th:onsubmit="|fetchEditorData()|">
                                 <input type="hidden" th:field="*{id}" />
                                 <input type="hidden" th:field="*{documentTemplateName}" />
-                                <div class="col-auto">
-                                    <h4 class="mb-2 text-primary">Service Request Document Template</h4>
-                                    <h6 class="text-700 fw-semi-bold">Template for managing service request document</h6>
-                                    <hr/>
-                                </div>
                                 <div id="toolbar-container"></div>
                                 <textarea th:field="*{editor}"></textarea>
                                 <input type="hidden" th:field="*{editorData}" />
-                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Process request</button>
+                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
+                                <button class="btn btn-primary mb-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Right Offcanvas</button>
+                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">View placeholders</button>
+                                <div class="offcanvas offcanvas-end" id="offcanvasRight" tabindex="-1" aria-labelledby="offcanvasRightLabel">
+                                    <div class="offcanvas-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm fs--1 mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="sort border-top ps-3 text-primary" data-sort="name">Placeholder</th>
+                                                        <th class="sort border-top text-secondary" data-sort="email">Description</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="list">
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{COMPANY_NAME}}</td>
+                                                        <td class="align-middle email">Name of company</td>                                                      
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{COMPANY_ADDRESS}}</td>
+                                                        <td class="align-middle email">Address of company</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{COMPANY_EMAIL}}</td>
+                                                        <td class="align-middle email">Official email of company</td>
+                                                    </tr><tr>
+                                                        <td class="align-middle ps-3 name">{{COMPANY_PHONE}}</td>
+                                                        <td class="align-middle email">Contact number of company</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{COMPANY_LOGO}}</td>
+                                                        <td class="align-middle email">Link to company logo</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{COMPANY_RC}}</td>
+                                                        <td class="align-middle email">Company RC number</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{DURATION}}</td>
+                                                        <td class="align-middle email">Time elapse between dates</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{START_DATE}}</td>
+                                                        <td class="align-middle email">Start date</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{END_DATE}}</td>
+                                                        <td class="align-middle email">End date</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{REQUEST_DATE}}</td>
+                                                        <td class="align-middle email">Date of request</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{REQUEST_BY}}</td>
+                                                        <td class="align-middle email">Request by</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{REQUEST_TYPE}}</td>
+                                                        <td class="align-middle email">Request type</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{DOCUMENT_ID}}</td>
+                                                        <td class="align-middle email">Document unique ID</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{DOCUMENT_TYPE}}</td>
+                                                        <td class="align-middle email">Document type</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{INPUTTER_COMMENT}}</td>
+                                                        <td class="align-middle email">Comment by inputter</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{COMMENT}}</td>
+                                                        <td class="align-middle email">Comment to approving officer</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{SIGNATURE}}</td>
+                                                        <td class="align-middle email">Link to inputter signature</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{AMOUNT}}</td>
+                                                        <td class="align-middle email">Single amount</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{TOTAL}}</td>
+                                                        <td class="align-middle email">Cummulative total</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{PURPOSE}}</td>
+                                                        <td class="align-middle email">Purpose for transaction</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{READONLY}}</td>
+                                                        <td class="align-middle email">Set field to read only</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-middle ps-3 name">{{RECIPIENT}}</td>
+                                                        <td class="align-middle email">Recipient of request</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">

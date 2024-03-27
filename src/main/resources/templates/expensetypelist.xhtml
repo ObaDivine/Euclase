@@ -12,10 +12,10 @@
                 <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
                 <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
-                    <div class="row mt-2">
+                    <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <div id="dealsTable" data-list='{"valueNames":["telco","mobileNumber","amount","reference"],"page":6,"pagination":true}'> 
-                                <div class="col-auto">
+                                <div class="col-auto mb-3">
                                     <nav class="mb-3" aria-label="breadcrumb">
                                         <ol class="breadcrumb mb-0">
                                             <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
@@ -24,8 +24,8 @@
                                             <li class="breadcrumb-item active">Expense Type Listing</li>
                                         </ol>
                                     </nav>
-                                    <br/>
-                                    <h5 class="mb-2 text-primary">Expense Type Listing</h5>
+                                    <h4 class="mb-2 text-secondary">Expense Type Listing</h4>
+                                    <h6 class="text-700 fw-semi-bold">Listing of all expense type documents</h6>
                                 </div>
                                 <div class="table-responsive ms-n1 ps-1 scrollbar">
                                     <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200">
@@ -47,8 +47,8 @@
                                                 <td th:text="${rec.createdBy}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.status}" class="status align-middle white-space-nowrap start ps-3"></td>
                                                 <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
-                                                    <a class="btn btn-sm btn-primary" href="#!" th:href="@{'/setup/expense/edit?seid=' + ${rec.id}}">Update</a>
-                                                    <a class="btn btn-sm btn-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">Delete</a>
+                                                    <a class="text-success" href="#!" th:href="@{'/setup/expense/edit?seid=' + ${rec.id}}">Update</a>&VerticalBar;
+                                                    <a class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">Delete</a>
                                                     <div class="modal fade" th:id="'a' + ${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">

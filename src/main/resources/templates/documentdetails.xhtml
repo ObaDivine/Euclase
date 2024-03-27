@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <title>Entity Software - Euclase</title>
+        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    </head>
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
+            <div class="container-fluid px-0">
+                <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <div class="content">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="col-auto mb-3">
+                                <nav class="mb-3" aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/document/my}">My Document</a></li>
+                                        <li class="breadcrumb-item active">Document Details</li>
+                                    </ol>
+                                </nav>
+                                <h4 class="mb-2 text-secondary">Document Details</h4>
+                                <h6 class="text-700 fw-semi-bold">Document details, supporting documents and workflow history</h6>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item border-top border-300">
+                                            <h4 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    Document Details
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse show" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body pt-0" th:object="${euclasePayload}">
+                                                    <div class="bg-soft dark__bg-1100 p-4 mb-4 rounded-2">
+                                                        <div class="row g-2">
+                                                            <div class="col-12 col-lg-4">
+                                                                <div class="row g-2 g-lg-2">
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Document Id :</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.documentId}">document id</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Date Created :</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.createdAt}">2024-03-01</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-lg-4">
+                                                                <div class="row g-2 g-lg-2">
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Type :</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.documentType}">document id</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Created By :</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.createdBy}">2024-03-01</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-lg-4">
+                                                                <div class="row g-2 g-lg-2">
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Sub Type :</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p th:if="${euclasePayload.documentType} == 'Expense'" class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.expenseType}">document id</p>
+                                                                                <p th:if="${euclasePayload.documentType} == 'Leave'" class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.leaveType}">document id</p>
+                                                                                <p th:if="${euclasePayload.documentType} == 'Loan'" class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.loanType}">document id</p>
+                                                                                <p th:if="${euclasePayload.documentType} == 'Service'" class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.serviceType}">document id</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Priority :</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.priority}">Normal</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-2">
+                                                            <div class="col-12 col-lg-4">
+                                                                <div class="row g-2 g-lg-2">
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div th:if="${euclasePayload.documentType} == 'Leave'" class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Start Date:</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.startDate}">2024-03-10</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div th:if="${euclasePayload.documentType} == 'Expense'" class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Expense Date:</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.expenseDate}">2024-03-10</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div th:if="${euclasePayload.documentType} == 'Loan'" class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Loan Amount:</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.loanAmount}">1k</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div th:if="${euclasePayload.documentType} == 'Service'" class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Trans Type</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.transType}">1k</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Unique ID:</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.uniqueId}">Unique</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-lg-4">
+                                                                <div class="row g-2 g-lg-2">
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div th:if="${euclasePayload.documentType} == 'Leave'" class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">End Date:</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.startDate}">2024-03-10</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div th:if="${euclasePayload.documentType} == 'Expense'" class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Payment Method:</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.paymentMethod}">2024-03-10</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div th:if="${euclasePayload.documentType} == 'Loan'" class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Request By</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.loanRequestBy}">1k</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div th:if="${euclasePayload.documentType} == 'Service'" class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Trans Type</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.transType}">1k</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Carbon Copy:</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.carbonCopy}">2024-03-01</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-lg-4">
+                                                                <div class="row g-2 g-lg-2">
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Purpose:</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.leaveReason}">Purpose</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 col-sm-6 col-lg-12">
+                                                                        <div class="row align-items-center g-0">
+                                                                            <div class="col-auto col-lg-6 col-xl-5">
+                                                                                <h6 class="mb-0 me-1">Narration:</h6>
+                                                                            </div>
+                                                                            <div class="col-auto col-lg-6 col-xl-7">
+                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.narration}">Narration</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                    Supporting Documents
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body pt-0">
+                                                    <div class="table-responsive ms-n1 ps-1 scrollbar">
+                                                        <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Document</th>
+                                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Link</th>
+                                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Upload By</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class="list" id="deal-tables-body" th:if="${documentList != null}">
+                                                                <tr th:each="rec : ${documentList}" class="position-static">
+                                                                    <td th:text="${rec.originalFileName}" class="date align-middle white-space-nowrap start ps-3"></td>
+                                                                    <td class="code align-middle white-space-nowrap start ps-3">
+                                                                        <a href="" th:href="@{rec.documentLink}" th:text="${rec.documentLink}"></a>
+                                                                    </td>
+                                                                    <td th:text="${rec.createdBy}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingThree">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                    Workflow History
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body pt-0">
+                                                    <div class="timeline-vertical">
+                                                        <div class="timeline-item" th:each="rec : ${workflowList}">
+                                                            <div class="row g-md-3 align-items-center mb-8 mb-lg-10">
+                                                                <div class="col-12 col-md-auto d-flex">
+                                                                    <div class="timeline-item-date text-end order-1 order-md-0 me-md-4">
+                                                                        <p class="fs--2 fw-semi-bold text-700 mb-0"><span th:text="${rec.createdAt}">23 August, 2023</span><br class="d-none d-md-block" /> <span th:text="${rec.executeTime}">10:30 AM</span></p>
+                                                                    </div>
+                                                                    <div class="timeline-item-bar position-relative me-3 me-md-0 border-400">
+                                                                        <div class="icon-item icon-item-sm bg-success dark__bg-success">
+                                                                            <span class="fa-solid fa-check text-white dark__text-white fs--2"></span>
+                                                                        </div>
+                                                                        <span class="timeline-bar border-end border-success"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="timeline-item-content ps-6 ps-md-3">
+                                                                        <h4 th:text="${rec.commentFrom}">Order is processing</h4>
+                                                                        <p class="fs--1 text-800 mb-0" th:text="${rec.comment}">Your package is ready for the seller to prepare.</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+        <script>
+            tinymce.init({
+                selector: '#editor',
+                plugins: [
+                    'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
+                    'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code', 'fullscreen', 'insertdatetime',
+                    'media', 'table', 'emoticons', 'template', 'help'
+                ],
+                menu: {
+                    file: {title: 'File', items: 'newdocument restoredraft | preview | export print | deleteallconversations'},
+                    edit: {title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace'},
+                    view: {title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments'},
+                    insert: {title: 'Insert', items: 'image link media addcomment pageembed template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime'},
+                    format: {title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat'},
+                    tools: {title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount'},
+                    table: {title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable'},
+                    help: {title: 'Help', items: 'help'}
+                },
+                menubar: 'favs file edit view insert format tools table help',
+                noneditable_class: 'uneditable'
+            });
+            $(document).ready(function () {
+                $(".add_file").click(function (e) {
+                    e.preventDefault();
+                    $('#uploadFiles').prepend('<div class="row"><div class="col-lg-10 col-md-10 col-sm-10"><input type="file" class="form-control form-control-sm" id="uploadedFiles" name="uploadedFiles"/></div><div class="col-lg-2 col-md-2 col-sm-2"><button class="btn btn-danger btn-sm w-100 remove_file" type="button">Remove file</button></div></div>');
+                });
+
+                $(document).on('click', '.remove_file', function (e) {
+                    e.preventDefault();
+                    let row = $(this).parent().parent();
+                    $(row).remove();
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,6 +1,8 @@
 package com.entitysc.euclase.service;
 
 import com.entitysc.euclase.payload.PylonPayload;
+import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -21,4 +23,6 @@ public interface GenericService {
     String generateRequestId();
 
     String callPylonAPI(String url, String requestBody, String token, String app);
+
+    String callPylonAPI(String url, String requestJson, List<MultipartFile> uploadedFiles, String token, String app);
 }

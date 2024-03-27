@@ -22,8 +22,8 @@ public interface EuclaseService {
 
     /**
      * ********************Department Transactions ******************* @param
-     * requestPayload
      *
+     * @param requestPayload
      * @return
      */
     PylonResponsePayload processCreateDepartment(EuclasePayload requestPayload);
@@ -36,8 +36,8 @@ public interface EuclaseService {
 
     /**
      * ******************Department Unit Transactions **************** @param
-     * requestPayload
      *
+     * @param requestPayload
      * @return
      */
     PylonResponsePayload processCreateDepartmentUnit(EuclasePayload requestPayload);
@@ -50,8 +50,8 @@ public interface EuclaseService {
 
     /**
      * ***************** Designation Transactions ******************* @param
-     * requestPayload
      *
+     * @param requestPayload
      * @return
      */
     PylonResponsePayload processCreateDesignation(EuclasePayload requestPayload);
@@ -64,8 +64,8 @@ public interface EuclaseService {
 
     /**
      * ***************** Branch Transactions *********************** @param
-     * requestPayload
      *
+     * @param requestPayload
      * @return
      */
     PylonResponsePayload processCreateBranch(EuclasePayload requestPayload);
@@ -78,8 +78,8 @@ public interface EuclaseService {
 
     /**
      * **************** Grade Level Transactions ******************* @param
-     * requestPayload
      *
+     * @param requestPayload
      * @return
      */
     PylonResponsePayload processCreateGradeLevel(EuclasePayload requestPayload);
@@ -92,10 +92,12 @@ public interface EuclaseService {
 
     /**
      * **************** Leave Transactions ******************* @param
-     * requestPayload
      *
+     * @param requestPayload
      * @return
      */
+    PylonResponsePayload processLeaveDocument(EuclasePayload requestPayload);
+
     PylonResponsePayload processCreateLeaveType(EuclasePayload requestPayload);
 
     PylonResponsePayload processCreateLeaveDocument(EuclasePayload requestPayload);
@@ -108,10 +110,12 @@ public interface EuclaseService {
 
     /**
      * **************** Loan Transactions ******************* @param
-     * requestPayload
      *
+     * @param requestPayload
      * @return
      */
+    PylonResponsePayload processLoanDocument(EuclasePayload requestPayload);
+
     PylonResponsePayload processCreateLoanType(EuclasePayload requestPayload);
 
     PylonResponsePayload processCreateLoanDocument(EuclasePayload requestPayload);
@@ -123,11 +127,14 @@ public interface EuclaseService {
     DataListResponsePayload processFetchLoanTypeList();
 
     /**
-     * **************** Expense Transactions ******************* @param
-     * requestPayload
+     * **************** Expense Transactions
      *
+     *******************
+     * @param requestPayload
      * @return
      */
+    PylonResponsePayload processExpenseDocument(EuclasePayload requestPayload);
+
     PylonResponsePayload processCreateExpenseType(EuclasePayload requestPayload);
 
     PylonResponsePayload processCreateExpenseDocument(EuclasePayload requestPayload);
@@ -139,11 +146,14 @@ public interface EuclaseService {
     DataListResponsePayload processFetchExpenseTypeList();
 
     /**
-     * **************** Service Request ******************* @param
-     * requestPayload
+     * **************** Service Request
      *
+     *******************
+     * @param requestPayload
      * @return
      */
+    PylonResponsePayload processServiceRequestDocument(EuclasePayload requestPayload);
+
     PylonResponsePayload processCreateServiceRequest(EuclasePayload requestPayload);
 
     PylonResponsePayload processCreateServiceRequestDocument(EuclasePayload requestPayload);
@@ -156,9 +166,47 @@ public interface EuclaseService {
 
     /**
      * **************** Document Template
+     *
+     * @param templateName
+     * @return
      */
     PylonResponsePayload processFetchDocumentTemplate(String templateName);
 
     PylonResponsePayload processCreateDocumentTemplate(EuclasePayload requestPayload);
+
+    /**
+     * **************** Document Workflow
+     *
+     * @param workflowName
+     * @return
+     */
+    PylonResponsePayload processFetchDocumentWorkflow(String workflowName);
+
+    PylonResponsePayload processCreateDocumentWorkflow(EuclasePayload requestPayload);
+
+    /**
+     * *************** My Documents
+     *
+     ******************
+     * @param principal
+     * @return
+     */
+    DataListResponsePayload processFetchMyDocuments(String principal);
+
+    DataListResponsePayload processFetchPendingDocuments(String principal);
+
+    DataListResponsePayload processFetchDraftDocuments(String principal);
+
+    DataListResponsePayload processFetchDocumentDetails(String documentType, String id);
+
+    DataListResponsePayload processFetchDocumentWorkflow(String documentType, String id);
+
+    PylonResponsePayload processApproveDocument(EuclasePayload requestPayload);
+
+    PylonResponsePayload processDeleteDraftDocument(String documentType, String id);
+
+    DataListResponsePayload processSearchDocument(String search);
+
+    PylonResponsePayload processDocumentSignature(EuclasePayload requestPayload);
 
 }

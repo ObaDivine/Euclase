@@ -19,4 +19,6 @@ public class DataListResponsePayload {
     private String responseCode;
     private String responseMessage;
     private List<PylonPayload> data;
+    private PylonPayload payload;
+    private List<PylonPayload> workflowData;
 }

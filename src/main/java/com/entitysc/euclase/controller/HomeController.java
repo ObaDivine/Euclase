@@ -105,7 +105,7 @@ public class HomeController {
         }
         alertMessage = "Your session is terminated and you are logged out";
         alertMessageType = "success";
-        return "redirect:/login";
+        return "redirect:/";
     }
 
     @GetMapping("/change-password")
@@ -151,7 +151,7 @@ public class HomeController {
         if (response.getResponseCode().equalsIgnoreCase("00")) {
             alertMessage = response.getResponseMessage();
             alertMessageType = "success";
-            return "redirect:/login";
+            return "redirect:/";
         }
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("alertMessage", response.getResponseMessage());
@@ -175,6 +175,7 @@ public class HomeController {
             userDetails.add(response.getData().getUsername());
             userDetails.add(response.getData().getEnableTwoFactorAuth());
             userDetails.add(String.valueOf(response.getData().getItemCounts()));
+            userDetails.add(response.getData().getSignatureLink());
             httpRequest.getSession().setAttribute("EUCLASE_SESSION_DETAILS", userDetails);
         } else {
             userDetails.set(0, response.getData().getUsername() + ".png");
@@ -188,6 +189,7 @@ public class HomeController {
             userDetails.set(8, response.getData().getUsername());
             userDetails.set(9, response.getData().getEnableTwoFactorAuth());
             userDetails.add(10, String.valueOf(response.getData().getItemCounts()));
+            userDetails.add(11, response.getData().getSignatureLink());
             httpRequest.getSession().setAttribute("EUCLASE_SESSION_DETAILS", userDetails);
         }
 
@@ -202,6 +204,7 @@ public class HomeController {
         euclasePayload.setUsername(response.getData().getUsername());
         euclasePayload.setEnableTwoFactorAuth(response.getData().getEnableTwoFactorAuth());
         euclasePayload.setItemCounts(response.getData().getItemCounts());
+        euclasePayload.setSignatureLink(response.getData().getSignatureLink());
         model.addAttribute("euclasePayload", euclasePayload);
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");

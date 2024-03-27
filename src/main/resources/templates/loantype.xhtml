@@ -12,22 +12,21 @@
                 <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
                 <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
-                    <div class="row mt-2">
+                    <div class="row">
                         <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
-                            <nav class="mb-3" aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Loan Type</li>
-                                </ol>
-                            </nav>
+                            <div class="col-auto mb-3">
+                                <nav class="mb-3" aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                        <li class="breadcrumb-item active">Loan Type</li>
+                                    </ol>
+                                </nav>
+                                <h4 class="mb-2 text-secondary">Loan Setup</h4>
+                                <h6 class="text-700 fw-semi-bold">Setup leave type for managing the loan related request</h6>
+                            </div>
                             <form th:object="${euclasePayload}" th:action="@{/setup/loan/}" method="POST">
                                 <input type="hidden" th:field="*{id}" />
-                                <div class="col-auto">
-                                    <h4 class="mb-2 text-primary">Loan Setup</h4>
-                                    <h6 class="text-700 fw-semi-bold">Setup leave type for managing the loan related request</h6>
-                                    <hr/>
-                                </div>
                                 <div class="form-icon-container">
                                     <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{loanTypeCode}" placeholder="Enter loan code" required="required"/>
                                     <span class="text-primary asterisk">*</span>
@@ -45,7 +44,7 @@
                                     </select>
                                     <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
                                 </div>
-                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Process request</button>
+                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
                                 <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">

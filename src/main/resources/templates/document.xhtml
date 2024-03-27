@@ -13,19 +13,18 @@
                 <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
                 <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
-                    <div class="row mt-2">
+                    <div class="row">
                         <div class="offset-lg-1 col-lg-10 col-md-12 col-sm-12">
-                            <nav class="mb-3" aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Create Document</li>
-                                </ol>
-                            </nav>
-                            <div class="col-auto">
-                                <h4 class="mb-2 text-primary">Create Document</h4>
+                            <div class="col-auto mb-3">
+                                <nav class="mb-3" aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                        <li class="breadcrumb-item active">Create Document</li>
+                                    </ol>
+                                </nav>
+                                <h4 class="mb-2 text-secondary">Create Document</h4>
                                 <h6 class="text-700 fw-semi-bold">Create different document types</h6>
-                                <hr/>
                             </div>
                         </div>
                     </div>
@@ -118,11 +117,11 @@
                                             <div class="d-flex justify-content-between">
                                                 <div class="mb-5 mb-md-0 mb-lg-5 me-3">
                                                     <div class="d-sm-flex align-items-center mb-3">
-                                                        <h4 class="mb-0 text-primary">Leave Document</h4>
+                                                        <h4 class="mb-0 text-primary">Loan Document</h4>
                                                     </div>
                                                     <div class="d-flex align-items-end mb-md-5 mb-lg-0">
                                                         <p  class="fs--1 text-700">
-                                                            Maternity, Sabbatical, Annual leave 
+                                                            SME, Micro, Salary Loans
                                                         </p>
                                                     </div>
                                                 </div>
@@ -134,8 +133,8 @@
                                                         <ul class="list-unstyled mb-0 border-start-sm border-start-md-0 border-start-lg ps-sm-2 ps-md-0 ps-lg-2 border-200">
                                                             <li class="d-flex align-items-center">
                                                                 <span class="uil uil-check-circle text-success me-2"></span>
-                                                                <a href="#" th:href="@{/document/leave}">
-                                                                    <span class="text-700">New Leave Document</span>
+                                                                <a href="#" th:href="@{/document/loan}">
+                                                                    <span class="text-700">New Loan Document</span>
                                                                 </a>
                                                             </li>
                                                         </ul>
@@ -157,11 +156,11 @@
                                             <div class="d-flex justify-content-between">
                                                 <div class="mb-5 mb-md-0 mb-lg-5 me-3">
                                                     <div class="d-sm-flex align-items-center mb-3">
-                                                        <h4 class="mb-0 text-primary">Loan Document</h4>
+                                                        <h4 class="mb-0 text-primary">Leave Document</h4>
                                                     </div>
                                                     <div class="d-flex align-items-end mb-md-5 mb-lg-0">
                                                         <p  class="fs--1 text-700">
-                                                            SME, Micro, Salary Loans
+                                                            Maternity, Sabbatical, Annual leave 
                                                         </p>
                                                     </div>
                                                 </div>
@@ -173,8 +172,8 @@
                                                         <ul class="list-unstyled mb-0 border-start-sm border-start-md-0 border-start-lg ps-sm-2 ps-md-0 ps-lg-2 border-200">
                                                             <li class="d-flex align-items-center">
                                                                 <span class="uil uil-check-circle text-success me-2"></span>
-                                                                <a href="#" th:href="@{/document/loan}">
-                                                                    <span class="text-700">New Loan Document</span>
+                                                                <a href="#" th:href="@{/document/leave}">
+                                                                    <span class="text-700">New Leave Document</span>
                                                                 </a>
                                                             </li>
                                                         </ul>

@@ -1,6 +1,7 @@
 package com.entitysc.euclase.payload;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -148,6 +149,7 @@ public class PylonPayload {
     private String hod;
     private String leaveTypeCode;
     private String leaveTypeName;
+    private String leaveType;
     private String loanTypeCode;
     private String loanTypeName;
     private String expenseTypeCode;
@@ -161,7 +163,8 @@ public class PylonPayload {
     private String uniqueId;
     private String serviceType;
     private String documentId;
-    private String leaveType;
+    private String documentType;
+    private String documentLink;
     private String leaveReason;
     private String loanPurpose;
     private String expenseType;
@@ -171,7 +174,13 @@ public class PylonPayload {
     private String loanAmount;
     private String expenseDate;
     private String paymentMethod;
-    private String copyEmails;
     private String comment;
-    private MultipartFile file;
+    private String commentFrom;
+    private String commentTo;
+    private List<MultipartFile> uploadedFiles;
+    private String carbonCopy;
+    public String slaExpiry;
+    private String originalFileName;
+    private String search;
+    private String signatureLink;
 }

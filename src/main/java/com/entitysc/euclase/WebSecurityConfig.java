@@ -26,12 +26,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionFixation().newSession();
 
         http.authorizeRequests()
-                .antMatchers("/", "/login/**", "/logout", "/signup/**", "/admin/signin/**", "/admin/logout", "/qrcode/**", "/otp/**", "/error/**", "/airtime/data/plan/**").permitAll()
+                .antMatchers("/", "/login/**", "/logout", "/signup/**", "/admin/signin/**", "/admin/logout", "/qrcode/**", "/otp/**", "/error/**").permitAll()
                 .antMatchers("/css/**", "/images/**", "/js/**", "/font/**", "/events/**", "/webhook/**", "/forgot-password/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login").loginProcessingUrl("/client/auth")
+                .loginPage("/")
                 .and()
                 .logout().logoutSuccessUrl("/logout")
                 .deleteCookies("JSESSIONID")

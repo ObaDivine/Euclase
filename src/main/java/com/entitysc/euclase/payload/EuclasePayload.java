@@ -1,5 +1,6 @@
 package com.entitysc.euclase.payload;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -68,6 +69,7 @@ public class EuclasePayload {
     private String uniqueId;
     private String documentType;
     private String documentId;
+    private String documentLink;
     private String paymentMethod;
     private String amount;
     private String narration;
@@ -80,7 +82,16 @@ public class EuclasePayload {
     private String editorData;
     private String documentTemplateName;
     private String documentTemplateBody;
-    private String copyEmails;
     private String comment;
-    private MultipartFile file;
+    private String commentFrom;
+    private String commentTo;
+    private List<MultipartFile> uploadedFiles;
+    private MultipartFile uploadedFile;
+    private String carbonCopy;
+    public String slaExpiry;
+    private String originalFileName;
+    private String createdAt;
+    private String createdBy;
+    private String search;
+    private String signatureLink;
 }

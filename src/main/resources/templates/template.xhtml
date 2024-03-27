@@ -3,7 +3,6 @@
     <head>
         <title>Entity Software - Euclase</title>
         <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
-        <!--        <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>-->
         <script src="https://cdn.tiny.cloud/1/l6x0x029codgczussxzl6kr49suvrl95ckbjoup3ry6u42kt/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     </head>
     <body onload="preloaderFunction()" style="margin: 0;">
@@ -13,19 +12,18 @@
                 <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
                 <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
-                    <div class="row mt-2">
-                        <div class="offset-lg-1 col-lg-10 col-md-12 col-sm-12">
-                            <nav class="mb-3" aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Document Template</li>
-                                </ol>
-                            </nav>
-                            <div class="col-auto">
-                                <h4 class="mb-2 text-primary">Document Templates</h4>
+                    <div class="row">
+                        <div class="offset-lg-1 col-lg-10 col-md-12 col-sm-12">                            
+                            <div class="col-auto mb-3">
+                                <nav class="mb-3" aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                        <li class="breadcrumb-item active">Document Template</li>
+                                    </ol>
+                                </nav>
+                                <h4 class="mb-2 text-secondary">Document Templates</h4>
                                 <h6 class="text-700 fw-semi-bold">Create and Manage different document templates</h6>
-                                <hr/>
                             </div>
                         </div>
                     </div>
@@ -120,12 +118,12 @@
                                             <div class="d-flex justify-content-between">
                                                 <div class="mb-5 mb-md-0 mb-lg-5 me-3">
                                                     <div class="d-sm-flex align-items-center mb-3">
-                                                        <h4 class="mb-0 text-primary">Leave Template</h4>
+                                                        <h4 class="mb-0 text-primary">Loan Template</h4>
                                                     </div>
-                                                    <p class="fs--1 text-700">Employee leave request.</p>
+                                                    <p class="fs--1 text-700">All loan setup.</p>
                                                     <div class="d-flex align-items-end mb-md-5 mb-lg-0">
                                                         <p  class="fs--1 text-700">
-                                                            Maternity, Sabbatical, Annual leave 
+                                                            SME, Micro, Salary Loans
                                                         </p>
                                                     </div>
                                                 </div>
@@ -137,7 +135,7 @@
                                                         <ul class="list-unstyled mb-0 border-start-sm border-start-md-0 border-start-lg ps-sm-2 ps-md-0 ps-lg-2 border-200">
                                                             <li class="d-flex align-items-center">
                                                                 <span class="uil uil-check-circle text-success me-2"></span>
-                                                                <a href="#" th:href="@{/template/leave}">
+                                                                <a href="#" th:href="@{/template/loan}">
                                                                     <span class="text-700">Manage Template</span>
                                                                 </a>
                                                             </li>
@@ -160,12 +158,12 @@
                                             <div class="d-flex justify-content-between">
                                                 <div class="mb-5 mb-md-0 mb-lg-5 me-3">
                                                     <div class="d-sm-flex align-items-center mb-3">
-                                                        <h4 class="mb-0 text-primary">Loan Template</h4>
+                                                        <h4 class="mb-0 text-primary">Leave Template</h4>
                                                     </div>
-                                                    <p class="fs--1 text-700">All loan setup.</p>
+                                                    <p class="fs--1 text-700">Employee leave request.</p>
                                                     <div class="d-flex align-items-end mb-md-5 mb-lg-0">
                                                         <p  class="fs--1 text-700">
-                                                            SME, Micro, Salary Loans
+                                                            Maternity, Sabbatical, Annual leave 
                                                         </p>
                                                     </div>
                                                 </div>
@@ -177,7 +175,7 @@
                                                         <ul class="list-unstyled mb-0 border-start-sm border-start-md-0 border-start-lg ps-sm-2 ps-md-0 ps-lg-2 border-200">
                                                             <li class="d-flex align-items-center">
                                                                 <span class="uil uil-check-circle text-success me-2"></span>
-                                                                <a href="#" th:href="@{/template/loan}">
+                                                                <a href="#" th:href="@{/template/leave}">
                                                                     <span class="text-700">Manage Template</span>
                                                                 </a>
                                                             </li>

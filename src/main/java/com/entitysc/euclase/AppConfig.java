@@ -1,4 +1,4 @@
-package com.entitysc.euclase ;
+package com.entitysc.euclase;
 
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import java.util.Properties;
@@ -57,6 +57,8 @@ public class AppConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**").addResourceLocations("classpath:/images/");
         registry.addResourceHandler("/css/**").addResourceLocations("classpath:/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("classpath:/js/");
+        registry.addResourceHandler("/documents/**").addResourceLocations("classpath:/documents/");
+        registry.addResourceHandler("/signatures/**").addResourceLocations("classpath:/signatures/");
     }
 
     @Bean

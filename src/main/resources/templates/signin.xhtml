@@ -33,7 +33,8 @@
                                         </div>
                                         <div class="col mx-auto">
                                             <div class="auth-form-box text-center">
-                                                <h4 class="text-primary mb-3">User Login</h4>
+                                                <h4 class="text-primary mb-3">Euclase :: Login</h4>
+                                                <hr/>
                                                 <form th:object="${euclasePayload}" th:action="@{/login}" method="POST" class="text-center">
                                                     <div class="form-icon-container">
                                                         <input class="form-control form-icon-input" th:field="*{username}" type="text" placeholder="Username" required="required" />
@@ -50,7 +51,7 @@
                                                         <span class="fas fa-key text-900 fs--1 form-icon text-primary"></span>
                                                     </div>
                                                     <button class="btn btn-primary w-100 mb-3 mt-2" type="submit">Sign In</button>
-                                                    <a class="fs--1 fw-bold" th:href="@{/signup}">Create an account</a> <span>::</span>
+                                                    <a class="fs--1 fw-semi-bold" th:href="@{/signup}">Create an account</a> <span>::</span>
                                                     <span><a class="fs--1 fw-semi-bold" th:href="@{/forgot-password}">Forgot Password?</a></span>
                                                 </form>
                                             </div>

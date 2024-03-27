@@ -3,6 +3,8 @@ package com.entitysc.euclase.service;
 import com.entitysc.euclase.payload.PylonPayload;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -10,7 +12,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
+import java.util.List;
 import java.util.StringJoiner;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -23,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -33,6 +39,8 @@ public class GenericServiceImpl implements GenericService {
 
     @Value("${euclase.encryption.key.web}")
     private String encryptionKey;
+    @Value("${euclase.image.dir}")
+    private String imageDirectory;
     Logger logger = LoggerFactory.getLogger(GenericServiceImpl.class);
 
     @Override
@@ -193,6 +201,11 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getDocumentTemplateName().trim());
                 break;
             }
+            case "Document Workflow": {
+                rawString.add(requestPayload.getUsername().trim());
+                rawString.add(requestPayload.getDocumentTemplateName().trim());
+                break;
+            }
             case "Leave Document": {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getDocumentId().trim());
@@ -201,6 +214,9 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getLeaveReason().trim());
                 rawString.add(requestPayload.getStartDate().trim());
                 rawString.add(requestPayload.getEndDate().trim());
+                if (requestPayload.getCarbonCopy() != null) {
+                    rawString.add(requestPayload.getCarbonCopy().trim());
+                }
                 break;
             }
             case "Loan Document": {
@@ -211,6 +227,9 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getLoanAmount().trim());
                 rawString.add(requestPayload.getLoanPurpose().trim());
                 rawString.add(requestPayload.getLoanRequestBy().trim());
+                if (requestPayload.getCarbonCopy() != null) {
+                    rawString.add(requestPayload.getCarbonCopy().trim());
+                }
                 break;
             }
             case "Expense Document": {
@@ -221,6 +240,9 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getExpenseDate().trim());
                 rawString.add(requestPayload.getAmount().trim());
                 rawString.add(requestPayload.getPaymentMethod().trim());
+                if (requestPayload.getCarbonCopy() != null) {
+                    rawString.add(requestPayload.getCarbonCopy().trim());
+                }
                 break;
             }
             case "Service Document": {
@@ -228,30 +250,22 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getDocumentId().trim());
                 rawString.add(requestPayload.getUniqueId().trim());
                 rawString.add(requestPayload.getServiceType().trim());
-                break;
-            }
-            case "Electricity Bulk": {
-                rawString.add(requestPayload.getMobileNumber().trim());
-                rawString.add(requestPayload.getDisco().trim());
-                rawString.add(requestPayload.getMeterNumber().trim());
-                rawString.add(requestPayload.getBillType().trim());
-                rawString.add(requestPayload.getAmount().trim());
-                rawString.add(requestPayload.getRequestId().trim());
-                break;
-            }
-            case "Electricity Schedule": {
-                rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getDisco().trim());
-                rawString.add(requestPayload.getMeterNumber().trim());
-                rawString.add(requestPayload.getBillType().trim());
-                rawString.add(requestPayload.getAmount().trim());
-                rawString.add(requestPayload.getStartDate().trim());
-                rawString.add(requestPayload.getEndDate().trim());
-                rawString.add(requestPayload.getFrequency().trim());
-                rawString.add(requestPayload.getExecuteTime().trim());
-                if (requestPayload.getId() != 0) {
-                    rawString.add(String.valueOf(requestPayload.getId()));
+                if (requestPayload.getCarbonCopy() != null) {
+                    rawString.add(requestPayload.getCarbonCopy().trim());
                 }
+                break;
+            }
+            case "Document Upload": {
+                rawString.add(requestPayload.getUsername().trim());
+                rawString.add(requestPayload.getDocumentId().trim());
+                rawString.add(requestPayload.getComment().trim());
+                break;
+            }
+            case "Document Approve": {
+                rawString.add(requestPayload.getUsername().trim());
+                rawString.add(requestPayload.getDocumentId().trim());
+                rawString.add(requestPayload.getComment().trim());
+                rawString.add(requestPayload.getStatus().trim());
                 break;
             }
             case "FundsTransfer": {
@@ -560,6 +574,46 @@ public class GenericServiceImpl implements GenericService {
                         .asString();
             }
             logger.info("Pylon Service - " + app + " Request " + requestBody);
+            //Log the error
+            logger.info("Pylon Service - " + app + " Response " + httpResponse.getBody());
+            return httpResponse.getBody();
+        } catch (Exception ex) {
+            logger.info("Pylon Service Response " + ex.getMessage());
+            return ex.getMessage();
+        }
+    }
+
+    @Override
+    public String callPylonAPI(String url, String requestJson, List<MultipartFile> uploadedFiles, String token, String app) {
+        try {
+            //Generate a collection of files
+            Collection<File> files = new ArrayList<>();
+            if (!uploadedFiles.isEmpty()) {
+                for (MultipartFile f : uploadedFiles) {
+                    if (!f.getOriginalFilename().equalsIgnoreCase("")) {
+                        File convFile = new File(f.getOriginalFilename());
+                        convFile.createNewFile();
+                        FileOutputStream fos = new FileOutputStream(convFile);
+                        fos.write(f.getBytes());
+                        fos.close();
+                        files.add(convFile);
+                    }
+                }
+            }
+
+            //Check if the collection is empty. Add dummy file
+            if (files.isEmpty()) {
+                File file = new File(imageDirectory + "/logo_nobg.png");
+                files.add(file);
+            }
+
+            Unirest.setTimeouts(0, 0);
+            HttpResponse<String> httpResponse = Unirest.post(url)
+                    .header("Authorization", "Bearer " + token)
+                    .field("requestPayload", requestJson)
+                    .field("uploadedFiles", files)
+                    .asString();
+            logger.info("Pylon Service - " + app + " Request " + requestJson);
             //Log the error
             logger.info("Pylon Service - " + app + " Response " + httpResponse.getBody());
             return httpResponse.getBody();
