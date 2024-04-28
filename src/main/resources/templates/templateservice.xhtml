@@ -3,7 +3,6 @@
     <head>
         <title>Entity Software - Euclase</title>
         <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
-        <!--        <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>-->
         <script src="https://cdn.tiny.cloud/1/l6x0x029codgczussxzl6kr49suvrl95ckbjoup3ry6u42kt/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     </head>
     <body onload="preloaderFunction()" style="margin: 0;">
@@ -34,7 +33,6 @@
                                 <textarea th:field="*{editor}"></textarea>
                                 <input type="hidden" th:field="*{editorData}" />
                                 <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
-                                <button class="btn btn-primary mb-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Right Offcanvas</button>
                                 <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">View placeholders</button>
                                 <div class="offcanvas offcanvas-end" id="offcanvasRight" tabindex="-1" aria-labelledby="offcanvasRightLabel">
                                     <div class="offcanvas-body">

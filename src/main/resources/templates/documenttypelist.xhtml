@@ -20,47 +20,46 @@
                                         <ol class="breadcrumb mb-0">
                                             <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                             <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                            <li class="breadcrumb-item"><a href="#" th:href="@{/document/new}">Document</a></li>
-                                            <li class="breadcrumb-item active">Draft Documents</li>
+                                            <li class="breadcrumb-item"><a href="#" th:href="@{/setup/document/type}">Document Type</a></li>
+                                            <li class="breadcrumb-item active">Document Type Listing</li>
                                         </ol>
                                     </nav>
-                                    <h4 class="mb-2 text-secondary">Draft Documents</h4>
-                                    <h6 class="text-700 fw-semi-bold">List all documents still in draft</h6>
+                                    <h4 class="mb-2 text-secondary">Document Type Listing</h4>
+                                    <h6 class="text-700 fw-semi-bold">Listing of all document types setup in the organization</h6>
                                 </div>
                                 <div class="table-responsive ms-n1 ps-1 scrollbar">
                                     <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200">
                                         <thead>
                                             <tr>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Request By</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="documentId">Document ID</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="documentType">Document Type</th>                                               
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="priority">Priority</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="group">Document Group</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="code">Document Type Code</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="name">Document Type Name</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="name">Created By</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="status">Status</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
                                             <tr th:each="rec : ${dataList}" class="position-static">
                                                 <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.createdBy}" class="code align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.documentId}" class="code align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.documentType}" class="name align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.priority}" class="location align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.narration}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
-                                                <td  class="status align-middle white-space-nowrap start ps-3">
-                                                    <a class="text-success" href="#!" th:href="@{'/document/draft/details?dt=' + ${rec.transType} + '&seid=' + ${rec.documentId}}">Details</a>
-                                                    &VerticalBar;
+                                                <td th:text="${rec.documentGroup}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.documentTypeCode}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.documentTypeName}" class="name align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.createdBy}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.status}" class="status align-middle white-space-nowrap start ps-3"></td>
+                                                <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
+                                                    <a class="text-success" href="#!" th:href="@{'/setup/document/type/edit?seid=' + ${rec.id}}">Update</a>&VerticalBar;
                                                     <a class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">Delete</a>
-                                                    <div class="modal fade" th:id="'a' +${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
+                                                    <div class="modal fade" th:id="'a' + ${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                     <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>                                                                   
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <h6>Confirm you want to delete this document</h6><br/>
-                                                                    <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/document/draft/delete?dt=' + ${rec.transType} + '&seid=' + ${rec.documentId}}">Delete</a>
+                                                                    <h6>Confirm you want to delete this document type</h6><br/>
+                                                                    <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/setup/document/type/delete?seid=' + ${rec.id}}">Delete</a>
                                                                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                                 </div>
                                                             </div>

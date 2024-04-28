@@ -60,7 +60,10 @@ spring:
             file-size-threshold: 5MB
         
 euclase:
+    temp:
+        dir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\temp
     document:
+        type: 'Expense, Service, Loan, Leave, Training'
         prefix:
             usegeneric: false
             loan: LN
@@ -130,6 +133,7 @@ pylon:
         dashboard: http://localhost:8080/pylon/api/v1/dashboard
         signin: http://localhost:8080/pylon/api/v1/app/user/signin
         signup: http://localhost:8080/pylon/api/v1/app/user/signup/web
+        changedefaultpassword: http://localhost:8080/pylon/api/v1/edms/password/default
         changepassword: http://localhost:8080/pylon/api/v1/app/user/change-password
         forgotpassword: http://localhost:8080/pylon/api/v1/app/user/forgot-password
         changepin: http://localhost:8080/pylon/api/v1/app/user/change-pin
@@ -138,100 +142,70 @@ pylon:
         totp: http://localhost:8080/pylon/api/v1/authenticator/google/otp
         profile:
             details: http://localhost:8080/pylon/api/v1/dashboard
+        appuser:
+            group:
+               fetch: http://localhost:8080/pylon/api/v1/group/role/details
+               update: http://localhost:8080/pylon/api/v1/group/role/update
+            list: http://localhost:8080/pylon/api/v1/app/user/list
+            create: http://localhost:8080/pylon/api/v1/app/user/signup/edms
+            update: http://localhost:8080/pylon/api/v1/app/user/edms/update
+            delete: http://localhost:8080/pylon/api/v1/app/user/delete
+            fetch: http://localhost:8080/pylon/api/v1/app/user/details
+            role:
+              list: http://localhost:8080/pylon/api/v1/role/group/list
+              fetch: http://localhost:8080/pylon/api/v1/role/group/details
+              create: http://localhost:8080/pylon/api/v1/role/group/create
+              update: http://localhost:8080/pylon/api/v1/role/group/update
+              delete: http://localhost:8080/pylon/api/v1/role/group/delete
         department:
             list: http://localhost:8080/pylon/api/v1/department/list
-            create: http://localhost:8080/pylon/api/v1/department
+            create: http://localhost:8080/pylon/api/v1/department/create
             update: http://localhost:8080/pylon/api/v1/department/update
             delete: http://localhost:8080/pylon/api/v1/department/delete
             fetch: http://localhost:8080/pylon/api/v1/department
         designation:
             list: http://localhost:8080/pylon/api/v1/designation/list
-            create: http://localhost:8080/pylon/api/v1/designation
+            create: http://localhost:8080/pylon/api/v1/designation/create
             update: http://localhost:8080/pylon/api/v1/designation/update
             delete: http://localhost:8080/pylon/api/v1/designation/delete
             fetch: http://localhost:8080/pylon/api/v1/designation
         departmentunit:
-            list: http://localhost:8080/pylon/api/v1/department/unit/list
-            create: http://localhost:8080/pylon/api/v1/department/unit
-            update: http://localhost:8080/pylon/api/v1/department/unit/update
-            delete: http://localhost:8080/pylon/api/v1/department/unit/delete
-            fetch: http://localhost:8080/pylon/api/v1/department/unit
+            department: http://localhost:8080/pylon/api/v1/department/unit
+            list: http://localhost:8080/pylon/api/v1/unit/list
+            create: http://localhost:8080/pylon/api/v1/unit/create
+            update: http://localhost:8080/pylon/api/v1/unit/update
+            delete: http://localhost:8080/pylon/api/v1/unit/delete
+            fetch: http://localhost:8080/pylon/api/v1/unit
         branch:
             list: http://localhost:8080/pylon/api/v1/branch/list
-            create: http://localhost:8080/pylon/api/v1/branch
+            create: http://localhost:8080/pylon/api/v1/branch/create
             update: http://localhost:8080/pylon/api/v1/branch/update
             delete: http://localhost:8080/pylon/api/v1/branch/delete
             fetch: http://localhost:8080/pylon/api/v1/branch
         gradelevel:
             list: http://localhost:8080/pylon/api/v1/grade-level/list
-            create: http://localhost:8080/pylon/api/v1/grade-level
+            create: http://localhost:8080/pylon/api/v1/grade-level/create
             update: http://localhost:8080/pylon/api/v1/grade-level/update
             delete: http://localhost:8080/pylon/api/v1/grade-level/delete
             fetch: http://localhost:8080/pylon/api/v1/grade-level
-        leave:
-            type:
-                list: http://localhost:8080/pylon/api/v1/leave/type/list
-                create: http://localhost:8080/pylon/api/v1/leave/type
-                update: http://localhost:8080/pylon/api/v1/leave/type/update
-                delete: http://localhost:8080/pylon/api/v1/leave/type/delete
-                fetch: http://localhost:8080/pylon/api/v1/leave/type
-            list: http://localhost:8080/pylon/api/v1/leave/list
-            create: http://localhost:8080/pylon/api/v1/leave
-            update: http://localhost:8080/pylon/api/v1/leave/update
-            delete: http://localhost:8080/pylon/api/v1/leave/delete
-            doc:
-                create: http://localhost:8080/pylon/api/v1/leave/doc
-                process: http://localhost:8080/pylon/api/v1/leave/doc/process
-        loan:
-            type:
-                list: http://localhost:8080/pylon/api/v1/loan/type/list
-                create: http://localhost:8080/pylon/api/v1/loan/type
-                update: http://localhost:8080/pylon/api/v1/loan/type/update
-                delete: http://localhost:8080/pylon/api/v1/loan/type/delete
-                fetch: http://localhost:8080/pylon/api/v1/loan/type
-            list: http://localhost:8080/pylon/api/v1/loan/list
-            create: http://localhost:8080/pylon/api/v1/loan
-            update: http://localhost:8080/pylon/api/v1/loan/update
-            delete: http://localhost:8080/pylon/api/v1/loan/delete
-            doc:
-                create: http://localhost:8080/pylon/api/v1/loan/doc
-                process: http://localhost:8080/pylon/api/v1/loan/doc/process
-        expense:
-            type:
-                list: http://localhost:8080/pylon/api/v1/expense/type/list
-                create: http://localhost:8080/pylon/api/v1/expense/type
-                update: http://localhost:8080/pylon/api/v1/expense/type/update
-                delete: http://localhost:8080/pylon/api/v1/expense/type/delete
-                fetch: http://localhost:8080/pylon/api/v1/expense/type
-            list: http://localhost:8080/pylon/api/v1/expense/list
-            create: http://localhost:8080/pylon/api/v1/expense
-            update: http://localhost:8080/pylon/api/v1/expense/update
-            delete: http://localhost:8080/pylon/api/v1/expense/delete
-            doc:
-                create: http://localhost:8080/pylon/api/v1/expense/doc
-                process: http://localhost:8080/pylon/api/v1/expense/doc/process
-        service:
-            request:
-                list: http://localhost:8080/pylon/api/v1/service/request/list
-                create: http://localhost:8080/pylon/api/v1/service/request
-                update: http://localhost:8080/pylon/api/v1/service/request/update
-                delete: http://localhost:8080/pylon/api/v1/service/request/delete
-                fetch: http://localhost:8080/pylon/api/v1/service/request
-            list: http://localhost:8080/pylon/api/v1/service/request/list
-            create: http://localhost:8080/pylon/api/v1/service/request
-            update: http://localhost:8080/pylon/api/v1/service/request/update
-            delete: http://localhost:8080/pylon/api/v1/service/request/delete
-            doc:
-                create: http://localhost:8080/pylon/api/v1/service/request/doc
-                process: http://localhost:8080/pylon/api/v1/service/request/doc/process
         document:
+            group:
+                list: http://localhost:8080/pylon/api/v1/document/group/list
+                create: http://localhost:8080/pylon/api/v1/document/group/create
+                update: http://localhost:8080/pylon/api/v1/document/group/update
+                delete: http://localhost:8080/pylon/api/v1/document/group/delete
+                fetch: http://localhost:8080/pylon/api/v1/document/group
+            type:
+                list: http://localhost:8080/pylon/api/v1/document/type/list
+                create: http://localhost:8080/pylon/api/v1/document/type/create
+                update: http://localhost:8080/pylon/api/v1/document/type/update
+                delete: http://localhost:8080/pylon/api/v1/document/type/delete
+                fetch: http://localhost:8080/pylon/api/v1/document/type
+            create: http://localhost:8080/pylon/api/v1/document
+            process: http://localhost:8080/pylon/api/v1/document/process
             search: http://localhost:8080/pylon/api/v1/document/search
             signature: http://localhost:8080/pylon/api/v1/document/signature
-            approve:
-                leave: http://localhost:8080/pylon/api/v1/document/leave/approve
-                loan: http://localhost:8080/pylon/api/v1/document/loan/approve
-                expense: http://localhost:8080/pylon/api/v1/document/expense/approve
-                service: http://localhost:8080/pylon/api/v1/document/service/approve
+            approve: http://localhost:8080/pylon/api/v1/document/approve
             details: http://localhost:8080/pylon/api/v1/document/details
             self: http://localhost:8080/pylon/api/v1/document/self
             pending: http://localhost:8080/pylon/api/v1/document/pending

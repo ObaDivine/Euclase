@@ -24,14 +24,14 @@
                                 </nav>
                                 <h4 class="mb-2 text-secondary">Signature</h4>
                                 <h6 class="text-700 fw-semi-bold">Setup user signature for document signing</h6>
-                            </div>                           
+                            </div>
+                            <img id="signature" src="" alt="" class="img-thumbnail mb-2" th:src="@{${euclasePayload.signatureLink}}" />
                             <form th:object="${euclasePayload}" th:action="@{/document/signature/process}" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" th:field="*{id}" />
-                                <img src="" alt="" class="img-thumbnail" th:src="@{${euclasePayload.signatureLink}}" />
                                 <div class="form-icon-container">
                                     <input type="file" class="form-control form-control-sm form-icon-input" th:field="*{uploadedFile}" required="required"/>
                                     <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-stream text-900 fs--1 form-icon text-primary"></span>
+                                    <span class="fas fa-signature text-900 fs--1 form-icon text-primary"></span>
                                 </div>                               
                                 <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
                                 <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">

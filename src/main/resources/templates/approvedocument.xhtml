@@ -3,7 +3,6 @@
     <head>
         <title>Entity Software - Euclase</title>
         <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
-        <!--        <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>-->
         <script src="https://cdn.tiny.cloud/1/l6x0x029codgczussxzl6kr49suvrl95ckbjoup3ry6u42kt/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     </head>
     <body onload="preloaderFunction()" style="margin: 0;">
@@ -32,7 +31,7 @@
                                 <input type="hidden" th:field="*{documentTemplateName}" />
                                 <input type="hidden" th:field="*{documentType}" />                                
                                 <div id="toolbar-container"></div>
-                                <textarea th:field="*{editor}" readonly="readonly"></textarea>
+                                <textarea th:field="*{editor}"></textarea>
                                 <div class="card mt-2">
                                     <div class="card-body">
                                         <h6 class="text-700 fw-semi-bold text-secondary mt-2 mb-3">Initiator Supporting Document(s)</h6>
@@ -42,12 +41,16 @@
                                                     <tr>
                                                         <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Document</th>
                                                         <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Link</th>
+                                                        <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Upload By</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="list" id="deal-tables-body" th:if="${documentList != null}">
                                                     <tr th:each="rec : ${documentList}" class="position-static">
                                                         <td th:text="${rec.originalFileName}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                                        <td th:text="${rec.documentLink}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                        <td class="code align-middle white-space-nowrap start ps-3">
+                                                            <a th:href="@{${rec.documentLink}}" th:text="${rec.documentLink}" target="_blank"></a>
+                                                        </td>
+                                                        <td th:text="${rec.createdBy}" class="code align-middle white-space-nowrap start ps-3"></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -124,6 +127,7 @@
                 menubar: 'favs file edit view insert format tools table help',
                 noneditable_class: 'uneditable'
             });
+
             $(document).ready(function () {
                 $(".add_file").click(function (e) {
                     e.preventDefault();
@@ -135,6 +139,7 @@
                     let row = $(this).parent().parent();
                     $(row).remove();
                 });
+                tinymce.activeEditor.mode.set("readonly");
             });
         </script>
     </body>

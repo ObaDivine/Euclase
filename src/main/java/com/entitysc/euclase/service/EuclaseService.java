@@ -48,6 +48,8 @@ public interface EuclaseService {
 
     DataListResponsePayload processFetchDepartmentUnitList();
 
+    DataListResponsePayload processFetchDepartmentUnitList(String departmentCode);
+
     /**
      * ***************** Designation Transactions ******************* @param
      *
@@ -91,78 +93,36 @@ public interface EuclaseService {
     DataListResponsePayload processFetchGradeLevelList();
 
     /**
-     * **************** Leave Transactions ******************* @param
-     *
+     * Document Group
      * @param requestPayload
      * @return
      */
-    PylonResponsePayload processLeaveDocument(EuclasePayload requestPayload);
 
-    PylonResponsePayload processCreateLeaveType(EuclasePayload requestPayload);
+    PylonResponsePayload processCreateDocumentGroup(EuclasePayload requestPayload);
 
-    PylonResponsePayload processCreateLeaveDocument(EuclasePayload requestPayload);
+    PylonResponsePayload processFetchDocumentGroup(String id);
 
-    PylonResponsePayload processFetchLeaveType(String id);
+    PylonResponsePayload processDeleteDocumentGroup(String id, String principal);
 
-    PylonResponsePayload processDeleteLeaveType(String id, String principal);
-
-    DataListResponsePayload processFetchLeaveTypeList();
+    DataListResponsePayload processFetchDocumentGroupList();
 
     /**
-     * **************** Loan Transactions ******************* @param
+     * **************** Document Transactions ******************* @param
      *
      * @param requestPayload
      * @return
      */
-    PylonResponsePayload processLoanDocument(EuclasePayload requestPayload);
+    PylonResponsePayload processDocument(EuclasePayload requestPayload);
 
-    PylonResponsePayload processCreateLoanType(EuclasePayload requestPayload);
+    PylonResponsePayload processCreateDocumentType(EuclasePayload requestPayload);
 
-    PylonResponsePayload processCreateLoanDocument(EuclasePayload requestPayload);
+    PylonResponsePayload processCreateDocument(EuclasePayload requestPayload);
 
-    PylonResponsePayload processFetchLoanType(String id);
+    PylonResponsePayload processFetchDocumentType(String id);
 
-    PylonResponsePayload processDeleteLoanType(String id, String principal);
+    PylonResponsePayload processDeleteDocumentType(String id, String principal);
 
-    DataListResponsePayload processFetchLoanTypeList();
-
-    /**
-     * **************** Expense Transactions
-     *
-     *******************
-     * @param requestPayload
-     * @return
-     */
-    PylonResponsePayload processExpenseDocument(EuclasePayload requestPayload);
-
-    PylonResponsePayload processCreateExpenseType(EuclasePayload requestPayload);
-
-    PylonResponsePayload processCreateExpenseDocument(EuclasePayload requestPayload);
-
-    PylonResponsePayload processFetchExpenseType(String id);
-
-    PylonResponsePayload processDeleteExpenseType(String id, String principal);
-
-    DataListResponsePayload processFetchExpenseTypeList();
-
-    /**
-     * **************** Service Request
-     *
-     *******************
-     * @param requestPayload
-     * @return
-     */
-    PylonResponsePayload processServiceRequestDocument(EuclasePayload requestPayload);
-
-    PylonResponsePayload processCreateServiceRequest(EuclasePayload requestPayload);
-
-    PylonResponsePayload processCreateServiceRequestDocument(EuclasePayload requestPayload);
-
-    PylonResponsePayload processFetchServiceRequest(String id);
-
-    PylonResponsePayload processDeleteServiceRequest(String id, String principal);
-
-    DataListResponsePayload processFetchServiceRequestList();
+    DataListResponsePayload processFetchDocumentTypeList(String id);
 
     /**
      * **************** Document Template
@@ -209,4 +169,32 @@ public interface EuclaseService {
 
     PylonResponsePayload processDocumentSignature(EuclasePayload requestPayload);
 
+    /**
+     * ********************Application Users ******************* @param
+     *
+     * @param principal
+     * @param requestPayload
+     * @return
+     */
+    PylonResponsePayload processCreateAppUser(String principal, EuclasePayload requestPayload);
+
+    PylonResponsePayload processFetchAppUser(String id);
+
+    PylonResponsePayload processDeleteAppUser(String id, String principal);
+
+    DataListResponsePayload processFetchAppUserList();
+
+    DataListResponsePayload processFetchRoleList();
+
+    PylonResponsePayload processCreateRoleGroup(EuclasePayload requestPayload);
+
+    PylonResponsePayload processFetchRoleGroup(String id);
+
+    PylonResponsePayload processDeleteRoleGroup(String id, String principal);
+
+    DataListResponsePayload processFetchGroupRoles(String groupName);
+
+    PylonResponsePayload processUpdateGroupRoles(EuclasePayload requestPayload);
+
+    PylonResponsePayload processChangeDefaultPassword(EuclasePayload requestPayload);
 }

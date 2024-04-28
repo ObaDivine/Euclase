@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.entitysc.euclase.service.EuclaseService;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  *
@@ -29,6 +30,8 @@ public class SetupController {
 
     @Autowired
     EuclaseService euclaseService;
+    @Value("${euclase.document.type}")
+    private String documentType;
     private String alertMessage = "";
     private String alertMessageType = "";
 
@@ -44,6 +47,7 @@ public class SetupController {
             userDetails = new ArrayList<>();
         }
         model.addAttribute("sessionDetails", userDetails);
+        model.addAttribute("departmentCount", euclaseService.processFetchDepartmentList().getData().size());
         return "department";
     }
 
@@ -61,6 +65,7 @@ public class SetupController {
             return "redirect:/setup/department";
         }
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("departmentCount", euclaseService.processFetchDepartmentList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         return "department";
@@ -91,6 +96,7 @@ public class SetupController {
             return "redirect:/setup/department/list";
         }
         model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("departmentCount", euclaseService.processFetchDepartmentList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -118,6 +124,7 @@ public class SetupController {
             userDetails = new ArrayList<>();
         }
         model.addAttribute("sessionDetails", userDetails);
+        model.addAttribute("unitCount", euclaseService.processFetchDepartmentUnitList().getData().size());
         return "departmentunit";
     }
 
@@ -135,6 +142,7 @@ public class SetupController {
             return "redirect:/setup/department/unit";
         }
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("unitCount", euclaseService.processFetchDepartmentUnitList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
@@ -166,6 +174,7 @@ public class SetupController {
             return "redirect:/setup/department/unit/list";
         }
         model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("unitCount", euclaseService.processFetchDepartmentUnitList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
         model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
@@ -193,6 +202,7 @@ public class SetupController {
             userDetails = new ArrayList<>();
         }
         model.addAttribute("sessionDetails", userDetails);
+        model.addAttribute("designationCount", euclaseService.processFetchDesignationList().getData().size());
         return "designation";
     }
 
@@ -210,6 +220,7 @@ public class SetupController {
             return "redirect:/setup/designation";
         }
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("designationCount", euclaseService.processFetchDesignationList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         return "designation";
@@ -240,6 +251,7 @@ public class SetupController {
             return "redirect:/setup/designation/list";
         }
         model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("designationCount", euclaseService.processFetchDesignationList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -266,6 +278,7 @@ public class SetupController {
             userDetails = new ArrayList<>();
         }
         model.addAttribute("sessionDetails", userDetails);
+        model.addAttribute("branchCount", euclaseService.processFetchBranchList().getData().size());
         return "branch";
     }
 
@@ -279,10 +292,11 @@ public class SetupController {
         PylonResponsePayload response = euclaseService.processCreateBranch(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
-            alertMessageType = "info";
+            alertMessageType = "success";
             return "redirect:/setup/branch";
         }
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("branchCount", euclaseService.processFetchBranchList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         return "branch";
@@ -313,6 +327,7 @@ public class SetupController {
             return "redirect:/setup/branch/list";
         }
         model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("branchCount", euclaseService.processFetchBranchList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -339,6 +354,7 @@ public class SetupController {
             userDetails = new ArrayList<>();
         }
         model.addAttribute("sessionDetails", userDetails);
+        model.addAttribute("gradeLevelCount", euclaseService.processFetchGradeLevelList().getData().size());
         return "gradelevel";
     }
 
@@ -356,6 +372,7 @@ public class SetupController {
             return "redirect:/setup/grade-level";
         }
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("gradeLevelCount", euclaseService.processFetchGradeLevelList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         return "gradelevel";
@@ -386,6 +403,7 @@ public class SetupController {
             return "redirect:/setup/grade-level/list";
         }
         model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("gradeLevelCount", euclaseService.processFetchGradeLevelList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -400,8 +418,16 @@ public class SetupController {
         return "redirect:/setup/grade-level/list";
     }
 
-    @GetMapping("/leave")
-    public String leaveType(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession session) {
+    /**
+     * ************ Document Group
+     *
+     ***************
+     * @param model
+     * @param session
+     * @return
+     */
+    @GetMapping("/document/type")
+    public String documentType(Model model, HttpSession session) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
@@ -412,69 +438,81 @@ public class SetupController {
             userDetails = new ArrayList<>();
         }
         model.addAttribute("sessionDetails", userDetails);
-        return "leavetype";
+        model.addAttribute("documentCount", euclaseService.processFetchDocumentTypeList("All").getData().size());
+        model.addAttribute("documentTypes", documentType.split(","));
+        return "documenttype";
     }
 
-    @PostMapping("/leave/")
-    public String leaveType(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+    @PostMapping("/document/type/create")
+    public String documentType(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
         List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
         requestPayload.setProfileImage(userDetails.get(0));
         requestPayload.setFirstName(userDetails.get(1));
         requestPayload.setLastName(userDetails.get(2));
         requestPayload.setUsername(userDetails.get(8));
-        PylonResponsePayload response = euclaseService.processCreateLeaveType(requestPayload);
+        PylonResponsePayload response = euclaseService.processCreateDocumentType(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
             alertMessageType = "success";
-            return "redirect:/setup/leave";
+            return "redirect:/setup/document/type";
         }
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("documentCount", euclaseService.processFetchDocumentTypeList("All").getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
-        return "leavetype";
+        return "documenttype";
     }
 
-    @GetMapping(value = "/leave/list")
-    public String leaveTypeList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
+    @GetMapping(value = "/document/type/list")
+    public String documentTypeList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
         EuclasePayload euclasePayload = new EuclasePayload();
         List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
         euclasePayload.setProfileImage(userDetails.get(0));
         euclasePayload.setFirstName(userDetails.get(1));
         euclasePayload.setLastName(userDetails.get(2));
         euclasePayload.setUsername(userDetails.get(8));
-        model.addAttribute("dataList", euclaseService.processFetchLeaveTypeList().getData());
+        model.addAttribute("dataList", euclaseService.processFetchDocumentTypeList("All").getData());
         model.addAttribute("euclasePayload", euclasePayload);
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
-        return "leavetypelist";
+        return "documenttypelist";
     }
 
-    @GetMapping("/leave/edit")
-    public String editLeaveType(@RequestParam("seid") String seid, Model model, Principal principal, HttpServletRequest httpRequest) {
-        PylonResponsePayload response = euclaseService.processFetchLeaveType(seid);
+    @GetMapping("/document/type/edit")
+    public String editDocumentType(@RequestParam("seid") String seid, Model model, Principal principal, HttpServletRequest httpRequest) {
+        PylonResponsePayload response = euclaseService.processFetchDocumentType(seid);
         if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
             alertMessageType = "success";
-            return "redirect:/setup/leave/list";
+            return "redirect:/setup/document/type/list";
         }
         model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("documentCount", euclaseService.processFetchDocumentTypeList("All").getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
-        return "leavetype";
+        return "documenttype";
     }
 
-    @GetMapping("/leave/delete")
-    public String deleteLeaveType(@RequestParam("seid") String seid, Model model, Principal principal) {
-        PylonResponsePayload response = euclaseService.processDeleteLeaveType(seid, principal.getName());
+    @GetMapping("/document/type/delete")
+    public String deleteDocumentType(@RequestParam("seid") String seid, Model model, Principal principal) {
+        PylonResponsePayload response = euclaseService.processDeleteDocumentType(seid, principal.getName());
         alertMessage = response.getResponseMessage();
         alertMessageType = "success";
-        return "redirect:/setup/leave/list";
+        return "redirect:/setup/document/type/list";
     }
 
-    @GetMapping("/loan")
-    public String loanType(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession session) {
+    /**
+     * ************ Document Group
+     *
+     ***************
+     * @param model
+     * @param session
+     * @return
+     */
+    @GetMapping("/document/group")
+    public String documentGroup(Model model, HttpSession session) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
@@ -485,211 +523,169 @@ public class SetupController {
             userDetails = new ArrayList<>();
         }
         model.addAttribute("sessionDetails", userDetails);
-        return "loantype";
+        model.addAttribute("documentCount", euclaseService.processFetchDocumentGroupList().getData().size());
+        return "documentgroup";
     }
 
-    @PostMapping("/loan/")
-    public String loanType(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+    @PostMapping("/document/group/create")
+    public String documentGroup(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
         List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
         requestPayload.setProfileImage(userDetails.get(0));
         requestPayload.setFirstName(userDetails.get(1));
         requestPayload.setLastName(userDetails.get(2));
         requestPayload.setUsername(userDetails.get(8));
-        PylonResponsePayload response = euclaseService.processCreateLoanType(requestPayload);
+        PylonResponsePayload response = euclaseService.processCreateDocumentGroup(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
             alertMessageType = "success";
-            return "redirect:/setup/loan";
+            return "redirect:/setup/document/group";
         }
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("documentCount", euclaseService.processFetchDocumentGroupList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
-        return "loantype";
+        return "documentgroup";
     }
 
-    @GetMapping(value = "/loan/list")
-    public String loanTypeList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
+    @GetMapping(value = "/document/group/list")
+    public String documentGroupList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
         EuclasePayload euclasePayload = new EuclasePayload();
         List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
         euclasePayload.setProfileImage(userDetails.get(0));
         euclasePayload.setFirstName(userDetails.get(1));
         euclasePayload.setLastName(userDetails.get(2));
         euclasePayload.setUsername(userDetails.get(8));
-        model.addAttribute("dataList", euclaseService.processFetchLoanTypeList().getData());
+        model.addAttribute("dataList", euclaseService.processFetchDocumentGroupList().getData());
         model.addAttribute("euclasePayload", euclasePayload);
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
-        return "loantypelist";
+        return "documentgrouplist";
     }
 
-    @GetMapping("/loan/edit")
-    public String editLoanType(@RequestParam("seid") String seid, Model model, Principal principal, HttpServletRequest httpRequest) {
-        PylonResponsePayload response = euclaseService.processFetchLoanType(seid);
+    @GetMapping("/document/group/edit")
+    public String editDocumentGroup(@RequestParam("seid") String seid, Model model, Principal principal, HttpServletRequest httpRequest) {
+        PylonResponsePayload response = euclaseService.processFetchDocumentGroup(seid);
         if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
             alertMessageType = "success";
-            return "redirect:/setup/loan/list";
+            return "redirect:/setup/document/group/list";
         }
         model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("documentCount", euclaseService.processFetchDocumentGroupList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
-        return "loantype";
+        return "documentgroup";
     }
 
-    @GetMapping("/loan/delete")
-    public String deleteLoan(@RequestParam("seid") String seid, Model model, Principal principal) {
-        PylonResponsePayload response = euclaseService.processDeleteLoanType(seid, principal.getName());
+    @GetMapping("/document/group/delete")
+    public String deleteDocumentGroup(@RequestParam("seid") String seid, Model model, Principal principal) {
+        PylonResponsePayload response = euclaseService.processDeleteDocumentGroup(seid, principal.getName());
         alertMessage = response.getResponseMessage();
         alertMessageType = "success";
-        return "redirect:/setup/loan/list";
+        return "redirect:/setup/document/group/list";
+    }
+
+    @GetMapping("/template")
+    public String template(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession session) {
+        model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", alertMessageType);
+        resetAlertMessage();
+        //Set session variables
+        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
+        if (userDetails == null) {
+            userDetails = new ArrayList<>();
+        }
+        model.addAttribute("sessionDetails", userDetails);
+        return "template";
+    }
+
+    @PostMapping("/template/create")
+    public String templateCreate(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
+        requestPayload.setProfileImage(userDetails.get(0));
+        requestPayload.setFirstName(userDetails.get(1));
+        requestPayload.setLastName(userDetails.get(2));
+        requestPayload.setUsername(userDetails.get(8));
+        PylonResponsePayload response = euclaseService.processCreateDocumentTemplate(requestPayload);
+
+        //Check the type of document
+        if (requestPayload.getDocumentTemplateName().equalsIgnoreCase("Expense")) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
+            return "redirect:/template/expense";
+        } else if (requestPayload.getDocumentTemplateName().equalsIgnoreCase("Leave")) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
+            return "redirect:/template/leave";
+        } else if (requestPayload.getDocumentTemplateName().equalsIgnoreCase("Loan")) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
+            return "redirect:/template/loan";
+        } else {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
+            return "redirect:/template/service-request";
+        }
     }
 
     @GetMapping("/expense")
-    public String expenseType(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession session) {
-        model.addAttribute("euclasePayload", new EuclasePayload());
-        model.addAttribute("alertMessage", alertMessage);
-        model.addAttribute("alertMessageType", alertMessageType);
-        resetAlertMessage();
+    public String templateExpense(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, Principal principal, HttpSession session) {
+        PylonResponsePayload response = euclaseService.processFetchDocumentTemplate("Expense");
+        EuclasePayload requestPayload = new EuclasePayload();
+        if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            requestPayload.setEditorData(response.getData().getDocumentTemplateBody());
+            requestPayload.setEditor(response.getData().getDocumentTemplateBody());
+            requestPayload.setDocumentTemplateName(response.getData().getDocumentTemplateName());
+            model.addAttribute("euclasePayload", requestPayload);
+        } else if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.RECORD_NOT_EXIST_CODE.getResponseCode())) {
+            model.addAttribute("euclasePayload", requestPayload);
+        } else {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = "error";
+            return "redirect:/template/manage";
+        }
         //Set session variables
         List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
         if (userDetails == null) {
             userDetails = new ArrayList<>();
         }
-        model.addAttribute("sessionDetails", userDetails);
-        return "expensetype";
-    }
 
-    @PostMapping("/expense/")
-    public String expenseType(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        requestPayload.setProfileImage(userDetails.get(0));
-        requestPayload.setFirstName(userDetails.get(1));
-        requestPayload.setLastName(userDetails.get(2));
-        requestPayload.setUsername(userDetails.get(8));
-        PylonResponsePayload response = euclaseService.processCreateExpenseType(requestPayload);
-        if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
-            alertMessage = response.getResponseMessage();
-            alertMessageType = "success";
-            return "redirect:/setup/expense";
-        }
-        model.addAttribute("euclasePayload", requestPayload);
-        model.addAttribute("alertMessage", response.getResponseMessage());
-        model.addAttribute("alertMessageType", "error");
-        return "expensetype";
-    }
-
-    @GetMapping(value = "/expense/list")
-    public String expenseTypeList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
-        EuclasePayload euclasePayload = new EuclasePayload();
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        euclasePayload.setProfileImage(userDetails.get(0));
-        euclasePayload.setFirstName(userDetails.get(1));
-        euclasePayload.setLastName(userDetails.get(2));
-        euclasePayload.setUsername(userDetails.get(8));
-        model.addAttribute("dataList", euclaseService.processFetchExpenseTypeList().getData());
-        model.addAttribute("euclasePayload", euclasePayload);
-        model.addAttribute("alertMessage", alertMessage);
-        model.addAttribute("alertMessageType", "success");
-        resetAlertMessage();
-        return "expensetypelist";
-    }
-
-    @GetMapping("/expense/edit")
-    public String editExpenseType(@RequestParam("seid") String seid, Model model, Principal principal, HttpServletRequest httpRequest) {
-        PylonResponsePayload response = euclaseService.processFetchExpenseType(seid);
-        if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
-            alertMessage = response.getResponseMessage();
-            alertMessageType = "success";
-            return "redirect:/setup/expense/list";
-        }
-        model.addAttribute("euclasePayload", response.getData());
-        model.addAttribute("alertMessage", response.getResponseMessage());
-        model.addAttribute("alertMessageType", "success");
-        resetAlertMessage();
-        return "expensetype";
-    }
-
-    @GetMapping("/expense/delete")
-    public String deleteExpenseType(@RequestParam("seid") String seid, Model model, Principal principal) {
-        PylonResponsePayload response = euclaseService.processDeleteExpenseType(seid, principal.getName());
-        alertMessage = response.getResponseMessage();
-        alertMessageType = "success";
-        return "redirect:/setup/expense/list";
-    }
-
-    @GetMapping("/service-request")
-    public String serviceRequest(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession session) {
-        model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
+        model.addAttribute("sessionDetails", userDetails);
+        return "templateexpense";
+    }
+
+    @GetMapping("/workflow")
+    public String workflow(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, Principal principal, HttpSession session) {
+        PylonResponsePayload response = euclaseService.processFetchDocumentWorkflow("Expense");
+        EuclasePayload requestPayload = new EuclasePayload();
+        if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            requestPayload.setDocumentTemplateBody(response.getData().getDocumentTemplateBody());
+            requestPayload.setDocumentTemplateName(response.getData().getDocumentTemplateName());
+            model.addAttribute("euclasePayload", requestPayload);
+        } else if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.RECORD_NOT_EXIST_CODE.getResponseCode())) {
+            model.addAttribute("euclasePayload", requestPayload);
+        } else {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = "error";
+            return "redirect:/workflow/manage";
+        }
         //Set session variables
         List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
         if (userDetails == null) {
             userDetails = new ArrayList<>();
         }
-        model.addAttribute("sessionDetails", userDetails);
-        return "servicerequest";
-    }
 
-    @PostMapping("/service-request/")
-    public String serviceRequest(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        requestPayload.setProfileImage(userDetails.get(0));
-        requestPayload.setFirstName(userDetails.get(1));
-        requestPayload.setLastName(userDetails.get(2));
-        requestPayload.setUsername(userDetails.get(8));
-        PylonResponsePayload response = euclaseService.processCreateServiceRequest(requestPayload);
-        if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
-            alertMessage = response.getResponseMessage();
-            alertMessageType = "success";
-            return "redirect:/setup/service-request";
-        }
-        model.addAttribute("euclasePayload", requestPayload);
-        model.addAttribute("alertMessage", response.getResponseMessage());
-        model.addAttribute("alertMessageType", "error");
-        return "servicerequest";
-    }
-
-    @GetMapping(value = "/service-request/list")
-    public String serviceRequestList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
-        EuclasePayload euclasePayload = new EuclasePayload();
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        euclasePayload.setProfileImage(userDetails.get(0));
-        euclasePayload.setFirstName(userDetails.get(1));
-        euclasePayload.setLastName(userDetails.get(2));
-        euclasePayload.setUsername(userDetails.get(8));
-        model.addAttribute("dataList", euclaseService.processFetchServiceRequestList().getData());
-        model.addAttribute("euclasePayload", euclasePayload);
         model.addAttribute("alertMessage", alertMessage);
-        model.addAttribute("alertMessageType", "success");
+        model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
-        return "servicerequestlist";
-    }
-
-    @GetMapping("/service-request/edit")
-    public String editServiceRequest(@RequestParam("seid") String seid, Model model, Principal principal, HttpServletRequest httpRequest) {
-        PylonResponsePayload response = euclaseService.processFetchServiceRequest(seid);
-        if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
-            alertMessage = response.getResponseMessage();
-            alertMessageType = "success";
-            return "redirect:/setup/service-request/list";
-        }
-        model.addAttribute("euclasePayload", response.getData());
-        model.addAttribute("alertMessage", response.getResponseMessage());
-        model.addAttribute("alertMessageType", "success");
-        resetAlertMessage();
-        return "servicerequest";
-    }
-
-    @GetMapping("/service-request/delete")
-    public String deleteServiceRequest(@RequestParam("seid") String seid, Model model, Principal principal) {
-        PylonResponsePayload response = euclaseService.processDeleteServiceRequest(seid, principal.getName());
-        alertMessage = response.getResponseMessage();
-        alertMessageType = "success";
-        return "redirect:/setup/service-request/list";
+        model.addAttribute("sessionDetails", userDetails);
+        return "workflowexpense";
     }
 
     private void resetAlertMessage() {

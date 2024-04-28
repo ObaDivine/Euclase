@@ -25,7 +25,7 @@
                                         </ol>
                                     </nav>
                                     <h4 class="mb-2 text-secondary">My Documents</h4>
-                                    <h6 class="text-700 fw-semi-bold">Listing of loan types in the organization</h6>
+                                    <h6 class="text-700 fw-semi-bold">Listing of documents by current user</h6>
                                 </div>
                                 <div class="table-responsive ms-n1 ps-1 scrollbar">
                                     <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200">
@@ -35,6 +35,7 @@
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="documentId">Document ID</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="documentType">Document Type</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="priority">Priority</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="status">SLA Expiry</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="status">Status</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
@@ -46,6 +47,7 @@
                                                 <td th:text="${rec.documentId}" class="code align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.documentType}" class="name align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.priority}" class="location align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.slaExpiry}" class="status align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.narration}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.status}" class="status align-middle white-space-nowrap start ps-3"></td>
                                                 <td  class="status align-middle white-space-nowrap start ps-3">

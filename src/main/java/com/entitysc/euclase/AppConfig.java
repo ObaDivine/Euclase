@@ -57,8 +57,7 @@ public class AppConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**").addResourceLocations("classpath:/images/");
         registry.addResourceHandler("/css/**").addResourceLocations("classpath:/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("classpath:/js/");
-        registry.addResourceHandler("/documents/**").addResourceLocations("classpath:/documents/");
-        registry.addResourceHandler("/signatures/**").addResourceLocations("classpath:/signatures/");
+        registry.addResourceHandler("/temp/**").addResourceLocations("classpath:/temp/");
     }
 
     @Bean

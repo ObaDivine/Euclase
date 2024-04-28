@@ -41,6 +41,8 @@ public class GenericServiceImpl implements GenericService {
     private String encryptionKey;
     @Value("${euclase.image.dir}")
     private String imageDirectory;
+    @Value("${euclase.temp.dir}")
+    private String tempFileDirectory;
     Logger logger = LoggerFactory.getLogger(GenericServiceImpl.class);
 
     @Override
@@ -57,7 +59,10 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getPassword().trim());
                 break;
             }
-            case "SignUp": {
+            case "Sign Up": {
+                if (requestPayload.getId() != 0) {
+                    rawString.add(String.valueOf(requestPayload.getId()));
+                }
                 rawString.add(requestPayload.getTitle().trim());
                 rawString.add(requestPayload.getLastName().trim());
                 rawString.add(requestPayload.getFirstName().trim());
@@ -67,14 +72,23 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getMobileNumber().trim());
                 rawString.add(requestPayload.getEmail().trim());
                 rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getPassword().trim());
-                rawString.add(requestPayload.getConfirmPassword().trim());
-                rawString.add(requestPayload.getPin().trim());
-                rawString.add(requestPayload.getConfirmPin().trim());
+                rawString.add(requestPayload.getDepartmentCode().trim());
+                rawString.add(requestPayload.getDepartmentUnitCode().trim());
+                rawString.add(requestPayload.getDesignationCode().trim());
+                rawString.add(requestPayload.getGradeLevelCode().trim());
+                rawString.add(requestPayload.getBranchCode().trim());
+                rawString.add(requestPayload.getRole().trim());
+                rawString.add(requestPayload.getLoginDays().trim());
+                rawString.add(requestPayload.getStartTime().trim());
+                rawString.add(requestPayload.getEndTime().trim());
+                rawString.add(requestPayload.getStatus().trim());
+                rawString.add(requestPayload.getHod().trim());
+                rawString.add(requestPayload.getTeamLead().trim());
                 rawString.add(requestPayload.getRequestId().trim());
+                rawString.add(requestPayload.getPrincipal().trim());
                 break;
             }
-            case "ChangePassword": {
+            case "Change Password": {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getCurrentPassword().trim());
                 rawString.add(requestPayload.getNewPassword().trim());
@@ -156,43 +170,24 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getStatus().trim());
                 break;
             }
-            case "Leave Type": {
+            case "Document Group": {
                 rawString.add(requestPayload.getUsername().trim());
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
                 }
-                rawString.add(requestPayload.getLeaveTypeCode().trim());
-                rawString.add(requestPayload.getLeaveTypeName().trim());
+                rawString.add(requestPayload.getDocumentGroupCode().trim());
+                rawString.add(requestPayload.getDocumentGroupName().trim());
                 rawString.add(requestPayload.getStatus().trim());
                 break;
             }
-            case "Loan Type": {
+            case "Document Type": {
                 rawString.add(requestPayload.getUsername().trim());
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
                 }
-                rawString.add(requestPayload.getLoanTypeCode().trim());
-                rawString.add(requestPayload.getLoanTypeName().trim());
-                rawString.add(requestPayload.getStatus().trim());
-                break;
-            }
-            case "Expense Type": {
-                rawString.add(requestPayload.getUsername().trim());
-                if (requestPayload.getId() != 0) {
-                    rawString.add(String.valueOf(requestPayload.getId()));
-                }
-                rawString.add(requestPayload.getExpenseTypeCode().trim());
-                rawString.add(requestPayload.getExpenseTypeName().trim());
-                rawString.add(requestPayload.getStatus().trim());
-                break;
-            }
-            case "Service Request": {
-                rawString.add(requestPayload.getUsername().trim());
-                if (requestPayload.getId() != 0) {
-                    rawString.add(String.valueOf(requestPayload.getId()));
-                }
-                rawString.add(requestPayload.getServiceRequestCode().trim());
-                rawString.add(requestPayload.getServiceRequestName().trim());
+                rawString.add(requestPayload.getDocumentGroupCode().trim());
+                rawString.add(requestPayload.getDocumentTypeCode().trim());
+                rawString.add(requestPayload.getDocumentTypeName().trim());
                 rawString.add(requestPayload.getStatus().trim());
                 break;
             }
@@ -206,50 +201,14 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getDocumentTemplateName().trim());
                 break;
             }
-            case "Leave Document": {
+            case "Document": {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getDocumentId().trim());
                 rawString.add(requestPayload.getUniqueId().trim());
-                rawString.add(requestPayload.getLeaveType().trim());
-                rawString.add(requestPayload.getLeaveReason().trim());
+                rawString.add(requestPayload.getDocumentType().trim());
+                rawString.add(requestPayload.getPurpose().trim());
                 rawString.add(requestPayload.getStartDate().trim());
                 rawString.add(requestPayload.getEndDate().trim());
-                if (requestPayload.getCarbonCopy() != null) {
-                    rawString.add(requestPayload.getCarbonCopy().trim());
-                }
-                break;
-            }
-            case "Loan Document": {
-                rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getDocumentId().trim());
-                rawString.add(requestPayload.getUniqueId().trim());
-                rawString.add(requestPayload.getLoanType().trim());
-                rawString.add(requestPayload.getLoanAmount().trim());
-                rawString.add(requestPayload.getLoanPurpose().trim());
-                rawString.add(requestPayload.getLoanRequestBy().trim());
-                if (requestPayload.getCarbonCopy() != null) {
-                    rawString.add(requestPayload.getCarbonCopy().trim());
-                }
-                break;
-            }
-            case "Expense Document": {
-                rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getDocumentId().trim());
-                rawString.add(requestPayload.getUniqueId().trim());
-                rawString.add(requestPayload.getExpenseType().trim());
-                rawString.add(requestPayload.getExpenseDate().trim());
-                rawString.add(requestPayload.getAmount().trim());
-                rawString.add(requestPayload.getPaymentMethod().trim());
-                if (requestPayload.getCarbonCopy() != null) {
-                    rawString.add(requestPayload.getCarbonCopy().trim());
-                }
-                break;
-            }
-            case "Service Document": {
-                rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getDocumentId().trim());
-                rawString.add(requestPayload.getUniqueId().trim());
-                rawString.add(requestPayload.getServiceType().trim());
                 if (requestPayload.getCarbonCopy() != null) {
                     rawString.add(requestPayload.getCarbonCopy().trim());
                 }
@@ -268,41 +227,18 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getStatus().trim());
                 break;
             }
-            case "FundsTransfer": {
+            case "Role Group": {
                 rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getSourceAccount().trim());
-                rawString.add(requestPayload.getRecipientCode().trim());
-                rawString.add(requestPayload.getNarration().trim());
-                rawString.add(requestPayload.getAmount().trim());
-                rawString.add(requestPayload.getRequestId().trim());
-                break;
-            }
-            case "FundsTransfer Bulk": {
-                rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getPassword().trim());
-                rawString.add(requestPayload.getUserType().trim());
-                break;
-            }
-            case "FundsTransfer Schedule": {
-                rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getSourceAccount().trim());
-                rawString.add(requestPayload.getRecipientCode().trim());
-                rawString.add(requestPayload.getNarration().trim());
-                rawString.add(requestPayload.getAmount().trim());
-                rawString.add(requestPayload.getStartDate().trim());
-                rawString.add(requestPayload.getEndDate().trim());
-                rawString.add(requestPayload.getFrequency().trim());
-                rawString.add(requestPayload.getExecuteTime().trim());
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
                 }
+                rawString.add(requestPayload.getRoleName().trim());
                 break;
             }
-            case "Fund Wallet": {
-                rawString.add(requestPayload.getWalletId().trim());
-                rawString.add(requestPayload.getAmount().trim());
-                rawString.add(requestPayload.getNarration().trim());
-                rawString.add(requestPayload.getRequestId().trim());
+            case "Group Roles": {
+                rawString.add(requestPayload.getUsername().trim());
+                rawString.add(requestPayload.getRoleName().trim());
+                rawString.add(requestPayload.getRole().trim());
                 break;
             }
             case "EmailPassword": {
@@ -344,24 +280,6 @@ public class GenericServiceImpl implements GenericService {
             case "PIN": {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getPin().trim());
-                break;
-            }
-            case "Smartcard Lookup": {
-                rawString.add(requestPayload.getBiller().trim());
-                rawString.add(requestPayload.getSmartcard().trim());
-                break;
-            }
-            case "Meter Lookup": {
-                rawString.add(requestPayload.getDisco().trim());
-                rawString.add(requestPayload.getMeterNumber().trim());
-                rawString.add(requestPayload.getBillType().trim());
-                break;
-            }
-            case "Transfer Beneficiary": {
-                rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getAccountNumber().trim());
-                rawString.add(requestPayload.getMnemonic().trim());
-                rawString.add(requestPayload.getBankCode().trim());
                 break;
             }
             case "Two Factor": {
@@ -591,7 +509,7 @@ public class GenericServiceImpl implements GenericService {
             if (!uploadedFiles.isEmpty()) {
                 for (MultipartFile f : uploadedFiles) {
                     if (!f.getOriginalFilename().equalsIgnoreCase("")) {
-                        File convFile = new File(f.getOriginalFilename());
+                        File convFile = new File(tempFileDirectory + "/" + f.getOriginalFilename());
                         convFile.createNewFile();
                         FileOutputStream fos = new FileOutputStream(convFile);
                         fos.write(f.getBytes());

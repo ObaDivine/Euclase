@@ -52,7 +52,8 @@
             <link th:href="@{/css/user.min.css}" type="text/css" rel="stylesheet" id="user-style-default"></link>
             <link th:href="@{/css/style.css}" type="text/css" rel="stylesheet"></link>
             <link th:href="@{/css/sweetalert2.min.css}" type="text/css" rel="stylesheet"></link>
-            <!--            <script th:src="@{/js/tinymce.min.js}"></script>-->
+            <link th:href="@{/css/choices.min.css}" type="text/css" rel="stylesheet"></link>
+            <!--                        <script th:src="@{/js/tinymce.min.js}"></script>-->
 
             <script th:inline="javascript">
                 document.addEventListener("DOMContentLoaded", () => {
@@ -249,14 +250,6 @@
                                     </a>
                                 </div>
                                 <div class="nav-item-wrapper">
-                                    <a class="nav-link label-1" th:href="@{/pin}" role="button" data-bs-toggle="" aria-expanded="false">
-                                        <div class="d-flex align-items-center">
-                                            <span class="nav-link-icon"><span class="fa fa-list-ol text-primary"></span></span>
-                                            <span class="nav-link-text-wrapper"><span class="nav-link-text">Change PIN</span></span>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="nav-item-wrapper">
                                     <a class="nav-link label-1" th:href="@{/security-question}" role="button" data-bs-toggle="" aria-expanded="false">
                                         <div class="d-flex align-items-center">
                                             <span class="nav-link-icon"><span class="fa fa-user-secret text-primary"></span></span>
@@ -272,10 +265,10 @@
                                         </div>
                                     </a>                                    
                                 </div>
-                            </li>
+                            </li>                         
                             <li class="nav-item">
                                 <!-- label-->
-                                <p class="navbar-vertical-label text-primary">Document</p>
+                                <p class="navbar-vertical-label text-primary">Document & Template</p>
                                 <hr class="navbar-vertical-line" />
                                 <!-- parent pages-->
                                 <div class="nav-item-wrapper">
@@ -292,7 +285,7 @@
                                         <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="Document">
                                             <li class="collapsed-nav-item-title d-none text-secondary">Document & File</li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/document/new}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/document/}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
                                                         <span class="nav-link-text">New Document</span>
                                                     </div>
@@ -329,18 +322,13 @@
                                         </ul>
                                     </div>
                                 </div>
-                            </li>
-                            <li class="nav-item">
-                                <!-- label-->
-                                <p class="navbar-vertical-label text-primary">Workflow & Template</p>
-                                <hr class="navbar-vertical-line" />
                                 <div class="nav-item-wrapper">
                                     <a class="nav-link dropdown-indicator label-1" href="#Workflow" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="Workflow">
                                         <div class="d-flex align-items-center">
                                             <div class="dropdown-indicator-icon">
                                                 <span class="fas fa-caret-right"></span>
                                             </div>
-                                            <span class="nav-link-icon"><span class="fa fa-phone text-primary"></span></span>
+                                            <span class="nav-link-icon"><span class="fa fa-cogs text-primary"></span></span>
                                             <span class="nav-link-text">Workflow & Template</span>
                                         </div>
                                     </a>
@@ -348,16 +336,30 @@
                                         <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="Workflow">
                                             <li class="collapsed-nav-item-title d-none text-secondary">Workflow & Template</li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/workflow/manage}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/setup/workflow}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
                                                         <span class="nav-link-text">Manage Workflow</span>
                                                     </div>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/template/manage}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/setup/template}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
                                                         <span class="nav-link-text">Manage Template</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                             <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/setup/document/group}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">Manage Document Group</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/setup/document/type}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">Manage Document Type</span>
                                                     </div>
                                                 </a>
                                             </li>
@@ -375,7 +377,7 @@
                                             <div class="dropdown-indicator-icon">
                                                 <span class="fas fa-caret-right"></span>
                                             </div>
-                                            <span class="nav-link-icon"><span class="fa fa-television text-primary"></span></span>
+                                            <span class="nav-link-icon"><span class="fa fa-wrench text-primary"></span></span>
                                             <span class="nav-link-text">Setup</span>
                                         </div>
                                     </a>
@@ -417,34 +419,6 @@
                                                     </div>
                                                 </a>
                                             </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/setup/expense}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Expense Type</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/setup/loan}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Loan Type</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/setup/leave}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Leave Type</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/setup/service-request}" data-bs-toggle="" aria-expanded="false">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="nav-link-text">Service Request</span>
-                                                    </div>
-                                                </a>
-                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -454,23 +428,22 @@
                                             <div class="dropdown-indicator-icon">
                                                 <span class="fas fa-caret-right"></span>
                                             </div>
-                                            <span class="nav-link-icon"><span class="fa fa-credit-card text-primary"></span></span>
+                                            <span class="nav-link-icon"><span class="fa fa-user-cog text-primary"></span></span>
                                             <span class="nav-link-text">User</span>
-                                            <span class="badge ms-2 badge badge-phoenix badge-phoenix-info nav-link-badge">New</span>
                                         </div>
                                     </a>
                                     <div class="parent-wrapper label-1">
                                         <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="User">
                                             <li class="collapsed-nav-item-title d-none text-secondary">Users</li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/user/}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/user}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
                                                         <span class="nav-link-text">New User</span>
                                                     </div>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" th:href="@{/user/listing}" data-bs-toggle="" aria-expanded="false">
+                                                <a class="nav-link" th:href="@{/user/list}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
                                                         <span class="nav-link-text">User Listing</span>
                                                     </div>
@@ -487,6 +460,49 @@
                                                 <a class="nav-link" th:href="@{/user/role}" data-bs-toggle="" aria-expanded="false">
                                                     <div class="d-flex align-items-center">
                                                         <span class="nav-link-text">Roles</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <!-- label-->
+                                <p class="navbar-vertical-label text-primary">Report</p>
+                                <hr class="navbar-vertical-line" />
+                                <!-- parent pages-->
+                                <div class="nav-item-wrapper">
+                                    <a class="nav-link dropdown-indicator label-1" href="#Report" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="Document">
+                                        <div class="d-flex align-items-center">
+                                            <div class="dropdown-indicator-icon">
+                                                <span class="fas fa-caret-right"></span>
+                                            </div>
+                                            <span class="nav-link-icon"><span class="fa fa-th-list text-primary"></span></span>
+                                            <span class="nav-link-text">Report</span>
+                                        </div>
+                                    </a>
+                                    <div class="parent-wrapper label-1">
+                                        <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="Report">
+                                            <li class="collapsed-nav-item-title d-none text-secondary">Reports</li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/report/audit}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">Audit Log</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/report/user}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">User Listing</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" th:href="@{/report/document}" data-bs-toggle="" aria-expanded="false">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="nav-link-text">Document Listing</span>
                                                     </div>
                                                 </a>
                                             </li>
@@ -525,6 +541,7 @@
             <script th:src="@{/js/dhtmlxgantt.js}"></script>
             <script th:src="@{/js/sweetalert2.min.js}"></script>
             <script th:src="@{/js/euclase.js}"></script>
+            <script th:src="@{/js/choices.min.js}"></script>
             <form id="logoutForm" th:action="@{/admin/logout}" method="POST">
                 <div class="modal fade" id="confirmLogout" tabindex="-1" role="dialog" aria-labelledby="confirmLogout" aria-hidden="true">
                     <div class="modal-dialog">

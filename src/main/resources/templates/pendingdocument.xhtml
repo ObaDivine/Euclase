@@ -36,8 +36,8 @@
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="documentId">Document ID</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="documentType">Document Type</th>                                               
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="priority">Priority</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="status">SLA Expiry</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
                                             </tr>
                                         </thead>
@@ -48,8 +48,8 @@
                                                 <td th:text="${rec.documentId}" class="code align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.documentType}" class="name align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.priority}" class="location align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.narration}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.slaExpiry}" class="status align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.narration}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
                                                 <td  class="status align-middle white-space-nowrap start ps-3">
                                                     <a class="text-success"  href="#!" th:href="@{'/document/approve/details?dt=' + ${rec.transType} + '&seid=' + ${rec.documentId}}">Approve or Reject</a>
                                                     &VerticalBar;

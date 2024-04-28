@@ -6,13 +6,16 @@ import com.entitysc.euclase.payload.EuclasePayload;
 import com.entitysc.euclase.payload.PylonPayload;
 import com.entitysc.euclase.payload.PylonResponsePayload;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,8 +34,8 @@ public class EuclaseServiceImpl implements EuclaseService {
     Gson gson;
     @Value("${pylon.api.signin}")
     private String signInUrl;
-    @Value("${pylon.api.signup}")
-    private String signUpUrl;
+    @Value("${pylon.api.changedefaultpassword}")
+    private String changeDefaultPasswordUrl;
     @Value("${pylon.api.changepassword}")
     private String changePasswordUrl;
     @Value("${pylon.api.forgotpassword}")
@@ -68,6 +71,8 @@ public class EuclaseServiceImpl implements EuclaseService {
     /**
      * ******** Department Unit **************
      */
+    @Value("${pylon.api.departmentunit.department}")
+    private String departmentUnitUrl;
     @Value("${pylon.api.departmentunit.list}")
     private String departmentUnitListUrl;
     @Value("${pylon.api.departmentunit.create}")
@@ -105,75 +110,36 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Value("${pylon.api.gradelevel.fetch}")
     private String fetchGradeLevelUrl;
     /**
-     * ******** Leave **************
+     * ******** Document Group **************
      */
-    @Value("${pylon.api.leave.type.list}")
-    private String leaveTypeListUrl;
-    @Value("${pylon.api.leave.type.create}")
-    private String createLeaveTypeUrl;
-    @Value("${pylon.api.leave.type.update}")
-    private String updateLeaveTypeUrl;
-    @Value("${pylon.api.leave.type.delete}")
-    private String deleteLeaveTypeUrl;
-    @Value("${pylon.api.leave.type.fetch}")
-    private String fetchLeaveTypeUrl;
-    @Value("${pylon.api.leave.doc.create}")
-    private String createLeaveDocUrl;
-    @Value("${pylon.api.leave.doc.process}")
-    private String processLeaveDocUrl;
+    @Value("${pylon.api.document.group.list}")
+    private String documentGroupListUrl;
+    @Value("${pylon.api.document.group.create}")
+    private String createDocumentGroupUrl;
+    @Value("${pylon.api.document.group.update}")
+    private String updateDocumentGroupUrl;
+    @Value("${pylon.api.document.group.delete}")
+    private String deleteDocumentGroupUrl;
+    @Value("${pylon.api.document.group.fetch}")
+    private String fetchDocumentGroupUrl;
 
     /**
-     * *************** Loan ****************
+     * ******** Document Type **************
      */
-    @Value("${pylon.api.loan.type.list}")
-    private String loanTypeListUrl;
-    @Value("${pylon.api.loan.type.create}")
-    private String createLoanTypeUrl;
-    @Value("${pylon.api.loan.type.update}")
-    private String updateLoanTypeUrl;
-    @Value("${pylon.api.loan.type.delete}")
-    private String deleteLoanTypeUrl;
-    @Value("${pylon.api.loan.type.fetch}")
-    private String fetchLoanTypeUrl;
-    @Value("${pylon.api.loan.doc.create}")
-    private String createLoanDocUrl;
-    @Value("${pylon.api.loan.doc.process}")
-    private String processLoanDocUrl;
-    /**
-     * ************ Expense ****************
-     */
-    @Value("${pylon.api.expense.type.list}")
-    private String expenseTypeListUrl;
-    @Value("${pylon.api.expense.type.create}")
-    private String createExpenseTypeUrl;
-    @Value("${pylon.api.expense.type.update}")
-    private String updateExpenseTypeUrl;
-    @Value("${pylon.api.expense.type.delete}")
-    private String deleteExpenseTypeUrl;
-    @Value("${pylon.api.expense.type.fetch}")
-    private String fetchExpenseTypeUrl;
-    @Value("${pylon.api.expense.doc.create}")
-    private String createExpenseDocUrl;
-    @Value("${pylon.api.expense.doc.process}")
-    private String processExpenseDocUrl;
-
-    /**
-     * ************ Service Request ****************
-     */
-    @Value("${pylon.api.service.request.list}")
-    private String serviceRequestListUrl;
-    @Value("${pylon.api.service.request.create}")
-    private String createServiceRequestUrl;
-    @Value("${pylon.api.service.request.update}")
-    private String updateServiceRequestUrl;
-    @Value("${pylon.api.service.request.delete}")
-    private String deleteServiceRequestUrl;
-    @Value("${pylon.api.service.request.fetch}")
-    private String fetchServiceRequestUrl;
-    @Value("${pylon.api.service.doc.create}")
-    private String createServiceDocUrl;
-    @Value("${pylon.api.service.doc.process}")
-    private String processServiceDocUrl;
+    @Value("${pylon.api.document.type.list}")
+    private String documentTypeListUrl;
+    @Value("${pylon.api.document.type.create}")
+    private String createDocumentTypeUrl;
+    @Value("${pylon.api.document.type.update}")
+    private String updateDocumentTypeUrl;
+    @Value("${pylon.api.document.type.delete}")
+    private String deleteDocumentTypeUrl;
+    @Value("${pylon.api.document.type.fetch}")
+    private String fetchDocumentTypeUrl;
+    @Value("${pylon.api.document.create}")
+    private String createDocumentUrl;
+    @Value("${pylon.api.document.process}")
+    private String processDocumentUrl;
 
     /**
      * ***************Document************************
@@ -198,14 +164,8 @@ public class EuclaseServiceImpl implements EuclaseService {
     private String fetchDraftDocumentUrl;
     @Value("${pylon.api.document.draft.delete}")
     private String processDeleteDraftDocumentUrl;
-    @Value("${pylon.api.document.approve.leave}")
-    private String processApproveLeaveDocUrl;
-    @Value("${pylon.api.document.approve.loan}")
-    private String processApproveLoanDocUrl;
-    @Value("${pylon.api.document.approve.expense}")
-    private String processApproveExpenseDocUrl;
-    @Value("${pylon.api.document.approve.service}")
-    private String processApproveServiceDocUrl;
+    @Value("${pylon.api.document.approve}")
+    private String processApproveDocumentUrl;
     @Value("${pylon.api.document.search}")
     private String processSearchDocumentUrl;
     @Value("${pylon.api.document.signature}")
@@ -231,6 +191,34 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Value("${pylon.api.document.workflow.history}")
     private String fetchDocumentWorkflowHistoryUrl;
 
+    /**
+     * ************ App User ****************
+     */
+    @Value("${pylon.api.appuser.list}")
+    private String appUserListUrl;
+    @Value("${pylon.api.appuser.create}")
+    private String createAppUserUrl;
+    @Value("${pylon.api.appuser.update}")
+    private String updateAppUserUrl;
+    @Value("${pylon.api.appuser.delete}")
+    private String deleteAppUserUrl;
+    @Value("${pylon.api.appuser.fetch}")
+    private String fetchAppUserUrl;
+    @Value("${pylon.api.appuser.role.list}")
+    private String listRoleGroupUrl;
+    @Value("${pylon.api.appuser.role.fetch}")
+    private String fetchRoleGroupUrl;
+    @Value("${pylon.api.appuser.role.update}")
+    private String updateRoleGroupUrl;
+    @Value("${pylon.api.appuser.role.create}")
+    private String createRoleGroupUrl;
+    @Value("${pylon.api.appuser.role.delete}")
+    private String deleteRoleGroupUrl;
+    @Value("${pylon.api.appuser.group.fetch}")
+    private String fetchGroupRolesUrl;
+    @Value("${pylon.api.appuser.group.update}")
+    private String updateGroupRolesUrl;
+
     @Override
     public PylonResponsePayload processSignin(EuclasePayload requestPayload) {
         String token = genericService.generatePylonAPIToken();
@@ -248,7 +236,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -273,7 +261,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -298,7 +286,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -323,7 +311,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -343,7 +331,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(departmentListUrl, "GET", token, "Department List");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -364,7 +352,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestType("Department");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to onex API
-            String response = "";
+            String response;
             if (requestPayload.getId() == 0) {
                 response = genericService.callPylonAPI(createDepartmentUrl, gson.toJson(pylonPayload), token, "Department");
             } else {
@@ -376,7 +364,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -396,7 +384,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -416,7 +404,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -437,7 +425,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestType("Department Unit");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to onex API
-            String response = "";
+            String response;
             if (requestPayload.getId() == 0) {
                 response = genericService.callPylonAPI(createDepartmentUnitUrl, gson.toJson(pylonPayload), token, "Department Unit");
             } else {
@@ -449,7 +437,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -469,7 +457,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -489,7 +477,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -509,7 +497,23 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(departmentUnitListUrl, "GET", token, "Department Unit List");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public DataListResponsePayload processFetchDepartmentUnitList(String departmentCode) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(departmentCode.trim()));
+            String response = genericService.callPylonAPI(departmentUnitUrl + "?id=" + encodedParam, "GET", token, "Department Unit Fetch");
+            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -530,7 +534,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestType("Designation");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to onex API
-            String response = "";
+            String response;
             if (requestPayload.getId() == 0) {
                 response = genericService.callPylonAPI(createDesignationUrl, gson.toJson(pylonPayload), token, "Designation");
             } else {
@@ -542,7 +546,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -562,7 +566,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -582,7 +586,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -602,7 +606,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(designationListUrl, "GET", token, "Designation List");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -623,7 +627,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestType("Branch");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to onex API
-            String response = "";
+            String response;
             if (requestPayload.getId() == 0) {
                 response = genericService.callPylonAPI(createBranchUrl, gson.toJson(pylonPayload), token, "Branch");
             } else {
@@ -635,7 +639,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -655,7 +659,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -675,7 +679,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -695,7 +699,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(branchListUrl, "GET", token, "Branch List");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -716,7 +720,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestType("Grade Level");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to onex API
-            String response = "";
+            String response;
             if (requestPayload.getId() == 0) {
                 response = genericService.callPylonAPI(createGradeLevelUrl, gson.toJson(pylonPayload), token, "Grade Level");
             } else {
@@ -728,7 +732,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -748,7 +752,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -768,7 +772,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -788,7 +792,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(gradeLevelListUrl, "GET", token, "Grade Level List");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -797,10 +801,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     /**
-     * ***************** Leave Transactions *********************
+     * ***************** Document Transactions *********************
      */
     @Override
-    public PylonResponsePayload processLeaveDocument(EuclasePayload requestPayload) {
+    public PylonResponsePayload processDocument(EuclasePayload requestPayload) {
         String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
@@ -814,14 +818,14 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestType("Document Upload");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to onex API
-            String response = genericService.callPylonAPI(processLeaveDocUrl, gson.toJson(pylonPayload), requestPayload.getUploadedFiles(), token, "Leave Document");
+            String response = genericService.callPylonAPI(processDocumentUrl, gson.toJson(pylonPayload), requestPayload.getUploadedFiles(), token, "Leave Document");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -830,7 +834,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public PylonResponsePayload processCreateLeaveDocument(EuclasePayload requestPayload) {
+    public PylonResponsePayload processCreateDocument(EuclasePayload requestPayload) {
         String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
@@ -840,17 +844,17 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Leave Document");
+            pylonPayload.setRequestType("Document");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to onex API
-            String response = genericService.callPylonAPI(createLeaveDocUrl, gson.toJson(pylonPayload), token, "Leave Document");
+            String response = genericService.callPylonAPI(createDocumentUrl, gson.toJson(pylonPayload), token, "Document");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -859,7 +863,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public PylonResponsePayload processCreateLeaveType(EuclasePayload requestPayload) {
+    public PylonResponsePayload processCreateDocumentGroup(EuclasePayload requestPayload) {
         String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
@@ -868,14 +872,14 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Leave Type");
+            pylonPayload.setRequestType("Document Group");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to onex API
-            String response = "";
+            String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createLeaveTypeUrl, gson.toJson(pylonPayload), token, "Leave Type");
+                response = genericService.callPylonAPI(createDocumentGroupUrl, gson.toJson(pylonPayload), token, "Document Group");
             } else {
-                response = genericService.callPylonAPI(updateLeaveTypeUrl, gson.toJson(pylonPayload), token, "Leave Type");
+                response = genericService.callPylonAPI(updateDocumentGroupUrl, gson.toJson(pylonPayload), token, "DOcument Group");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -883,7 +887,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -892,18 +896,18 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public PylonResponsePayload processDeleteLeaveType(String id, String principal) {
+    public PylonResponsePayload processDeleteDocumentGroup(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteLeaveTypeUrl + "?id=" + encodedParam, "GET", token, "Leave Type Delete");
+            String response = genericService.callPylonAPI(deleteDocumentGroupUrl + "?id=" + encodedParam, "GET", token, "Document Group Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -912,18 +916,18 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public PylonResponsePayload processFetchLeaveType(String id) {
+    public PylonResponsePayload processFetchDocumentGroup(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchLeaveTypeUrl + "?id=" + encodedParam, "GET", token, "Leave Type Fetch");
+            String response = genericService.callPylonAPI(fetchDocumentGroupUrl + "?id=" + encodedParam, "GET", token, "Document Group Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -932,18 +936,13 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public DataListResponsePayload processFetchLeaveTypeList() {
+    public DataListResponsePayload processFetchDocumentGroupList() {
         String token = genericService.generatePylonAPIToken();
         try {
-            PylonPayload pylonPayload = new PylonPayload();
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            //Connect to onex API
-            String response = genericService.callPylonAPI(leaveTypeListUrl, "GET", token, "Leave Type List");
+            String response = genericService.callPylonAPI(documentGroupListUrl, "GET", token, "Document Group List");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -951,70 +950,8 @@ public class EuclaseServiceImpl implements EuclaseService {
         }
     }
 
-    /**
-     * ********************** Loan Transaction *********************
-     */
     @Override
-    public PylonResponsePayload processLoanDocument(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            PylonPayload pylonPayload = new PylonPayload();
-            BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setDocumentTemplateBody(requestPayload.getEditor());
-            pylonPayload.setUploadedFiles(requestPayload.getUploadedFiles());
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestBy(requestPayload.getUsername());
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Document Upload");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
-            //Connect to onex API
-            String response = genericService.callPylonAPI(processLoanDocUrl, gson.toJson(pylonPayload), token, "Loan Document");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public PylonResponsePayload processCreateLoanDocument(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            PylonPayload pylonPayload = new PylonPayload();
-            BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setDocumentTemplateBody(requestPayload.getEditor());
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestBy(requestPayload.getUsername());
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Loan Document");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
-            //Connect to onex API
-            String response = genericService.callPylonAPI(createLoanDocUrl, gson.toJson(pylonPayload), token, "Loan Document");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public PylonResponsePayload processCreateLoanType(EuclasePayload requestPayload) {
+    public PylonResponsePayload processCreateDocumentType(EuclasePayload requestPayload) {
         String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
@@ -1023,14 +960,14 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Loan Type");
+            pylonPayload.setRequestType("Document Type");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to onex API
-            String response = "";
+            String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createLoanTypeUrl, gson.toJson(pylonPayload), token, "Loan Type");
+                response = genericService.callPylonAPI(createDocumentTypeUrl, gson.toJson(pylonPayload), token, "Document Type");
             } else {
-                response = genericService.callPylonAPI(updateLoanTypeUrl, gson.toJson(pylonPayload), token, "Loan Type");
+                response = genericService.callPylonAPI(updateDocumentTypeUrl, gson.toJson(pylonPayload), token, "DOcument Type");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -1038,7 +975,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1047,18 +984,18 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public PylonResponsePayload processDeleteLoanType(String id, String principal) {
+    public PylonResponsePayload processDeleteDocumentType(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteLoanTypeUrl + "?id=" + encodedParam, "GET", token, "Loan Type Delete");
+            String response = genericService.callPylonAPI(deleteDocumentTypeUrl + "?id=" + encodedParam, "GET", token, "Document Type Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1067,18 +1004,18 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public PylonResponsePayload processFetchLoanType(String id) {
+    public PylonResponsePayload processFetchDocumentType(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchLoanTypeUrl + "?id=" + encodedParam, "GET", token, "Loan Type Fetch");
+            String response = genericService.callPylonAPI(fetchDocumentTypeUrl + "?id=" + encodedParam, "GET", token, "Document Type Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1087,328 +1024,14 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public DataListResponsePayload processFetchLoanTypeList() {
+    public DataListResponsePayload processFetchDocumentTypeList(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
-            PylonPayload pylonPayload = new PylonPayload();
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            //Connect to onex API
-            String response = genericService.callPylonAPI(loanTypeListUrl, "GET", token, "Loan Type List");
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(documentTypeListUrl + "?id=" + encodedParam, "GET", token, "Document Type List");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
-            DataListResponsePayload responsePayload = new DataListResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    /**
-     * ****************** Expense Transaction ******************
-     */
-    @Override
-    public PylonResponsePayload processExpenseDocument(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            PylonPayload pylonPayload = new PylonPayload();
-            BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setDocumentTemplateBody(requestPayload.getEditor());
-            pylonPayload.setUploadedFiles(requestPayload.getUploadedFiles());
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestBy(requestPayload.getUsername());
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Document Upload");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
-            //Connect to onex API
-            String response = genericService.callPylonAPI(processExpenseDocUrl, gson.toJson(pylonPayload), token, "Expense Document");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public PylonResponsePayload processCreateExpenseDocument(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            PylonPayload pylonPayload = new PylonPayload();
-            BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setDocumentTemplateBody(requestPayload.getEditor());
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestBy(requestPayload.getUsername());
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Expense Document");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
-            //Connect to onex API
-            String response = genericService.callPylonAPI(createExpenseDocUrl, gson.toJson(pylonPayload), token, "Expense Document");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public PylonResponsePayload processCreateExpenseType(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            PylonPayload pylonPayload = new PylonPayload();
-            BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestBy(requestPayload.getUsername());
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Expense Type");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
-            //Connect to onex API
-            String response = "";
-            if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createExpenseTypeUrl, gson.toJson(pylonPayload), token, "Expense Type");
-            } else {
-                response = genericService.callPylonAPI(updateExpenseTypeUrl, gson.toJson(pylonPayload), token, "Expense Type");
-            }
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public PylonResponsePayload processDeleteExpenseType(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteExpenseTypeUrl + "?id=" + encodedParam, "GET", token, "Expense Type Delete");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public PylonResponsePayload processFetchExpenseType(String id) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchExpenseTypeUrl + "?id=" + encodedParam, "GET", token, "Expense Type Fetch");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public DataListResponsePayload processFetchExpenseTypeList() {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            PylonPayload pylonPayload = new PylonPayload();
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            //Connect to onex API
-            String response = genericService.callPylonAPI(expenseTypeListUrl, "GET", token, "Expense Type List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
-        } catch (Exception ex) {
-            DataListResponsePayload responsePayload = new DataListResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    /**
-     * ***************** Service Request **********************
-     */
-    @Override
-    public PylonResponsePayload processServiceRequestDocument(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            PylonPayload pylonPayload = new PylonPayload();
-            BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setDocumentTemplateBody(requestPayload.getEditor());
-            pylonPayload.setUploadedFiles(requestPayload.getUploadedFiles());
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestBy(requestPayload.getUsername());
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Document Upload");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
-            //Connect to onex API
-            String response = genericService.callPylonAPI(processServiceDocUrl, gson.toJson(pylonPayload), token, "Service Request Document");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public PylonResponsePayload processCreateServiceRequestDocument(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            PylonPayload pylonPayload = new PylonPayload();
-            BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setDocumentTemplateBody(requestPayload.getEditor());
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestBy(requestPayload.getUsername());
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Service Document");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
-            //Connect to onex API
-            String response = genericService.callPylonAPI(createServiceDocUrl, gson.toJson(pylonPayload), token, "Service Document");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public PylonResponsePayload processCreateServiceRequest(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            PylonPayload pylonPayload = new PylonPayload();
-            BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestBy(requestPayload.getUsername());
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Service Request");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
-            //Connect to onex API
-            String response = "";
-            if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createServiceRequestUrl, gson.toJson(pylonPayload), token, "Service Request");
-            } else {
-                response = genericService.callPylonAPI(updateServiceRequestUrl, gson.toJson(pylonPayload), token, "Service Request");
-            }
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public PylonResponsePayload processDeleteServiceRequest(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteServiceRequestUrl + "?id=" + encodedParam, "GET", token, "Service Request Delete");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public PylonResponsePayload processFetchServiceRequest(String id) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchServiceRequestUrl + "?id=" + encodedParam, "GET", token, "Service Request Fetch");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (Exception ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
-    @Override
-    public DataListResponsePayload processFetchServiceRequestList() {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            PylonPayload pylonPayload = new PylonPayload();
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            //Connect to onex API
-            String response = genericService.callPylonAPI(serviceRequestListUrl, "GET", token, "Service Request List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1426,7 +1049,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     public String generateDocumentId(String documentType) {
         //Check if generic docuemtn prefix is set
-        String documentId = "";
+        String documentId;
         if (useGenericDocumentPrefix) {
             documentId = genericDocumentPrefix + genericService.generateRequestId();
         } else {
@@ -1463,7 +1086,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1493,7 +1116,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1509,7 +1132,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(fetchMyDocumentUrl + "?id=" + encodedParam, "GET", token, "My Documents Fetch");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1525,7 +1148,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(fetchPendingDocumentUrl + "?id=" + encodedParam, "GET", token, "Pending Documents Fetch");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1541,7 +1164,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(fetchDraftDocumentUrl + "?id=" + encodedParam, "GET", token, "Draft Documents Fetch");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1561,7 +1184,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1592,7 +1215,7 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1609,7 +1232,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(fetchDocumentDetailsUrl + "?dt=" + encodedDocumentType + "&id=" + encodedParam, "GET", token, "Documents Details");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1632,24 +1255,14 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestType("Document Approve");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to onex API
-            String url = "";
-            if (requestPayload.getDocumentType().equalsIgnoreCase("Leave")) {
-                url = processApproveLeaveDocUrl;
-            } else if (requestPayload.getDocumentType().equalsIgnoreCase("Loan")) {
-                url = processApproveLoanDocUrl;
-            } else if (requestPayload.getDocumentType().equalsIgnoreCase("Expense")) {
-                url = processApproveExpenseDocUrl;
-            } else {
-                url = processApproveServiceDocUrl;
-            }
-            String response = genericService.callPylonAPI(url, gson.toJson(pylonPayload), requestPayload.getUploadedFiles(), token, "Document Approve");
+            String response = genericService.callPylonAPI(processApproveDocumentUrl, gson.toJson(pylonPayload), requestPayload.getUploadedFiles(), token, "Document Approve");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1666,7 +1279,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(fetchDocumentWorkflowHistoryUrl + "?dt=" + encodedDocumentType + "&id=" + encodedParam, "GET", token, "Documents Workflow");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1683,7 +1296,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(processDeleteDraftDocumentUrl + "?dt=" + encodedDocumentType + "&id=" + encodedParam, "GET", token, "Delete Draft Documents");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1699,7 +1312,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             String response = genericService.callPylonAPI(processSearchDocumentUrl + "?search=" + encodedParam, "GET", token, "Search Documents");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
@@ -1729,7 +1342,268 @@ public class EuclaseServiceImpl implements EuclaseService {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processFetchAppUser(String id) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(fetchAppUserUrl + "?id=" + encodedParam, "GET", token, "App User Fetch");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processDeleteAppUser(String id, String principal) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(deleteAppUserUrl + "?id=" + encodedParam, "GET", token, "App User Delete");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public DataListResponsePayload processFetchAppUserList() {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(token);
+            //Connect to onex API
+            String response = genericService.callPylonAPI(appUserListUrl, "GET", token, "App User List");
+            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processCreateAppUser(String principal, EuclasePayload requestPayload) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            BeanUtils.copyProperties(requestPayload, pylonPayload);
+            pylonPayload.setHod(requestPayload.getHod() == null ? "False" : "True");
+            pylonPayload.setTeamLead(requestPayload.getTeamLead() == null ? "False" : "True");
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(token);
+            pylonPayload.setRequestType("Sign Up");
+            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            //Connect to onex API
+            String response;
+            if (requestPayload.getId() == 0) {
+                response = genericService.callPylonAPI(createAppUserUrl, gson.toJson(pylonPayload), token, "App User");
+            } else {
+                response = genericService.callPylonAPI(updateAppUserUrl, gson.toJson(pylonPayload), token, "App User");
+            }
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public DataListResponsePayload processFetchRoleList() {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(token);
+            //Connect to onex API
+            String response = genericService.callPylonAPI(listRoleGroupUrl, "GET", token, "Role List");
+            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processFetchRoleGroup(String id) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(fetchRoleGroupUrl + "?id=" + encodedParam, "GET", token, "Role Group Fetch");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processCreateRoleGroup(EuclasePayload requestPayload) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            BeanUtils.copyProperties(requestPayload, pylonPayload);
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(token);
+            pylonPayload.setRequestType("Role Group");
+            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            //Connect to onex API
+            String response;
+            if (requestPayload.getId() == 0) {
+                response = genericService.callPylonAPI(createRoleGroupUrl, gson.toJson(pylonPayload), token, "Role Group");
+            } else {
+                response = genericService.callPylonAPI(updateRoleGroupUrl, gson.toJson(pylonPayload), token, "Role Group");
+            }
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processDeleteRoleGroup(String id, String principal) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(deleteRoleGroupUrl + "?id=" + encodedParam, "GET", token, "Role Group Delete");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public DataListResponsePayload processFetchGroupRoles(String groupName) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(groupName.trim()));
+            String response = genericService.callPylonAPI(fetchGroupRolesUrl + "?groupName=" + encodedParam, "GET", token, "Group Roles Fetch");
+            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processUpdateGroupRoles(EuclasePayload requestPayload) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            BeanUtils.copyProperties(requestPayload, pylonPayload);
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(token);
+            pylonPayload.setRequestType("Group Roles");
+            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            //Connect to onex API
+            String response = genericService.callPylonAPI(updateGroupRolesUrl, gson.toJson(pylonPayload), token, "Group Roles");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            responsePayload.setResponseMessage(ex.getMessage());
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processChangeDefaultPassword(EuclasePayload requestPayload) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            BeanUtils.copyProperties(requestPayload, pylonPayload);
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setTransType("Default Password");
+            pylonPayload.setToken(token);
+            pylonPayload.setRequestType("Change Password");
+            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            //Connect to onex API
+            String response = genericService.callPylonAPI(changeDefaultPasswordUrl, gson.toJson(pylonPayload), token, "Change Password");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             responsePayload.setResponseMessage(ex.getMessage());
