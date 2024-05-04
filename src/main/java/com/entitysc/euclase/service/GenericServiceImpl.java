@@ -193,22 +193,16 @@ public class GenericServiceImpl implements GenericService {
             }
             case "Document Template": {
                 rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getDocumentTemplateName().trim());
-                break;
-            }
-            case "Document Workflow": {
-                rawString.add(requestPayload.getUsername().trim());
-                rawString.add(requestPayload.getDocumentTemplateName().trim());
+                rawString.add(String.valueOf(requestPayload.getId()));
                 break;
             }
             case "Document": {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getDocumentId().trim());
-                rawString.add(requestPayload.getUniqueId().trim());
+                rawString.add(requestPayload.getTag().trim());
                 rawString.add(requestPayload.getDocumentType().trim());
                 rawString.add(requestPayload.getPurpose().trim());
-                rawString.add(requestPayload.getStartDate().trim());
-                rawString.add(requestPayload.getEndDate().trim());
+                rawString.add(requestPayload.getNarration().trim());
                 if (requestPayload.getCarbonCopy() != null) {
                     rawString.add(requestPayload.getCarbonCopy().trim());
                 }

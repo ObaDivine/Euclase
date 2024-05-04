@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.entitysc.euclase.service.EuclaseService;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  *
@@ -30,8 +29,6 @@ public class SetupController {
 
     @Autowired
     EuclaseService euclaseService;
-    @Value("${euclase.document.type}")
-    private String documentType;
     private String alertMessage = "";
     private String alertMessageType = "";
 
@@ -419,7 +416,7 @@ public class SetupController {
     }
 
     /**
-     * ************ Document Group
+     * ************ Document Type
      *
      ***************
      * @param model
@@ -439,7 +436,7 @@ public class SetupController {
         }
         model.addAttribute("sessionDetails", userDetails);
         model.addAttribute("documentCount", euclaseService.processFetchDocumentTypeList("All").getData().size());
-        model.addAttribute("documentTypes", documentType.split(","));
+        model.addAttribute("documentGroup", euclaseService.processFetchDocumentGroupList().getData());
         return "documenttype";
     }
 
@@ -458,6 +455,7 @@ public class SetupController {
         }
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("documentCount", euclaseService.processFetchDocumentTypeList("All").getData().size());
+        model.addAttribute("documentGroup", euclaseService.processFetchDocumentGroupList().getData());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         return "documenttype";
@@ -489,6 +487,7 @@ public class SetupController {
         }
         model.addAttribute("euclasePayload", response.getData());
         model.addAttribute("documentCount", euclaseService.processFetchDocumentTypeList("All").getData().size());
+        model.addAttribute("documentGroup", euclaseService.processFetchDocumentGroupList().getData());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -588,7 +587,7 @@ public class SetupController {
     }
 
     @GetMapping("/template")
-    public String template(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession session) {
+    public String template(Model model, HttpSession session) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
@@ -599,6 +598,7 @@ public class SetupController {
             userDetails = new ArrayList<>();
         }
         model.addAttribute("sessionDetails", userDetails);
+        model.addAttribute("documentTypes", euclaseService.processFetchDocumentTypeList("All").getData());
         return "template";
     }
 
@@ -609,43 +609,28 @@ public class SetupController {
         requestPayload.setFirstName(userDetails.get(1));
         requestPayload.setLastName(userDetails.get(2));
         requestPayload.setUsername(userDetails.get(8));
-        PylonResponsePayload response = euclaseService.processCreateDocumentTemplate(requestPayload);
-
-        //Check the type of document
-        if (requestPayload.getDocumentTemplateName().equalsIgnoreCase("Expense")) {
-            alertMessage = response.getResponseMessage();
-            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
-            return "redirect:/template/expense";
-        } else if (requestPayload.getDocumentTemplateName().equalsIgnoreCase("Leave")) {
-            alertMessage = response.getResponseMessage();
-            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
-            return "redirect:/template/leave";
-        } else if (requestPayload.getDocumentTemplateName().equalsIgnoreCase("Loan")) {
-            alertMessage = response.getResponseMessage();
-            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
-            return "redirect:/template/loan";
-        } else {
-            alertMessage = response.getResponseMessage();
-            alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
-            return "redirect:/template/service-request";
-        }
+        PylonResponsePayload response = euclaseService.processUpdateDocumentTemplate(requestPayload);
+        model.addAttribute("alertMessage", response.getResponseMessage());
+        model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
+        return "documenttemplate";
     }
 
-    @GetMapping("/expense")
-    public String templateExpense(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, Principal principal, HttpSession session) {
-        PylonResponsePayload response = euclaseService.processFetchDocumentTemplate("Expense");
+    @GetMapping("/template/edit")
+    public String template(@RequestParam("seid") String seid, Model model, HttpSession session) {
+        PylonResponsePayload response = euclaseService.processFetchDocumentType(seid);
         EuclasePayload requestPayload = new EuclasePayload();
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             requestPayload.setEditorData(response.getData().getDocumentTemplateBody());
             requestPayload.setEditor(response.getData().getDocumentTemplateBody());
-            requestPayload.setDocumentTemplateName(response.getData().getDocumentTemplateName());
+            requestPayload.setDocumentTypeName(response.getData().getDocumentTypeName());
+            requestPayload.setId(response.getData().getId());
             model.addAttribute("euclasePayload", requestPayload);
         } else if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.RECORD_NOT_EXIST_CODE.getResponseCode())) {
             model.addAttribute("euclasePayload", requestPayload);
         } else {
             alertMessage = response.getResponseMessage();
             alertMessageType = "error";
-            return "redirect:/template/manage";
+            return "redirect:/setup/template";
         }
         //Set session variables
         List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
@@ -657,23 +642,40 @@ public class SetupController {
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
         model.addAttribute("sessionDetails", userDetails);
-        return "templateexpense";
+        return "documenttemplate";
     }
 
     @GetMapping("/workflow")
     public String workflow(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, Principal principal, HttpSession session) {
-        PylonResponsePayload response = euclaseService.processFetchDocumentWorkflow("Expense");
+        model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", alertMessageType);
+        resetAlertMessage();
+        //Set session variables
+        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
+        if (userDetails == null) {
+            userDetails = new ArrayList<>();
+        }
+        model.addAttribute("sessionDetails", userDetails);
+        model.addAttribute("documentTypes", euclaseService.processFetchDocumentTypeList("All").getData());
+        return "workflow";
+    }
+
+    @GetMapping("/workflow/edit")
+    public String workflow(@RequestParam("seid") String seid, Model model, HttpSession session) {
+        PylonResponsePayload response = euclaseService.processFetchDocumentType(seid);
         EuclasePayload requestPayload = new EuclasePayload();
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
-            requestPayload.setDocumentTemplateBody(response.getData().getDocumentTemplateBody());
-            requestPayload.setDocumentTemplateName(response.getData().getDocumentTemplateName());
+            requestPayload.setDocumentWorkflowBody(response.getData().getDocumentWorkflowBody());
+            requestPayload.setDocumentTypeName(response.getData().getDocumentTypeName());
+            requestPayload.setId(response.getData().getId());
             model.addAttribute("euclasePayload", requestPayload);
         } else if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.RECORD_NOT_EXIST_CODE.getResponseCode())) {
             model.addAttribute("euclasePayload", requestPayload);
         } else {
             alertMessage = response.getResponseMessage();
             alertMessageType = "error";
-            return "redirect:/workflow/manage";
+            return "redirect:/setup/workflow";
         }
         //Set session variables
         List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
@@ -685,7 +687,20 @@ public class SetupController {
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
         model.addAttribute("sessionDetails", userDetails);
-        return "workflowexpense";
+        return "documentworkflow";
+    }
+    
+    @PostMapping("/workflow/create")
+    public String workflowCreate(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
+        requestPayload.setProfileImage(userDetails.get(0));
+        requestPayload.setFirstName(userDetails.get(1));
+        requestPayload.setLastName(userDetails.get(2));
+        requestPayload.setUsername(userDetails.get(8));
+        PylonResponsePayload response = euclaseService.processUpdateDocumentWorkflow(requestPayload);
+        model.addAttribute("alertMessage", response.getResponseMessage());
+        model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
+        return "documentworkflow";
     }
 
     private void resetAlertMessage() {

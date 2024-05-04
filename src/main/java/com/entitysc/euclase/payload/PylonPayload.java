@@ -155,6 +155,7 @@ public class PylonPayload {
     private String priority;
     private String documentTemplateName;
     private String documentTemplateBody;
+    private String documentWorkflowBody;
     private String uniqueId;
     private String serviceType;
     private String documentId;
@@ -182,4 +183,5 @@ public class PylonPayload {
     private String roleExist;
     private String principal;
     private String passwordChangeDate;
+    private String tag;
 }

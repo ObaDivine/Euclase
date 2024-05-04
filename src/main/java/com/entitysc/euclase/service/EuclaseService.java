@@ -127,22 +127,18 @@ public interface EuclaseService {
     /**
      * **************** Document Template
      *
-     * @param templateName
+     * @param requestPayload
      * @return
      */
-    PylonResponsePayload processFetchDocumentTemplate(String templateName);
-
-    PylonResponsePayload processCreateDocumentTemplate(EuclasePayload requestPayload);
+    PylonResponsePayload processUpdateDocumentTemplate(EuclasePayload requestPayload);
 
     /**
      * **************** Document Workflow
      *
-     * @param workflowName
+     * @param requestPayload
      * @return
      */
-    PylonResponsePayload processFetchDocumentWorkflow(String workflowName);
-
-    PylonResponsePayload processCreateDocumentWorkflow(EuclasePayload requestPayload);
+    PylonResponsePayload processUpdateDocumentWorkflow(EuclasePayload requestPayload);
 
     /**
      * *************** My Documents

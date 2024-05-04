@@ -167,3 +167,8 @@
     min-height: 200px;
     min-width: 200px;
 }
+
+#img-doc-types{
+    max-height: 250px;
+    max-width: 375px;
+}

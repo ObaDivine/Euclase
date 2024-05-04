@@ -43,7 +43,7 @@
                                         <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
                                             <tr th:each="rec : ${dataList}" class="position-static">
                                                 <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.documentGroup}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.documentGroupName}" class="code align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.documentTypeCode}" class="code align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.documentTypeName}" class="name align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.createdBy}" class="createdBy align-middle white-space-nowrap start ps-3"></td>

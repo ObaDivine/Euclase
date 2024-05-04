@@ -63,13 +63,8 @@ euclase:
     temp:
         dir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\temp
     document:
-        type: 'Expense, Service, Loan, Leave, Training'
         prefix:
             usegeneric: false
-            loan: LN
-            leave: LV
-            expense: EX
-            service: SR
             generic: DOC
         id:
             allowuser: false
@@ -213,9 +208,7 @@ pylon:
                 fetch: http://localhost:8080/pylon/api/v1/document/draft
                 delete: http://localhost:8080/pylon/api/v1/document/draft/delete
             template:
-                fetch: http://localhost:8080/pylon/api/v1/document/template/record
-                create: http://localhost:8080/pylon/api/v1/document/template
+                update: http://localhost:8080/pylon/api/v1/document/template/update
             workflow:
-                fetch: http://localhost:8080/pylon/api/v1/document/workflow/record
-                create: http://localhost:8080/pylon/api/v1/document/workflow
+                update: http://localhost:8080/pylon/api/v1/document/workflow/update
                 history: http://localhost:8080/pylon/api/v1/document/workflow/history

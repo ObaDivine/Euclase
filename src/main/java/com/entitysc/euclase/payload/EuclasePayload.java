@@ -77,6 +77,7 @@ public class EuclasePayload {
     private String editorData;
     private String documentTemplateName;
     private String documentTemplateBody;
+    private String documentWorkflowBody;
     private String comment;
     private String commentFrom;
     private String commentTo;
@@ -101,4 +102,5 @@ public class EuclasePayload {
     private String passwordChangeDate;
     private List<String> loginDay;
     private String transType;
+    private String tag;
 }

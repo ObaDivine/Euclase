@@ -6,7 +6,6 @@ import com.entitysc.euclase.payload.EuclasePayload;
 import com.entitysc.euclase.payload.PylonResponsePayload;
 import com.entitysc.euclase.service.EuclaseService;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -38,8 +37,6 @@ public class DocumentController {
     private String alertMessageType = "";
     @Value("${euclase.document.id.allowuser}")
     private String allowUserDocumentId;
-    @Value("${euclase.document.type}")
-    private String documentType;
     @Autowired
     MessageSource messageSource;
 
@@ -52,7 +49,7 @@ public class DocumentController {
         requestPayload.setLastName(userDetails.get(2));
         requestPayload.setUsername(userDetails.get(8));
         model.addAttribute("euclasePayload", requestPayload);
-        model.addAttribute("documentTypes", documentType.split(","));
+        model.addAttribute("documentTypes", euclaseService.processFetchDocumentTypeList("All").getData());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -60,13 +57,17 @@ public class DocumentController {
     }
 
     @GetMapping("/new")
-    public String newDocument(@RequestParam("seid") String seid, Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
+    public String newDocument(@RequestParam("seid") String seid, Model model, HttpSession httpSession) {
+        PylonResponsePayload response = euclaseService.processFetchDocumentType(seid);
         EuclasePayload requestPayload = new EuclasePayload();
         List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
         requestPayload.setProfileImage(userDetails.get(0));
         requestPayload.setFirstName(userDetails.get(1));
         requestPayload.setLastName(userDetails.get(2));
         requestPayload.setUsername(userDetails.get(8));
+        requestPayload.setDocumentWorkflowBody(response.getData().getDocumentWorkflowBody());
+        requestPayload.setDocumentTypeName(response.getData().getDocumentTypeName());
+        requestPayload.setDocumentType(String.valueOf(response.getData().getId())); //Pass document type id for lookup
         //Check if the signature is set. Index 11 holds the signature
         if (userDetails.get(11) == null || userDetails.get(11).equalsIgnoreCase("")) {
             alertMessage = messageSource.getMessage("appMessages.signature.notset", new Object[0], Locale.ENGLISH);
@@ -76,13 +77,12 @@ public class DocumentController {
 
         requestPayload.setDocumentType(seid);
         //Generate document id
-        String documentId = euclaseService.generateDocumentId(requestPayload.getDocumentType());
+        String documentId = euclaseService.generateDocumentId(response.getData().getDocumentGroupCode());
         requestPayload.setDocumentId(documentId);
         requestPayload.setAllowUserDocumentId(allowUserDocumentId);
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
-        model.addAttribute("documentTypeList", euclaseService.processFetchDocumentTypeList(seid).getData());
         model.addAttribute("sessionDetails", userDetails);
         resetAlertMessage();
         return "documentinit";
@@ -100,19 +100,19 @@ public class DocumentController {
             requestPayload.setEditorData(response.getData().getDocumentTemplateBody());
             requestPayload.setEditor(response.getData().getDocumentTemplateBody());
             requestPayload.setDocumentTemplateName(response.getData().getDocumentTemplateName());
+            requestPayload.setDocumentTypeName(response.getData().getDocumentTypeName());
             model.addAttribute("euclasePayload", requestPayload);
             model.addAttribute("alertMessage", response.getResponseMessage());
             model.addAttribute("alertMessageType", "success");
             model.addAttribute("sessionDetails", userDetails);
             resetAlertMessage();
-            return "leavedocprocess";
+            return "documentprocess";
         }
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         model.addAttribute("sessionDetails", userDetails);
-        model.addAttribute("leaveTypeList", euclaseService.processFetchDocumentTypeList(requestPayload.getDocumentType()).getData());
-        return "leavedocinit";
+        return "documentinit";
     }
 
     @PostMapping("/process")
@@ -126,7 +126,7 @@ public class DocumentController {
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
             alertMessageType = "success";
-            return "redirect:/document/leave";
+            return "redirect:/document/";
         }
 
         model.addAttribute("euclasePayload", requestPayload);
@@ -135,7 +135,7 @@ public class DocumentController {
         model.addAttribute("sessionDetails", userDetails);
         model.addAttribute("leaveTypeList", euclaseService.processFetchDocumentTypeList(requestPayload.getDocumentType()).getData());
         resetAlertMessage();
-        return "leavedocprocess";
+        return "documentprocess";
     }
 
     @GetMapping("/my")

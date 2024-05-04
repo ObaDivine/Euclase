@@ -34410,8 +34410,8 @@ html:not(.navbar-vertical-collapsed) .navbar-vertical .firefox .navbar-vibrant .
 }
 
 .auth-card .auth-title-box .auth-title-box-img {
-    width: 220px !important;
-    height: 220px !important;
+    width: 520px !important;
+    height: 520px !important;
 }
 
 @media(min-width: 768px) {

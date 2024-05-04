@@ -13,20 +13,20 @@
                 <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
                     <div class="row">
-                        <div class="offset-lg-1 col-lg-10 col-md-12 col-sm-12">
+                        <div class="offset-lg-1 col-lg-10 col-md-12 col-sm-12" th:object="${euclasePayload}">
                             <div class="col-auto mb-3">
                                 <nav class="mb-3" aria-label="breadcrumb">
                                     <ol class="breadcrumb mb-0">
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/template/manage}">Template</a></li>
-                                        <li class="breadcrumb-item active">Leave Request</li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/document/}">Template</a></li>
+                                        <li class="breadcrumb-item active">Document Process</li>
                                     </ol>
                                 </nav>
-                                <h4 class="mb-2 text-secondary">Leave Document Template</h4>
-                                <h6 class="text-700 fw-semi-bold">Template for managing leave document</h6>
+                                <h4 class="mb-2 text-secondary" th:text="${euclasePayload.documentTypeName}">Document</h4>
+                                <h6 class="text-700 fw-semi-bold" th:text="'Process ' + ${euclasePayload.documentTypeName} + ' Document'">Document description</h6>
                             </div>
-                            <form th:object="${euclasePayload}" th:action="@{/document/leave/process}" method="POST"  enctype="multipart/form-data">
+                            <form th:action="@{/document/leave/process}" method="POST"  enctype="multipart/form-data">
                                 <input type="hidden" th:field="*{documentId}" />
                                 <input type="hidden" th:field="*{documentTemplateName}" />
                                 <div id="toolbar-container"></div>
