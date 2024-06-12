@@ -171,6 +171,7 @@ public class PylonPayload {
     private List<MultipartFile> uploadedFiles;
     private String carbonCopy;
     public String slaExpiry;
+    public String slaVoilated;
     private String originalFileName;
     private String search;
     private String signatureLink;
@@ -184,4 +185,6 @@ public class PylonPayload {
     private String principal;
     private String passwordChangeDate;
     private String tag;
+    private String newValue;
+    private String action;
 }

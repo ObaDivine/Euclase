@@ -9,10 +9,10 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -38,7 +38,7 @@ public class HomeController {
 
     @Autowired
     EuclaseService euclaseService;
-        @Autowired
+    @Autowired
     GenericService genericService;
     private String alertMessage = "";
     private String alertMessageType = "";
@@ -459,6 +459,38 @@ public class HomeController {
         model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
         model.addAttribute("transType", "group");
         return "roles";
+    }
+
+    @GetMapping("/user/update")
+    public String userUpdate(HttpServletRequest request, HttpServletResponse response, Principal principal, Model model, HttpSession httpSession) {
+        EuclasePayload requestPayload = new EuclasePayload();
+        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
+        requestPayload.setProfileImage(userDetails.get(0));
+        requestPayload.setFirstName(userDetails.get(1));
+        model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());
+        model.addAttribute("roleList", euclaseService.processFetchRoleList().getData());
+        model.addAttribute("userCount", euclaseService.processFetchAppUserList().getData().size());
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", "success");
+        resetAlertMessage();
+        return "appuserupdate";
+    }
+
+    @PostMapping("/user/update/")
+    public String updateUser(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
+        requestPayload.setProfileImage(userDetails.get(0));
+        requestPayload.setFirstName(userDetails.get(1));
+        requestPayload.setLastName(userDetails.get(2));
+        requestPayload.setUsername(userDetails.get(8));
+        PylonResponsePayload response = euclaseService.processUpdateUser(requestPayload, principal.getName());
+        model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());
+        model.addAttribute("roleList", euclaseService.processFetchRoleList().getData());
+        model.addAttribute("alertMessage", response.getResponseMessage());
+        model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
+        return "appuserupdate";
     }
 
     private void resetAlertMessage() {

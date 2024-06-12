@@ -85,6 +85,7 @@ public class EuclasePayload {
     private MultipartFile uploadedFile;
     private String carbonCopy;
     public String slaExpiry;
+    public String slaVoilated;
     private String originalFileName;
     private String createdAt;
     private String createdBy;
@@ -103,4 +104,6 @@ public class EuclasePayload {
     private List<String> loginDay;
     private String transType;
     private String tag;
+    private String newValue;
+    private String action;
 }

@@ -168,6 +168,16 @@
     min-width: 200px;
 }
 
+.approval-signature{
+    max-height: 40px !important;
+    max-width: 200px !important;
+}
+
+#inputter-signature{
+    max-height: 60px !important;
+    max-width: 200px !important;
+}
+
 #img-doc-types{
     max-height: 250px;
     max-width: 375px;

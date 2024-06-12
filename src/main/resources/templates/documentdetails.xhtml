@@ -37,203 +37,74 @@
                                             <div class="accordion-collapse collapse show" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body pt-0" th:object="${euclasePayload}">
                                                     <div class="bg-soft dark__bg-1100 p-4 mb-4 rounded-2">
-                                                        <div class="row g-2">
-                                                            <div class="col-12 col-lg-4">
-                                                                <div class="row g-2 g-lg-2">
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Document Id :</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.documentId}">document id</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Date Created :</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.createdAt}">2024-03-01</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document ID: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentId}"></span>
                                                             </div>
-                                                            <div class="col-12 col-lg-4">
-                                                                <div class="row g-2 g-lg-2">
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Type :</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.documentType}">document id</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Created By :</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.createdBy}">2024-03-01</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document Group: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentGroupName}"></span>
                                                             </div>
-                                                            <div class="col-12 col-lg-4">
-                                                                <div class="row g-2 g-lg-2">
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Sub Type :</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p th:if="${euclasePayload.documentType} == 'Expense'" class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.expenseType}">document id</p>
-                                                                                <p th:if="${euclasePayload.documentType} == 'Leave'" class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.leaveType}">document id</p>
-                                                                                <p th:if="${euclasePayload.documentType} == 'Loan'" class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.loanType}">document id</p>
-                                                                                <p th:if="${euclasePayload.documentType} == 'Service'" class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.serviceType}">document id</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Priority :</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.priority}">Normal</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document Type: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentTypeName}"></span>
+                                                            </div>
+                                                        </div> 
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Date Created: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdAt}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Created By: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdBy}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Status: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.status}"></span>
+                                                            </div>                                                            
+                                                        </div> 
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Priority: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.priority}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">SLA Expiry: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.slaExpiry}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">SLA Voilated: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.slaVoilated}"></span>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-2">
-                                                            <div class="col-12 col-lg-4">
-                                                                <div class="row g-2 g-lg-2">
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div th:if="${euclasePayload.documentType} == 'Leave'" class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Start Date:</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.startDate}">2024-03-10</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div th:if="${euclasePayload.documentType} == 'Expense'" class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Expense Date:</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.expenseDate}">2024-03-10</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div th:if="${euclasePayload.documentType} == 'Loan'" class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Loan Amount:</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.loanAmount}">1k</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div th:if="${euclasePayload.documentType} == 'Service'" class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Trans Type</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.transType}">1k</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Unique ID:</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.uniqueId}">Unique</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Tag: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.tag}"></span>
                                                             </div>
-                                                            <div class="col-12 col-lg-4">
-                                                                <div class="row g-2 g-lg-2">
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div th:if="${euclasePayload.documentType} == 'Leave'" class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">End Date:</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.startDate}">2024-03-10</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div th:if="${euclasePayload.documentType} == 'Expense'" class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Payment Method:</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.paymentMethod}">2024-03-10</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div th:if="${euclasePayload.documentType} == 'Loan'" class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Request By</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.loanRequestBy}">1k</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div th:if="${euclasePayload.documentType} == 'Service'" class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Trans Type</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.transType}">1k</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Carbon Copy:</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.carbonCopy}">2024-03-01</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Purpose: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.purpose}"></span>
                                                             </div>
-                                                            <div class="col-12 col-lg-4">
-                                                                <div class="row g-2 g-lg-2">
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Purpose:</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.leaveReason}">Purpose</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12 col-sm-6 col-lg-12">
-                                                                        <div class="row align-items-center g-0">
-                                                                            <div class="col-auto col-lg-6 col-xl-5">
-                                                                                <h6 class="mb-0 me-1">Narration:</h6>
-                                                                            </div>
-                                                                            <div class="col-auto col-lg-6 col-xl-7">
-                                                                                <p class="fs--1 text-800 fw-semi-bold mb-0" th:text="${euclasePayload.narration}">Narration</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Narration </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.narration}"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Carbon Copy: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.carbonCopy}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Amount: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.amount}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0"> </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" ></span>
                                                             </div>
                                                         </div>
                                                     </div>

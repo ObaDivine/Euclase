@@ -8,9 +8,9 @@ import com.entitysc.euclase.service.EuclaseService;
 import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -131,9 +131,8 @@ public class DocumentController {
 
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("alertMessage", response.getResponseMessage());
-        model.addAttribute("alertMessageType", "success");
+        model.addAttribute("alertMessageType", "error");
         model.addAttribute("sessionDetails", userDetails);
-        model.addAttribute("leaveTypeList", euclaseService.processFetchDocumentTypeList(requestPayload.getDocumentType()).getData());
         resetAlertMessage();
         return "documentprocess";
     }
@@ -254,6 +253,7 @@ public class DocumentController {
         requestPayload.setFirstName(userDetails.get(1));
         requestPayload.setLastName(userDetails.get(2));
         requestPayload.setUsername(userDetails.get(8));
+        requestPayload.setSignatureLink(userDetails.get(11));
         DataListResponsePayload response = euclaseService.processFetchDocumentDetails(dt, seid);
         if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();

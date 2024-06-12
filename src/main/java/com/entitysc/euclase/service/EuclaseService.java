@@ -19,6 +19,8 @@ public interface EuclaseService {
     PylonResponsePayload processFetchProfileDetails(String username);
 
     String generateDocumentId(String documentType);
+    
+    PylonResponsePayload processUpdateUser(EuclasePayload requestPayload, String principal);
 
     /**
      * ********************Department Transactions ******************* @param
