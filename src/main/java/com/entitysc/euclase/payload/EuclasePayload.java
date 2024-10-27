@@ -106,4 +106,16 @@ public class EuclasePayload {
     private String tag;
     private String newValue;
     private String action;
+    private String securityQuestion;
+    private String securityAnswer;
+    private MultipartFile fileUpload;
+    private String sentBy;
+    private String sentTo;
+    private String referenceDocument;
+    private String publicHolidayName;
+    private String publicHolidayDate;
+    private String slaName;
+    private String slaPeriod;
+    private String slaValue;
+    private String slaPriority;
 }

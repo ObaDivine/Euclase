@@ -1,3 +1,31 @@
+var options = new List('listTable', {
+    valueNames: ['id', 'date', 'createdBy', 'document', 'priority', 'sla', 'comment', 'username', 'name', 'mobile', 'email', 'gender', 'dob',
+	'branch', 'department', 'unit', 'designation', 'grade', 'code', 'location', 'position', 'type'
+    ],
+    page: 10,
+    pagination: true
+});
+
+$(document).ready(function () {
+    var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
+    var navbarTop = document.querySelector('.navbar-top');
+    if (navbarTopStyle === 'darker') {
+        navbarTop.classList.add('navbar-darker');
+    }
+
+    var navbarVerticalStyle = window.config.config.phoenixNavbarVerticalStyle;
+    var navbarVertical = document.querySelector('.navbar-vertical');
+    if (navbarVertical && navbarVerticalStyle === 'darker') {
+        navbarVertical.classList.add('navbar-darker');
+    }
+    ;
+});
+
+var navbarStyle = window.config.config.phoenixNavbarStyle;
+if (navbarStyle && navbarStyle !== 'transparent') {
+    document.querySelector('body').classList.add(`navbar-${navbarStyle}`);
+};
+
 function verifyMobileNumber(mobileNumber) {
     $.ajax({
         url: "/onex/otp/mobile/" + mobileNumber,

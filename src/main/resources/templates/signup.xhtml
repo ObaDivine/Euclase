@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <title>Entity Software - Euclase</title>
-        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
-    </head>
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
@@ -39,7 +36,7 @@
                                         </div>
                                         <div class="col mx-auto">
                                             <div class="auth-form-box">
-                                                <form th:object="${onexPayload}" th:action="@{/signup/}" method="POST">
+                                                <form th:object="${euclasePayload}" th:action="@{/signup/}" method="POST">
                                                     <div class="form-icon-container">
                                                         <select class="form-control form-icon-input"  th:field="*{title}">
                                                             <option value="">--Select title--</option>
@@ -164,7 +161,7 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                                <form id="qrcode" th:object="${onexPayload}" th:action="@{/qrcode/generate}" method="POST">
+                                                <form id="qrcode" th:object="${euclasePayload}" th:action="@{/qrcode/generate}" method="POST">
                                                     <div class="modal fade" id="qrCodeModal" tabindex="-1" role="dialog" aria-labelledby="qrCodeModal" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
@@ -194,6 +191,6 @@
                 </div>
             </div>
         </main>
-        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
     </body>
 </html>

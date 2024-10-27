@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Entity Software - Euclase</title>
-        <th:block th:include="~{fragments/entityscFragments :: homeheaderfiles}"></th:block>
+        <th:block th:replace="~{fragments/entityscFragments :: homeheaderfiles}"></th:block>
     </head>
     <body>
         <header id="header" class="fixed-top d-flex align-items-center">
@@ -308,7 +308,7 @@
                         </div>
 
                         <div class="col-lg-5 col-md-12" data-aos="fade-up" data-aos-delay="300">
-                            <form th:action="@{/contact}" th:object="${onexPayload}" method="post" role="form" class="php-email-form">
+                            <form th:action="@{/contact}" th:object="${euclasePayload}" method="post" role="form" class="php-email-form">
                                 <div class="form-group">
                                     <input type="text" name="name" class="form-control form-control-sm" id="name" placeholder="Your Name" required>
                                 </div>
@@ -354,6 +354,6 @@
             </div>
         </footer>
 <!--        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="fas fa-arrow-up-short"></i></a>-->
-        <th:block th:include="~{fragments/entityscFragments :: homescriptfiles}"></th:block>
+        <th:block th:replace="~{fragments/entityscFragments :: homescriptfiles}"></th:block>
     </body>
 </html>

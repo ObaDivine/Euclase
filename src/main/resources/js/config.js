@@ -27,7 +27,8 @@
     phoenixNavbarVerticalStyle: 'default',
     phoenixNavbarPosition: 'vertical',
     phoenixNavbarTopShape: 'default',
-    phoenixIsRTL: false
+    phoenixIsRTL: false,
+    phoenixSupportChat: true
   };
 
   const CONFIG = { ...initialConfig };
@@ -50,7 +51,6 @@
 
   const urlSearchParams = new URLSearchParams(window.location.search);
   const params = Object.fromEntries(urlSearchParams.entries());
-  console.log({ params });
 
   if (
     Object.keys(params).length > 0 &&
@@ -60,9 +60,6 @@
 
     Object.keys(params).forEach(param => {
       if (configQueryMap[param]) {
-        // setConfig({
-        //   [configQueryMap[param]]: params[param]
-        // });
         localStorage.setItem(configQueryMap[param], params[param]);
       }
     });
@@ -89,15 +86,20 @@
   }
 
   if (localStorage.getItem('phoenixTheme') === 'dark') {
-    document.documentElement.classList.add('dark');
+    document.documentElement.setAttribute('data-bs-theme', 'dark');
+  } else if (localStorage.getItem('phoenixTheme') === 'auto') {
+    document.documentElement.setAttribute(
+      'data-bs-theme',
+      window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    );
   }
 
   if (localStorage.getItem('phoenixNavbarPosition') === 'horizontal') {
-    document.documentElement.classList.add('navbar-horizontal');
+    document.documentElement.setAttribute('data-navigation-type', 'horizontal');
   }
 
   if (localStorage.getItem('phoenixNavbarPosition') === 'combo') {
-    document.documentElement.classList.add('navbar-combo');
+    document.documentElement.setAttribute('data-navigation-type', 'combo');
   }
 
   var config = {

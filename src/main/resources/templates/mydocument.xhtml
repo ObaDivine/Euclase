@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <title>Entity Software - Euclase</title>
-        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
-    </head>
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
             <div class="container-fluid px-0">
-                <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
-                <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
-                            <div id="dealsTable" data-list='{"valueNames":["telco","mobileNumber","amount","reference"],"page":6,"pagination":true}'> 
+                            <div id="listTable" data-list='{"valueNames":[],"page":10,"pagination":true}'> 
                                 <div class="col-auto mb-3">
                                     <nav class="mb-3" aria-label="breadcrumb">
                                         <ol class="breadcrumb mb-0">
@@ -28,14 +25,24 @@
                                     <h6 class="text-700 fw-semi-bold">Listing of documents by current user</h6>
                                 </div>
                                 <div class="table-responsive ms-n1 ps-1 scrollbar">
-                                    <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200">
+                                    <div class="offset-lg-2 col-lg-10 col-md-12 col-sm-12 mb-2">
+                                        <div class="input-group mb-3">
+                                            <input class="form-control form-control-sm search-input search" type="search" placeholder="Search record" aria-label="Search" />
+                                            <div class="input-group-append">
+                                                <button id="csv" class="btn btn-sm btn-secondary">Export to CSV</button> 
+                                                <button id="pdf" class="btn btn-sm btn-secondary">Export to PDF</button>
+                                                <button id="json" class="btn btn-sm btn-secondary">Export to JSON</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
                                         <thead>
                                             <tr>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="documentId">Document ID</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="documentType">Document Type</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="id">Document ID</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="type">Document Type</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="priority">Priority</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="status">SLA Expiry</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="sla">SLA Expiry</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="status">Status</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
@@ -44,14 +51,18 @@
                                         <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
                                             <tr th:each="rec : ${dataList}" class="position-static">
                                                 <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.documentId}" class="code align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.documentType}" class="name align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.priority}" class="location align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.slaExpiry}" class="status align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.narration}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
+                                                <td class="id align-middle white-space-nowrap start ps-3">
+                                                    <a th:href="@{'/document/details?dt=' + ${rec.transType} + '&seid=' + ${rec.documentId}}" th:text="${rec.documentId}"></a>
+                                                </td>
+                                                <td th:text="${rec.documentType}" class="type align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.priority}" class="priority align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.slaExpiry}" class="sla align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.narration}" class="comment align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.status}" class="status align-middle white-space-nowrap start ps-3"></td>
                                                 <td  class="status align-middle white-space-nowrap start ps-3">
-                                                    <a class="text-success" href="#!" th:href="@{'/document/details?dt=' + ${rec.transType} + '&seid=' + ${rec.documentId}}">Details</a>
+                                                    <a class="text-success" href="#!" th:href="@{'/document/details?dt=' + ${rec.transType} + '&seid=' + ${rec.documentId}}">
+                                                        <span class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="View Document Details"></span>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -75,6 +86,6 @@
                 </div>
             </div> 
         </main>
-        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
     </body>
 </html>

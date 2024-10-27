@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <title>Entity Software - Euclase</title>
-        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
-    </head>
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
             <div class="container-fluid px-0">
-                <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
-                <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
-                            <div id="dealsTable" data-list='{"valueNames":["telco","mobileNumber","amount","reference"],"page":6,"pagination":true}'> 
+                            <div id="listTable" data-list='{"valueNames":[],"page":10,"pagination":true}'> 
                                 <div class="col-auto mb-3">
                                     <nav class="mb-3" aria-label="breadcrumb">
                                         <ol class="breadcrumb mb-0">
@@ -28,13 +25,23 @@
                                     <h6 class="text-700 fw-semi-bold">List of all users within the organization</h6>
                                 </div>
                                 <div class="table-responsive ms-n1 ps-1 scrollbar">
-                                    <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200">
+                                    <div class="offset-lg-2 col-lg-10 col-md-12 col-sm-12 mb-2">
+                                        <div class="input-group mb-3">
+                                            <input class="form-control form-control-sm search-input search" type="search" placeholder="Search record" aria-label="Search" />
+                                            <div class="input-group-append">
+                                                <button id="csv" class="btn btn-sm btn-secondary">Export to CSV</button> 
+                                                <button id="pdf" class="btn btn-sm btn-secondary">Export to PDF</button>
+                                                <button id="json" class="btn btn-sm btn-secondary">Export to JSON</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
                                         <thead>
                                             <tr>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="username">Username</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="name">Names</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="mobileNumber">Mobile Number</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="mobile">Mobile Number</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="email">Email</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="gender">Gender</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="dob">Date of Birth</th>
@@ -42,7 +49,7 @@
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="department">Department</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="unit">Unit</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="designation">Designation</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="gradeLevel">Grade Level</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="grade">Grade Level</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Created By</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="status">Status</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
@@ -51,25 +58,29 @@
                                         <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
                                             <tr th:each="rec : ${dataList}" class="position-static">
                                                 <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.username}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.username}" class="username align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.firstName + ' ' + rec.lastName}" class="name align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.mobileNumber}" class="location align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.email}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.gender}" class="status align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.dob}" class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger"></td>
-                                                <td th:text="${rec.branchCode}" class="code align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.departmentCode}" class="name align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.departmentUnitCode}" class="location align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.designationCode}" class="location align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.gradeLevelCode}" class="location align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.mobileNumber}" class="mobile align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.email}" class="email align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.gender}" class="gender align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.dob}" class="dob align-middle white-space-nowrap start ps-3 btn-reveal-trigger"></td>
+                                                <td th:text="${rec.branchCode}" class="branch align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.departmentCode}" class="department align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.departmentUnitCode}" class="unit align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.designationCode}" class="designation align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.gradeLevelCode}" class="grade align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.createdBy}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.status}" class="status align-middle white-space-nowrap start ps-3"></td>
                                                 <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
-                                                    <a class="text-success" href="#!" th:href="@{'/user/details?seid=' + ${rec.id}}">Details</a>
-                                                    &VerticalBar;
-                                                    <a class="text-success" href="#!" th:href="@{'/user/edit?seid=' + ${rec.id}}">Update</a>
-                                                    &VerticalBar;
-                                                    <a class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">Delete</a>
+                                                    <a class="text-info" href="#!" th:href="@{'/user/details?seid=' + ${rec.id}}">
+                                                        <span class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="View User Details"></span>
+                                                    </a>
+                                                    <a class="text-success" href="#!" th:href="@{'/user/edit?seid=' + ${rec.id}}">
+                                                        <span class="fas fa-edit" data-bs-toggle="tooltip" data-bs-placement="right" title="Update User Details"></span>
+                                                    </a>
+                                                    <a class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">
+                                                        <span class="fas fa-trash" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete User"></span>
+                                                    </a>
                                                     <div class="modal fade" th:id="'a' +${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
@@ -107,6 +118,6 @@
                 </div>
             </div> 
         </main>
-        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
     </body>
 </html>

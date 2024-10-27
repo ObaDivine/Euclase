@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class PylonPayload {
 
     private int id = 0;
+    private String appType;
     private String title;
     private String gender;
     private String dob;
@@ -187,4 +188,13 @@ public class PylonPayload {
     private String tag;
     private String newValue;
     private String action;
+    private String sentBy;
+    private String sentTo;
+    private String referenceDocument;
+    private String publicHolidayName;
+    private String publicHolidayDate;
+    private String slaName;
+    private String slaPeriod;
+    private String slaValue;
+    private String slaPriority;
 }

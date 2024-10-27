@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <title>Entity Software - Euclase</title>
-        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
-    </head>
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
             <div class="container-fluid px-0">
-                <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
-                <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
                     <div class="row mt-2">
                         <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
@@ -21,7 +18,7 @@
                                     <li class="breadcrumb-item active">QR Code</li>
                                 </ol>
                             </nav>
-                            <form th:object="${onexPayload}" th:action="@{/twofa/update}" method="POST">
+                            <form th:object="${euclasePayload}" th:action="@{/twofa/update}" method="POST">
                                 <div class="col-auto">
                                     <h4 class="mb-2 text-primary">Two Factor Authentication</h4>
                                     <h6 class="text-700 fw-semi-bold">Increase your account security by enabling Two Factor Authentication</h6>
@@ -29,10 +26,10 @@
                                 </div>
                                 <div class="form-icon-container">
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input form-check-lg" id="totp" name="totp" type="checkbox" th:checked="${onexPayload.enableTwoFactorAuth == 'true'}" th:onclick="updateTwoFactorAuth()"/>
+                                        <input class="form-check-input form-check-lg" id="totp" name="totp" type="checkbox" th:checked="${euclasePayload.enableTwoFactorAuth == 'true'}" th:onclick="updateTwoFactorAuth()"/>
                                         <label class="form-check-label" for="totp">
-                                            <span th:if="${onexPayload.enableTwoFactorAuth == 'false'}">Enable Two Factor Authentication</span>
-                                            <span th:if="${onexPayload.enableTwoFactorAuth == 'true'}">Disable Two Factor Authentication</span>
+                                            <span th:if="${euclasePayload.enableTwoFactorAuth == 'false'}">Enable Two Factor Authentication</span>
+                                            <span th:if="${euclasePayload.enableTwoFactorAuth == 'true'}">Disable Two Factor Authentication</span>
                                         </label>
                                     </div>
                                 </div>
@@ -51,10 +48,10 @@
                                     </div>
                                 </div>
                             </form>
-                            <div class="col mx-auto mt-2" th:if="${onexPayload.enableTwoFactorAuth == 'true'}">
+                            <div class="col mx-auto mt-2" th:if="${euclasePayload.enableTwoFactorAuth == 'true'}">
                                 <div class="auth-form-box">   
                                     <p>Scan QR Code to generate OTP</p>                                                    
-                                    <img id="qrcode-image" class="img-fluid auth-title-box-img d-dark-none" th:src="@{${onexPayload.qrCodeImage}}" alt="" src=""/>
+                                    <img id="qrcode-image" class="img-fluid auth-title-box-img d-dark-none" th:src="@{${euclasePayload.qrCodeImage}}" alt="" src=""/>
                                 </div>
                             </div>
                         </div>
@@ -62,6 +59,6 @@
                 </div>
             </div>
         </main>
-        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
     </body>
 </html>

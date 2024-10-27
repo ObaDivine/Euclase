@@ -19,7 +19,7 @@ public interface EuclaseService {
     PylonResponsePayload processFetchProfileDetails(String username);
 
     String generateDocumentId(String documentType);
-    
+
     PylonResponsePayload processUpdateUser(EuclasePayload requestPayload, String principal);
 
     /**
@@ -96,10 +96,10 @@ public interface EuclaseService {
 
     /**
      * Document Group
+     *
      * @param requestPayload
      * @return
      */
-
     PylonResponsePayload processCreateDocumentGroup(EuclasePayload requestPayload);
 
     PylonResponsePayload processFetchDocumentGroup(String id);
@@ -195,4 +195,32 @@ public interface EuclaseService {
     PylonResponsePayload processUpdateGroupRoles(EuclasePayload requestPayload);
 
     PylonResponsePayload processChangeDefaultPassword(EuclasePayload requestPayload);
+
+    /**
+     * Public Holiday
+     *
+     * @param requestPayload
+     * @return
+     */
+    PylonResponsePayload processCreatePublicHoliday(EuclasePayload requestPayload);
+
+    PylonResponsePayload processFetchPublicHoliday(String id);
+
+    PylonResponsePayload processDeletePublicHoliday(String id, String principal);
+
+    DataListResponsePayload processFetchPublicHolidayList();
+
+    /**
+     * Service Level Agreement
+     *
+     * @param requestPayload
+     * @return
+     */
+    PylonResponsePayload processCreateSLA(EuclasePayload requestPayload);
+
+    PylonResponsePayload processFetchSLA(String id);
+
+    PylonResponsePayload processDeleteSLA(String id, String principal);
+
+    DataListResponsePayload processFetchSLAList();
 }

@@ -207,6 +207,34 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Value("${pylon.api.appuser.group.update}")
     private String updateGroupRolesUrl;
 
+    /**
+     * ******** Public Holiday **************
+     */
+    @Value("${pylon.api.holidays.list}")
+    private String publicHolidayListUrl;
+    @Value("${pylon.api.holidays.create}")
+    private String createPublicHolidayUrl;
+    @Value("${pylon.api.holidays.update}")
+    private String updatePublicHolidayUrl;
+    @Value("${pylon.api.holidays.delete}")
+    private String deletePublicHolidayUrl;
+    @Value("${pylon.api.holidays.fetch}")
+    private String fetchPublicHolidayUrl;
+
+    /**
+     * ******** Service Level Agreement **************
+     */
+    @Value("${pylon.api.sla.list}")
+    private String slaListUrl;
+    @Value("${pylon.api.sla.create}")
+    private String createSlaUrl;
+    @Value("${pylon.api.sla.update}")
+    private String updateSlaUrl;
+    @Value("${pylon.api.sla.delete}")
+    private String deleteSlaUrl;
+    @Value("${pylon.api.sla.fetch}")
+    private String fetchSlaUrl;
+
     @Override
     public PylonResponsePayload processSignin(EuclasePayload requestPayload) {
         String token = genericService.generatePylonAPIToken();
@@ -215,6 +243,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setToken(token);
             pylonPayload.setRequestType("SignIn");
+            pylonPayload.setAppType("Euclase");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response = genericService.callPylonAPI(signInUrl, gson.toJson(pylonPayload), token, "Login");
@@ -227,7 +256,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -252,7 +285,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -277,7 +314,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -302,7 +343,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -333,7 +378,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -353,7 +402,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -386,7 +439,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -406,7 +463,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -426,7 +487,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -459,7 +524,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -479,7 +548,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -499,7 +572,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -519,7 +596,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -535,7 +616,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -568,7 +653,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -588,7 +677,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -608,7 +701,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -628,7 +725,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -661,7 +762,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -681,7 +786,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -701,7 +810,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -721,7 +834,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -754,7 +871,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -774,7 +895,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -794,7 +919,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -814,7 +943,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -834,7 +967,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Document Upload");
+            pylonPayload.setRequestType("DocumentUpload");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response = genericService.callPylonAPI(processDocumentUrl, gson.toJson(pylonPayload), requestPayload.getUploadedFiles(), token, "Document Process");
@@ -847,7 +980,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -876,7 +1013,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -891,7 +1032,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Document Group");
+            pylonPayload.setRequestType("DocumentGroup");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response;
@@ -909,7 +1050,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -929,7 +1074,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -949,7 +1098,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -964,7 +1117,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -979,7 +1136,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Document Type");
+            pylonPayload.setRequestType("DocumentType");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response;
@@ -997,7 +1154,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1017,7 +1178,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1037,7 +1202,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1053,13 +1222,19 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
 
     /**
      * **************** Document ******************* @param documentGroupCode
+     *
+     * @param documentGroupCode
      * @return
      */
     @Override
@@ -1086,7 +1261,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Document Template");
+            pylonPayload.setRequestType("DocumentTemplate");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response = genericService.callPylonAPI(updateDocumentTemplateUrl, gson.toJson(pylonPayload), token, "Document Template");
@@ -1099,7 +1274,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1115,7 +1294,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1131,7 +1314,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1147,7 +1334,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1165,7 +1356,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Document Template");
+            pylonPayload.setRequestType("DocumentTemplate");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response = genericService.callPylonAPI(updateDocumentWorkflowUrl, gson.toJson(pylonPayload), token, "Document Workflow");
@@ -1178,7 +1369,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1195,7 +1390,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1212,7 +1411,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Document Approve");
+            pylonPayload.setRequestType("DocumentApprove");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response = genericService.callPylonAPI(processApproveDocumentUrl, gson.toJson(pylonPayload), requestPayload.getUploadedFiles(), token, "Document Approve");
@@ -1225,7 +1424,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1242,7 +1445,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1259,7 +1466,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1275,7 +1486,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1290,7 +1505,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Document Signature");
+            pylonPayload.setRequestType("DocumentSignature");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             List<MultipartFile> files = new ArrayList<>();
@@ -1305,7 +1520,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1325,7 +1544,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1345,7 +1568,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1365,7 +1592,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1382,7 +1613,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Sign Up");
+            pylonPayload.setRequestType("SignUp");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response;
@@ -1400,7 +1631,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1420,7 +1655,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1440,7 +1679,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1455,7 +1698,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Role Group");
+            pylonPayload.setRequestType("RoleGroup");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response;
@@ -1473,7 +1716,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1493,7 +1740,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1509,7 +1760,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1524,7 +1779,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Group Roles");
+            pylonPayload.setRequestType("GroupRoles");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response = genericService.callPylonAPI(updateGroupRolesUrl, gson.toJson(pylonPayload), token, "Group Roles");
@@ -1537,7 +1792,11 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
@@ -1566,9 +1825,220 @@ public class EuclaseServiceImpl implements EuclaseService {
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
             return responsePayload;
         }
     }
 
+    @Override
+    public PylonResponsePayload processCreatePublicHoliday(EuclasePayload requestPayload) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            BeanUtils.copyProperties(requestPayload, pylonPayload);
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(token);
+            pylonPayload.setRequestType("PublicHoliday");
+            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            //Connect to Pylon API
+            String response;
+            if (requestPayload.getId() == 0) {
+                response = genericService.callPylonAPI(createPublicHolidayUrl, gson.toJson(pylonPayload), token, "Public Holiday");
+            } else {
+                response = genericService.callPylonAPI(updatePublicHolidayUrl, gson.toJson(pylonPayload), token, "Public Holiday");
+            }
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processDeletePublicHoliday(String id, String principal) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(deletePublicHolidayUrl + "?id=" + encodedParam, "GET", token, "Public Holiday Delete");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processFetchPublicHoliday(String id) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(fetchPublicHolidayUrl + "?id=" + encodedParam, "GET", token, "Public Holiday Fetch");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public DataListResponsePayload processFetchPublicHolidayList() {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String response = genericService.callPylonAPI(publicHolidayListUrl, "GET", token, "Public Holiday List");
+            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processCreateSLA(EuclasePayload requestPayload) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            BeanUtils.copyProperties(requestPayload, pylonPayload);
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(token);
+            pylonPayload.setRequestType("SLA");
+            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            //Connect to Pylon API
+            String response;
+            if (requestPayload.getId() == 0) {
+                response = genericService.callPylonAPI(createSlaUrl, gson.toJson(pylonPayload), token, "SLA");
+            } else {
+                response = genericService.callPylonAPI(updateSlaUrl, gson.toJson(pylonPayload), token, "SLA");
+            }
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processDeleteSLA(String id, String principal) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(deleteSlaUrl + "?id=" + encodedParam, "GET", token, "SLA Delete");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processFetchSLA(String id) {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(fetchSlaUrl + "?id=" + encodedParam, "GET", token, "SLA Fetch");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public DataListResponsePayload processFetchSLAList() {
+        String token = genericService.generatePylonAPIToken();
+        try {
+            String response = genericService.callPylonAPI(slaListUrl, "GET", token, "SLA List");
+            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
 }

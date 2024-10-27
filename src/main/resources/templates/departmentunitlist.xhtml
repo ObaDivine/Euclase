@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <title>Entity Software - Euclase</title>
-        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
-    </head>
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
             <div class="container-fluid px-0">
-                <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
-                <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
-                            <div id="dealsTable" data-list='{"valueNames":["telco","mobileNumber","amount","reference"],"page":6,"pagination":true}'> 
+                            <div id="listTable" data-list='{"valueNames":[],"page":10,"pagination":true}'> 
                                 <div class="col-auto mb-3">
                                     <nav class="mb-3" aria-label="breadcrumb">
                                         <ol class="breadcrumb mb-0">
@@ -28,13 +25,25 @@
                                     <h6 class="text-700 fw-semi-bold">List all units within departments in the organization</h6>
                                 </div>
                                 <div class="table-responsive ms-n1 ps-1 scrollbar">
-                                    <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200">
+                                    <div class="offset-lg-2 col-lg-10 col-md-12 col-sm-12 mb-2">
+                                        <div class="input-group mb-3">
+                                            <input class="form-control form-control-sm search-input search" type="search" placeholder="Search record" aria-label="Search" />
+                                            <div class="input-group-append">
+                                                <a class="btn btn-sm btn-primary" th:href="@{/setup/department/unit}">Add Department Unit</a>
+                                                <button id="csv" class="btn btn-sm btn-secondary">Export to CSV</button> 
+                                                <button id="pdf" class="btn btn-sm btn-secondary">Export to PDF</button>
+                                                <button id="json" class="btn btn-sm btn-secondary">Export to JSON</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
                                         <thead>
                                             <tr>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="code">Department Unit Code</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="name">Department Unit Name</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="location">Department</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="department">Department</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Created By</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="status">Status</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
                                             </tr>
@@ -44,12 +53,16 @@
                                                 <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.departmentUnitCode}" class="code align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.departmentUnitName}" class="name align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.department}" class="department align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.departmentCode}" class="department align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.createdBy}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
                                                 <td th:text="${rec.status}" class="status align-middle white-space-nowrap start ps-3"></td>
                                                 <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
-                                                    <a class="text-success" href="#!" th:href="@{'/setup/department/unit/edit?seid=' + ${rec.id}}">Update</a>&VerticalBar;
-                                                    <a class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">Delete</a>
+                                                    <a class="text-success" href="#!" th:href="@{'/setup/department/unit/edit?seid=' + ${rec.id}}">
+                                                        <span class="fas fa-edit" data-bs-toggle="tooltip" data-bs-placement="right" title="Update Unit Details"></span>
+                                                    </a>
+                                                    <a class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">
+                                                        <span class="fas fa-trash" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Unit"></span>
+                                                    </a>
                                                     <div class="modal fade" th:id="'a' + ${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
@@ -87,6 +100,6 @@
                 </div>
             </div> 
         </main>
-        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
     </body>
 </html>

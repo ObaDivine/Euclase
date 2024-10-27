@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <title>Entity Software - Euclase</title>
-        <th:block th:include="~{fragments/entityscFragments :: headerfiles}"></th:block>
-    </head>
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
             <div class="container-fluid px-0">
-                <th:block th:include="~{fragments/entityscFragments :: leftMenu}"></th:block>
-                <th:block th:include="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
                 <div class="content">
                     <div class="row mt-2">
                         <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
@@ -21,7 +18,7 @@
                                     <li class="breadcrumb-item active">Change PIN</li>
                                 </ol>
                             </nav>
-                            <form th:object="${onexPayload}" th:action="@{/pin/}" method="POST">
+                            <form th:object="${euclasePayload}" th:action="@{/pin/}" method="POST">
                                 <div class="col-auto">
                                     <h4 class="mb-2 text-primary">Change PIN</h4>
                                     <h6 class="text-700 fw-semi-bold">Change transaction PIN for the current user</h6>
@@ -63,6 +60,6 @@
                 </div>
             </div>
         </main>
-        <th:block th:include="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
     </body>
 </html>

@@ -40,17 +40,17 @@ spring:
             profile: dev
     datasource:
         initialization-mode: ALWAYS
-        password: Password!23
-        username: accionisservice
-        driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver  
-        url: jdbc:sqlserver://localhost;databaseName=euclase;;encrypt=true;trustServerCertificate=true
-        #driverClassName: org.postgresql.Driver
-        #url: jdbc:postgresql://209.159.155.84/pylon
+        password: Anaconda1521@
+        username: entityscdbuser
+        #driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver  
+        #url: jdbc:sqlserver://localhost;databaseName=euclase;;encrypt=true;trustServerCertificate=true
+        driverClassName: org.postgresql.Driver
+        url: jdbc:postgresql://209.159.155.84/pylon
     jpa:
         hibernate:
             ddl-auto: update
-            dialect: org.hibernate.dialect.SQLServer2012Dialect
-            #dialect: org.hibernate.dialect.PostgreSQLDialect
+            #dialect: org.hibernate.dialect.SQLServer2012Dialect
+            dialect: org.hibernate.dialect.PostgreSQLDialect
         show-sql: true
         open-in-view: false
     servlet:
@@ -212,3 +212,15 @@ pylon:
             workflow:
                 update: http://localhost:8080/pylon/api/v1/document/workflow/update
                 history: http://localhost:8080/pylon/api/v1/document/workflow/history
+        holidays:
+            list: http://localhost:8080/pylon/api/v1/holidays/list
+            create: http://localhost:8080/pylon/api/v1/holidays/create
+            update: http://localhost:8080/pylon/api/v1/holidays/update
+            delete: http://localhost:8080/pylon/api/v1/holidays/delete
+            fetch: http://localhost:8080/pylon/api/v1/holidays
+        sla:
+            list: http://localhost:8080/pylon/api/v1/sla/list
+            create: http://localhost:8080/pylon/api/v1/sla/create
+            update: http://localhost:8080/pylon/api/v1/sla/update
+            delete: http://localhost:8080/pylon/api/v1/sla/delete
+            fetch: http://localhost:8080/pylon/api/v1/sla

@@ -38,23 +38,12 @@ public class SetupController {
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
-        //Set session variables
-        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
-        if (userDetails == null) {
-            userDetails = new ArrayList<>();
-        }
-        model.addAttribute("sessionDetails", userDetails);
         model.addAttribute("departmentCount", euclaseService.processFetchDepartmentList().getData().size());
         return "department";
     }
 
     @PostMapping("/department/")
     public String department(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        requestPayload.setProfileImage(userDetails.get(0));
-        requestPayload.setFirstName(userDetails.get(1));
-        requestPayload.setLastName(userDetails.get(2));
-        requestPayload.setUsername(userDetails.get(8));
         PylonResponsePayload response = euclaseService.processCreateDepartment(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -70,14 +59,8 @@ public class SetupController {
 
     @GetMapping(value = "/department/list")
     public String departmentList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
-        EuclasePayload euclasePayload = new EuclasePayload();
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        euclasePayload.setProfileImage(userDetails.get(0));
-        euclasePayload.setFirstName(userDetails.get(1));
-        euclasePayload.setLastName(userDetails.get(2));
-        euclasePayload.setUsername(userDetails.get(8));
         model.addAttribute("dataList", euclaseService.processFetchDepartmentList().getData());
-        model.addAttribute("euclasePayload", euclasePayload);
+        model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -115,23 +98,12 @@ public class SetupController {
         model.addAttribute("alertMessageType", alertMessageType);
         model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
         resetAlertMessage();
-        //Set session variables
-        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
-        if (userDetails == null) {
-            userDetails = new ArrayList<>();
-        }
-        model.addAttribute("sessionDetails", userDetails);
         model.addAttribute("unitCount", euclaseService.processFetchDepartmentUnitList().getData().size());
         return "departmentunit";
     }
 
     @PostMapping("/department/unit/")
     public String departmentUnit(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        requestPayload.setProfileImage(userDetails.get(0));
-        requestPayload.setFirstName(userDetails.get(1));
-        requestPayload.setLastName(userDetails.get(2));
-        requestPayload.setUsername(userDetails.get(8));
         PylonResponsePayload response = euclaseService.processCreateDepartmentUnit(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -148,14 +120,8 @@ public class SetupController {
 
     @GetMapping(value = "/department/unit/list")
     public String departmentUnitList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
-        EuclasePayload euclasePayload = new EuclasePayload();
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        euclasePayload.setProfileImage(userDetails.get(0));
-        euclasePayload.setFirstName(userDetails.get(1));
-        euclasePayload.setLastName(userDetails.get(2));
-        euclasePayload.setUsername(userDetails.get(8));
         model.addAttribute("dataList", euclaseService.processFetchDepartmentUnitList().getData());
-        model.addAttribute("euclasePayload", euclasePayload);
+        model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -192,24 +158,13 @@ public class SetupController {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
-        resetAlertMessage();
-        //Set session variables
-        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
-        if (userDetails == null) {
-            userDetails = new ArrayList<>();
-        }
-        model.addAttribute("sessionDetails", userDetails);
         model.addAttribute("designationCount", euclaseService.processFetchDesignationList().getData().size());
+        resetAlertMessage();
         return "designation";
     }
 
     @PostMapping("/designation/")
     public String designation(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        requestPayload.setProfileImage(userDetails.get(0));
-        requestPayload.setFirstName(userDetails.get(1));
-        requestPayload.setLastName(userDetails.get(2));
-        requestPayload.setUsername(userDetails.get(8));
         PylonResponsePayload response = euclaseService.processCreateDesignation(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -225,14 +180,8 @@ public class SetupController {
 
     @GetMapping(value = "/designation/list")
     public String designationList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
-        EuclasePayload euclasePayload = new EuclasePayload();
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        euclasePayload.setProfileImage(userDetails.get(0));
-        euclasePayload.setFirstName(userDetails.get(1));
-        euclasePayload.setLastName(userDetails.get(2));
-        euclasePayload.setUsername(userDetails.get(8));
         model.addAttribute("dataList", euclaseService.processFetchDesignationList().getData());
-        model.addAttribute("euclasePayload", euclasePayload);
+        model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -268,24 +217,13 @@ public class SetupController {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
-        resetAlertMessage();
-        //Set session variables
-        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
-        if (userDetails == null) {
-            userDetails = new ArrayList<>();
-        }
-        model.addAttribute("sessionDetails", userDetails);
         model.addAttribute("branchCount", euclaseService.processFetchBranchList().getData().size());
+        resetAlertMessage();
         return "branch";
     }
 
     @PostMapping("/branch/")
     public String branch(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        requestPayload.setProfileImage(userDetails.get(0));
-        requestPayload.setFirstName(userDetails.get(1));
-        requestPayload.setLastName(userDetails.get(2));
-        requestPayload.setUsername(userDetails.get(8));
         PylonResponsePayload response = euclaseService.processCreateBranch(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -301,14 +239,8 @@ public class SetupController {
 
     @GetMapping(value = "/branch/list")
     public String branchList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
-        EuclasePayload euclasePayload = new EuclasePayload();
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        euclasePayload.setProfileImage(userDetails.get(0));
-        euclasePayload.setFirstName(userDetails.get(1));
-        euclasePayload.setLastName(userDetails.get(2));
-        euclasePayload.setUsername(userDetails.get(8));
         model.addAttribute("dataList", euclaseService.processFetchBranchList().getData());
-        model.addAttribute("euclasePayload", euclasePayload);
+        model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -344,24 +276,13 @@ public class SetupController {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
-        resetAlertMessage();
-        //Set session variables
-        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
-        if (userDetails == null) {
-            userDetails = new ArrayList<>();
-        }
-        model.addAttribute("sessionDetails", userDetails);
         model.addAttribute("gradeLevelCount", euclaseService.processFetchGradeLevelList().getData().size());
+        resetAlertMessage();
         return "gradelevel";
     }
 
     @PostMapping("/grade-level/")
     public String gradeLevel(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        requestPayload.setProfileImage(userDetails.get(0));
-        requestPayload.setFirstName(userDetails.get(1));
-        requestPayload.setLastName(userDetails.get(2));
-        requestPayload.setUsername(userDetails.get(8));
         PylonResponsePayload response = euclaseService.processCreateGradeLevel(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -377,14 +298,8 @@ public class SetupController {
 
     @GetMapping(value = "/grade-level/list")
     public String gradeLevelList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
-        EuclasePayload euclasePayload = new EuclasePayload();
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        euclasePayload.setProfileImage(userDetails.get(0));
-        euclasePayload.setFirstName(userDetails.get(1));
-        euclasePayload.setLastName(userDetails.get(2));
-        euclasePayload.setUsername(userDetails.get(8));
         model.addAttribute("dataList", euclaseService.processFetchGradeLevelList().getData());
-        model.addAttribute("euclasePayload", euclasePayload);
+        model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -428,25 +343,14 @@ public class SetupController {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
-        resetAlertMessage();
-        //Set session variables
-        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
-        if (userDetails == null) {
-            userDetails = new ArrayList<>();
-        }
-        model.addAttribute("sessionDetails", userDetails);
         model.addAttribute("documentCount", euclaseService.processFetchDocumentTypeList("All").getData().size());
         model.addAttribute("documentGroup", euclaseService.processFetchDocumentGroupList().getData());
+        resetAlertMessage();
         return "documenttype";
     }
 
     @PostMapping("/document/type/create")
     public String documentType(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        requestPayload.setProfileImage(userDetails.get(0));
-        requestPayload.setFirstName(userDetails.get(1));
-        requestPayload.setLastName(userDetails.get(2));
-        requestPayload.setUsername(userDetails.get(8));
         PylonResponsePayload response = euclaseService.processCreateDocumentType(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -463,14 +367,8 @@ public class SetupController {
 
     @GetMapping(value = "/document/type/list")
     public String documentTypeList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
-        EuclasePayload euclasePayload = new EuclasePayload();
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        euclasePayload.setProfileImage(userDetails.get(0));
-        euclasePayload.setFirstName(userDetails.get(1));
-        euclasePayload.setLastName(userDetails.get(2));
-        euclasePayload.setUsername(userDetails.get(8));
         model.addAttribute("dataList", euclaseService.processFetchDocumentTypeList("All").getData());
-        model.addAttribute("euclasePayload", euclasePayload);
+        model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -515,24 +413,13 @@ public class SetupController {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
-        resetAlertMessage();
-        //Set session variables
-        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
-        if (userDetails == null) {
-            userDetails = new ArrayList<>();
-        }
-        model.addAttribute("sessionDetails", userDetails);
         model.addAttribute("documentCount", euclaseService.processFetchDocumentGroupList().getData().size());
+        resetAlertMessage();
         return "documentgroup";
     }
 
     @PostMapping("/document/group/create")
     public String documentGroup(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        requestPayload.setProfileImage(userDetails.get(0));
-        requestPayload.setFirstName(userDetails.get(1));
-        requestPayload.setLastName(userDetails.get(2));
-        requestPayload.setUsername(userDetails.get(8));
         PylonResponsePayload response = euclaseService.processCreateDocumentGroup(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -548,14 +435,8 @@ public class SetupController {
 
     @GetMapping(value = "/document/group/list")
     public String documentGroupList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
-        EuclasePayload euclasePayload = new EuclasePayload();
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        euclasePayload.setProfileImage(userDetails.get(0));
-        euclasePayload.setFirstName(userDetails.get(1));
-        euclasePayload.setLastName(userDetails.get(2));
-        euclasePayload.setUsername(userDetails.get(8));
         model.addAttribute("dataList", euclaseService.processFetchDocumentGroupList().getData());
-        model.addAttribute("euclasePayload", euclasePayload);
+        model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -591,24 +472,13 @@ public class SetupController {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
-        resetAlertMessage();
-        //Set session variables
-        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
-        if (userDetails == null) {
-            userDetails = new ArrayList<>();
-        }
-        model.addAttribute("sessionDetails", userDetails);
         model.addAttribute("documentTypes", euclaseService.processFetchDocumentTypeList("All").getData());
+        resetAlertMessage();
         return "template";
     }
 
     @PostMapping("/template/create")
     public String templateCreate(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        requestPayload.setProfileImage(userDetails.get(0));
-        requestPayload.setFirstName(userDetails.get(1));
-        requestPayload.setLastName(userDetails.get(2));
-        requestPayload.setUsername(userDetails.get(8));
         PylonResponsePayload response = euclaseService.processUpdateDocumentTemplate(requestPayload);
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
@@ -632,16 +502,9 @@ public class SetupController {
             alertMessageType = "error";
             return "redirect:/setup/template";
         }
-        //Set session variables
-        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
-        if (userDetails == null) {
-            userDetails = new ArrayList<>();
-        }
-
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
-        model.addAttribute("sessionDetails", userDetails);
         return "documenttemplate";
     }
 
@@ -650,14 +513,8 @@ public class SetupController {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
-        resetAlertMessage();
-        //Set session variables
-        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
-        if (userDetails == null) {
-            userDetails = new ArrayList<>();
-        }
-        model.addAttribute("sessionDetails", userDetails);
         model.addAttribute("documentTypes", euclaseService.processFetchDocumentTypeList("All").getData());
+        resetAlertMessage();
         return "workflow";
     }
 
@@ -677,32 +534,155 @@ public class SetupController {
             alertMessageType = "error";
             return "redirect:/setup/workflow";
         }
-        //Set session variables
-        List<String> userDetails = (List<String>) session.getAttribute("EUCLASE_SESSION_DETAILS");
-        if (userDetails == null) {
-            userDetails = new ArrayList<>();
-        }
-
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
-        model.addAttribute("sessionDetails", userDetails);
         return "documentworkflow";
     }
-    
+
     @PostMapping("/workflow/create")
     public String workflowCreate(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        List<String> userDetails = (List<String>) httpSession.getAttribute("EUCLASE_SESSION_DETAILS");
-        requestPayload.setProfileImage(userDetails.get(0));
-        requestPayload.setFirstName(userDetails.get(1));
-        requestPayload.setLastName(userDetails.get(2));
-        requestPayload.setUsername(userDetails.get(8));
         PylonResponsePayload response = euclaseService.processUpdateDocumentWorkflow(requestPayload);
+        model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
         return "documentworkflow";
     }
+    
+     /**
+     * ************ Public Holidays
+     *
+     ***************
+     * @param model
+     * @param session
+     * @return
+     */
+    @GetMapping("/holidays")
+    public String publicHoliday(Model model, HttpSession session) {
+        model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", alertMessageType);
+        model.addAttribute("documentCount", euclaseService.processFetchPublicHolidayList().getData().size());
+        resetAlertMessage();
+        return "publicholiday";
+    }
 
+    @PostMapping("/holidays/create")
+    public String publicHoliday(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        PylonResponsePayload response = euclaseService.processCreatePublicHoliday(requestPayload);
+        if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = "success";
+            return "redirect:/setup/holidays";
+        }
+        model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("documentCount", euclaseService.processFetchPublicHolidayList().getData().size());
+        model.addAttribute("alertMessage", response.getResponseMessage());
+        model.addAttribute("alertMessageType", "error");
+        return "publicholiday";
+    }
+
+    @GetMapping(value = "/holidays/list")
+    public String publicHolidayList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
+        model.addAttribute("dataList", euclaseService.processFetchPublicHolidayList().getData());
+        model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", "success");
+        resetAlertMessage();
+        return "publicholidaylist";
+    }
+
+    @GetMapping("/holidays/edit")
+    public String editPublicholiday(@RequestParam("seid") String seid, Model model, Principal principal, HttpServletRequest httpRequest) {
+        PylonResponsePayload response = euclaseService.processFetchPublicHoliday(seid);
+        if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = "success";
+            return "redirect:/setup/holidays/list";
+        }
+        model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("documentCount", euclaseService.processFetchPublicHolidayList().getData().size());
+        model.addAttribute("alertMessage", response.getResponseMessage());
+        model.addAttribute("alertMessageType", "success");
+        resetAlertMessage();
+        return "publicholiday";
+    }
+
+    @GetMapping("/holidays/delete")
+    public String deletePublicHoliday(@RequestParam("seid") String seid, Model model, Principal principal) {
+        PylonResponsePayload response = euclaseService.processDeletePublicHoliday(seid, principal.getName());
+        alertMessage = response.getResponseMessage();
+        alertMessageType = "success";
+        return "redirect:/setup/holidays/list";
+    }
+    
+    /**
+     * ************ Service Level Agreement
+     *
+     ***************
+     * @param model
+     * @param session
+     * @return
+     */
+    @GetMapping("/sla")
+    public String sla(Model model, HttpSession session) {
+        model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", alertMessageType);
+        model.addAttribute("documentCount", euclaseService.processFetchSLAList().getData().size());
+        resetAlertMessage();
+        return "sla";
+    }
+
+    @PostMapping("/sla/create")
+    public String sla(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        PylonResponsePayload response = euclaseService.processCreateSLA(requestPayload);
+        if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = "success";
+            return "redirect:/setup/sla";
+        }
+        model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("documentCount", euclaseService.processFetchSLAList().getData().size());
+        model.addAttribute("alertMessage", response.getResponseMessage());
+        model.addAttribute("alertMessageType", "error");
+        return "sla";
+    }
+
+    @GetMapping(value = "/sla/list")
+    public String slaList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
+        model.addAttribute("dataList", euclaseService.processFetchSLAList().getData());
+        model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", "success");
+        resetAlertMessage();
+        return "slalist";
+    }
+
+    @GetMapping("/sla/edit")
+    public String editSla(@RequestParam("seid") String seid, Model model, Principal principal, HttpServletRequest httpRequest) {
+        PylonResponsePayload response = euclaseService.processFetchSLA(seid);
+        if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = "success";
+            return "redirect:/setup/sla/list";
+        }
+        model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("documentCount", euclaseService.processFetchSLAList().getData().size());
+        model.addAttribute("alertMessage", response.getResponseMessage());
+        model.addAttribute("alertMessageType", "success");
+        resetAlertMessage();
+        return "sla";
+    }
+
+    @GetMapping("/sla/delete")
+    public String deleteSla(@RequestParam("seid") String seid, Model model, Principal principal) {
+        PylonResponsePayload response = euclaseService.processDeleteSLA(seid, principal.getName());
+        alertMessage = response.getResponseMessage();
+        alertMessageType = "success";
+        return "redirect:/setup/sla/list";
+    }
+    
     private void resetAlertMessage() {
         alertMessage = "";
         alertMessageType = "";
