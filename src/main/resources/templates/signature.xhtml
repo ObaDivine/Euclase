@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
+            <div class="container-fluid px-0">
+                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <div class="content">
+                    <div class="row">
+                        <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
+                            <div class="col-auto mb-3">
+                                <nav class="mb-3" aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                        <li class="breadcrumb-item active">Signature</li>
+                                    </ol>
+                                </nav>
+                                <h4 class="mb-2 text-secondary">Signature</h4>
+                                <h6 class="text-700 fw-semi-bold">Setup user signature for document signing</h6>
+                            </div>
+                            <img id="signature" src="" alt="" class="img-thumbnail mb-2" th:src="@{${euclasePayload.signatureLink}}" />
+                            <form th:object="${euclasePayload}" th:action="@{/document/signature/process}" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" th:field="*{id}" />
+                                <div class="form-icon-container">
+                                    <input type="file" class="form-control form-control-sm form-icon-input" th:field="*{uploadedFile}" required="required"/>
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-signature text-900 fs--1 form-icon text-primary"></span>
+                                </div>                               
+                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
+                                <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="mb-2">Create or update signature. Proceed?</p>
+                                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+    </body>
+</html>

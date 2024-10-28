@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
+            <div class="container-fluid px-0">
+                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <div class="content">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="col-auto mb-3">
+                                <nav class="mb-3" aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/document/my}">My Document</a></li>
+                                        <li class="breadcrumb-item active">Document Details</li>
+                                    </ol>
+                                </nav>
+                                <h4 class="mb-2 text-secondary">Document Details</h4>
+                                <h6 class="text-700 fw-semi-bold">Document details, supporting documents and workflow history</h6>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item border-top border-300">
+                                            <h4 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    Document Details
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse show" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body pt-0" th:object="${euclasePayload}">
+                                                    <div class="bg-soft dark__bg-1100 p-4 mb-4 rounded-2">
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document ID: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentId}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document Group: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentGroupName}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document Type: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentTypeName}"></span>
+                                                            </div>
+                                                        </div> 
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Date Created: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdAt}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Created By: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdBy}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Status: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.status}"></span>
+                                                            </div>                                                            
+                                                        </div> 
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Priority: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.priority}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">SLA Expiry: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.slaExpiry}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">SLA Voilated: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.slaVoilated}"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Tag: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.tag}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Purpose: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.purpose}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Narration </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.narration}"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Carbon Copy: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.carbonCopy}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Amount: </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.amount}"></span>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0"> </span>
+                                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" ></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                    Supporting Documents
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapseTwo" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body pt-0">
+                                                    <div class="table-responsive ms-n1 ps-1 scrollbar">
+                                                        <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Document</th>
+                                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Link</th>
+                                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Upload By</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class="list" id="deal-tables-body" th:if="${documentList != null}">
+                                                                <tr th:each="rec : ${documentList}" class="position-static">
+                                                                    <td th:text="${rec.originalFileName}" class="date align-middle white-space-nowrap start ps-3"></td>
+                                                                    <td class="code align-middle white-space-nowrap start ps-3">
+                                                                        <a href="" th:href="@{${rec.documentLink}}" th:text="${rec.documentLink}" target="_blank"></a>
+                                                                    </td>
+                                                                    <td th:text="${rec.createdBy}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingThree">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                    Workflow History
+                                                </button>
+                                            </h4>
+                                            <div class="accordion-collapse collapse" id="collapseThree" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body pt-0">
+                                                    <div class="timeline-vertical">
+                                                        <div class="timeline-item" th:each="rec : ${workflowList}">
+                                                            <div class="row g-md-3 align-items-center mb-8 mb-lg-10">
+                                                                <div class="col-12 col-md-auto d-flex">
+                                                                    <div class="timeline-item-date text-end order-1 order-md-0 me-md-4">
+                                                                        <p class="fs--2 fw-semi-bold text-700 mb-0"><span th:text="${rec.createdAt}">23 August, 2023</span><br class="d-none d-md-block" /> <span th:text="${rec.executeTime}">10:30 AM</span></p>
+                                                                    </div>
+                                                                    <div class="timeline-item-bar position-relative me-3 me-md-0 border-400">
+                                                                        <div class="icon-item icon-item-sm bg-success dark__bg-success">
+                                                                            <span class="fa-solid fa-check text-white dark__text-white fs--2"></span>
+                                                                        </div>
+                                                                        <span class="timeline-bar border-end border-success"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="timeline-item-content ps-6 ps-md-3">
+                                                                        <h4 th:text="${rec.commentFrom}">Order is processing</h4>
+                                                                        <p class="fs--1 text-800 mb-0" th:text="${rec.comment}">Your package is ready for the seller to prepare.</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+    </body>
+</html>

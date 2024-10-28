@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
+            <div class="container-fluid px-0">
+                <div class="container-fluid">
+                    <div class="row flex-center position-relative min-vh-100 g-0 py-1">
+                        <div class="col-11 col-sm-10 col-xl-8">
+                            <div class="card border border-300 auth-card">
+                                <div class="card-body pe-md-0">
+                                    <div class="row align-items-center gx-0 gy-1">
+                                        <div class="col-auto bg-100 dark__bg-1100 rounded-3 position-relative overflow-hidden auth-title-box">
+                                            <div class="position-relative px-4 pt-7 pb-7 pb-sm-5 pb-lg-7 text-center text-md-start px-md-7">
+                                                <div class="false">
+                                                    <a th:href="@{/}">
+                                                        <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                                                            <img th:src="@{/images/logo_nobg.png}" alt="entitysc" width="48" src="" />&nbsp;&nbsp;
+                                                            <h3 class="mt-3 text-primary">Entity <span class="text-secondary">Euclase</span></h3>
+                                                        </div>
+                                                    </a>
+                                                    <h5 class="mt-3 text-black">Sign Up</h5>
+                                                    <a class="fw-bold fs--1" th:href="@{/login}">Or login now
+                                                        <span class="fas fa-angle-right ms-1" data-fa-transform="down-1 shrink-2"></span>
+                                                    </a>
+                                                    <a class="fw-bold fs--1" type="button" data-bs-target="#qrCodeModal" data-bs-toggle="modal">Generate QR Code
+                                                        <span class="fas fa-angle-right ms-1" data-fa-transform="down-1 shrink-2"></span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="position-relative z-index--1 d-none d-sm-block text-center mt-md-15 mb-5">
+                                                <img class="auth-title-box-img d-dark-none" th:src="@{/images/auth.png}" alt="" src=""/>
+                                            </div>
+                                        </div>
+                                        <div class="col mx-auto">
+                                            <div class="auth-form-box">
+                                                <form th:object="${euclasePayload}" th:action="@{/signup/}" method="POST">
+                                                    <div class="form-icon-container">
+                                                        <select class="form-control form-icon-input"  th:field="*{title}">
+                                                            <option value="">--Select title--</option>
+                                                            <option value="Mr">Mr</option>
+                                                            <option value="Miss">Miss</option>
+                                                            <option value="Mrs">Mrs</option>
+                                                            <option value="Ms">Ms</option>
+                                                            <option value="Dr">Dr.</option>
+                                                        </select>
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-tenge text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <input class="form-control form-icon-input" th:field="*{lastName}" type="text" placeholder="Last Name" required="required" />
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-font text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <input class="form-control form-icon-input" th:field="*{firstName}" type="text" placeholder="First Name" required="required" />
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-font text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <input class="form-control form-icon-input" th:field="*{mobileNumber}" type="text" placeholder="Mobile Number" required="required" pattern="[0-9]{11}" title="Mobile Number like 08037727138" />
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-mobile text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <input class="form-control form-icon-input" th:field="*{email}" type="text" placeholder="Email" required="required" />
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-envelope text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <select class="form-control form-icon-input form-select" data-choices="data-choices" th:field="*{gender}">
+                                                            <option value="">--Select Gender--</option>
+                                                            <option value="Female">Female</option>
+                                                            <option value="Male">Male</option>
+                                                        </select>
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-restroom text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <input class="form-control form-icon-input" th:field="*{dob}" type="date" placeholder="Date of Birth" required="required" />
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-calendar text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <input class="form-control form-icon-input" th:field="*{username}" type="text" placeholder="Username" required="required" />
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-user-circle text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <input class="form-control form-icon-input" th:field="*{password}" type="password" placeholder="Password" required="required" />
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="password-visibility" onclick="password_show_hide();">
+                                                            <i class="fas fa-eye-slash" id="show_eye"></i>
+                                                            <i class="fas fa-eye d-none" id="hide_eye"></i>
+                                                        </span>  
+                                                        <span class="fas fa-key text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <input class="form-control form-icon-input" th:field="*{confirmPassword}" type="password" placeholder="Confirm Password" required="required" />
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="password-visibility" onclick="password_show_hide();">
+                                                            <i class="fas fa-eye-slash" id="show_eye"></i>
+                                                            <i class="fas fa-eye d-none" id="hide_eye"></i>
+                                                        </span>  
+                                                        <span class="fas fa-key text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container input-group-sm">
+                                                        <input class="form-control form-icon-input" th:field="*{pin}" type="text" placeholder="PIN" required="required" pattern="[0-9]{4}" title="Enter 4 digit PIN" />
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-list-ol text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <input class="form-control form-icon-input" th:field="*{confirmPin}" type="text" placeholder="Confirm PIN" required="required" pattern="[0-9]{4}" title="Enter 4 digit PIN" />
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-list-ol text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <select class="form-select form-icon-input" data-choices="data-choices" th:field="*{securityQuestion}" required="required">
+                                                            <option value="">---Select Security Question---</option>
+                                                            <option value="What is your favourite color">What is your favourite color</option>
+                                                            <option value="What is your mother's maiden name">What is your mother's maiden name?</option>
+                                                            <option value="What was the make of your first car">What was the make of your first car</option>
+                                                            <option value="In what city or town was your first job">In what city or town was your first job</option>
+                                                            <option value="What is your favorite movie">What is your favorite movie</option>
+                                                            <option value="Where did you meet your spouse">Where did you meet your spouse</option>
+                                                            <option value="What was the name of your first childhood friend">What was the name of your first childhood friend</option>
+                                                            <option value="What is your brightest childhood dream">What is your brightest childhood dream</option>
+                                                            <option value="What is your favorite food">What is your favorite food</option>
+                                                            <option value="What is your grandfather’s last name">What is your grandfather’s last name</option>
+                                                        </select>
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-question-circle text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <div class="form-icon-container">
+                                                        <input class="form-control form-icon-input" th:field="*{securityAnswer}" type="text" placeholder="Enter answer to security question" required="required" />
+                                                        <span class="text-primary asterisk">*</span>
+                                                        <span class="fas fa-tag text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <br/>
+                                                    <div class="form-check mb-3">
+                                                        <input class="form-check-input" id="termsService" type="checkbox" title="Please check the box to accept terms and condition"  required="required"/>
+                                                        <label class="form-label fs--1 text-none" for="termsService">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
+                                                    </div>
+                                                    <button class="btn btn-primary w-100 mb-3" type="button" data-bs-target="#signUpModal" data-bs-toggle="modal">Sign up</button>
+                                                    <a class="fs--1 fw-bold" th:href="@{/login}" href="">Sign in to an existing account </a><span>::</span>
+                                                    <a class="fs--1 fw-bold" th:href="@{/qrcode}" type="button" data-bs-target="#qrCodeModal" data-bs-toggle="modal">Generate QR Code</a>
+                                                    <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModal" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <h6 class="text-black">Confirm you want to submit this request</h6><br/>
+                                                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <form id="qrcode" th:object="${euclasePayload}" th:action="@{/qrcode/generate}" method="POST">
+                                                    <div class="modal fade" id="qrCodeModal" tabindex="-1" role="dialog" aria-labelledby="qrCodeModal" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <h6 class="text-secondary mb-2">Enter your username to generate QR Code</h6>
+                                                                    <div class="input-group mb-3">
+                                                                        <span class="input-group-text text-primary"><i class="fas fa-user text-primary"></i></span>
+                                                                        <input type="text" class="form-control form-control-sm" th:field="*{username}" placeholder="Enter your username" required="required"/>
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-primary btn-sm">Process request</button>
+                                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+    </body>
+</html>

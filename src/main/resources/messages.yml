@@ -1,0 +1,12 @@
+######### Entity Software Euclase Messages ############
+---
+appMessages:
+  signature:
+    notset: Your signature has not been set. Kindly update the signature
+  failed:
+    connect:
+      middleware: Unable to reach the middleware server
+  success:
+    fundwallet: Wallet funded successfully
+    
+        

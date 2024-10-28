@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    <body>
+        <div class="container-fluid px-0">
+            <div class="px-3">
+                <div class="row min-vh-100 flex-center p-5">
+                    <div class="col-12 col-xl-10 col-xxl-8">
+                        <div class="row justify-content-center g-5">
+                            <div class="col-12 col-lg-6 text-center text-lg-start">
+                                <img class="img-fluid mb-6 w-50 w-lg-75 d-dark-none" th:src="@{/images/icons/500.png}" alt="" />
+                                <h2 class="text-800 fw-bolder mb-3">Oops! Internal Server Error</h2>
+                                <p class="text-900 mb-5">Internal server error has occurred. Please contact your administrator.</p>
+                                <a class="btn btn-sm btn-primary" onclick="history.back()">Go Back</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>   
+    </body>
+</html>

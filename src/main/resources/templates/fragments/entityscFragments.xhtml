@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Entity Software</title>
+    </head>
+    <body>
+        <div th:fragment="homeheaderfiles">
+            <meta charset="utf-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"/>
+            <meta name="description" content="Entity Software Euclase" />
+            <meta name="keywords" content="Entity, Entity Software, Document, Electronic Document, Document Manager, EDMS, DMS" />
+            <link href="assets/img/favicon.png" rel="icon"></link>
+            <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"></link>
+            <link href="https://fonts.googleapis.com/css2?family=Montserrat" rel="stylesheet"></link>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet"></link>
+            <link th:href="@{/css/aos.css}" rel="stylesheet"></link>
+            <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"></link>
+            <link th:href="@{/css/glightbox.min.css}" rel="stylesheet"></link>
+            <link th:href="@{/css/swiper-bundle.min.css}" rel="stylesheet"></link>
+            <link th:href="@{/css/onex.css}" rel="stylesheet"></link>
+        </div>
+
+        <head th:fragment="headerfiles">
+            <title>Entity Software - Euclase</title>
+            <meta charset="utf-8"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"/>
+            <meta name="keywords" content="Entity, Entity Software, Document, Electronic Document, Document Manager, EDMS, DMS" />
+            <link rel="apple-touch-icon" sizes="180x180" th:href="@{/images/favicons/apple-touch-icon.png}"></link>
+            <link rel="icon" type="image/png" sizes="32x32" th:href="@{/images/favicons/favicon-32x32.png}"></link>
+            <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/favicons/favicon-16x16.png}"></link>
+            <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicons/favicon.ico}"></link>
+            <meta name="theme-color" content="#ffffff" />
+            <script th:src="@{/js/simplebar.min.js}"></script>
+            <script th:src="@{/js/config.js}"></script>
+            <link rel="preconnect" href="https://fonts.googleapis.com"></link>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""></link>
+            <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css"></link>
+            <link th:href="@{/css/theme-rtl.min.css}" type="text/css" rel="stylesheet" id="style-rtl"></link>
+            <link th:href="@{/css/theme.min.css}" type="text/css" rel="stylesheet" id="style-default"></link>
+            <link th:href="@{/css/sweetalert2.min.css}" type="text/css" rel="stylesheet"></link>
+            <link th:href="@{/css/euclase.css}" type="text/css" rel="stylesheet"></link>
+            <script th:inline="javascript">
+                document.addEventListener("DOMContentLoaded", () => {
+                    var message = [[${alertMessage}]];
+                    var messageType = [[${alertMessageType}]];
+
+                    if (message === "" || message === null || message === "null")
+                        return;
+                    else {
+                        showAlert(message, messageType);
+                    }
+                });
+
+                function showAlert(message, messageType) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-right',
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                        showCancelButton: false,
+                        timer: 8000,
+                        customClass: {
+                            popup: 'colored-toast'
+                        }
+                    });
+
+                    Toast.fire({
+                        icon: messageType,
+                        title: message
+                    });
+                }
+                ;
+
+                var phoenixIsRTL = window.config.config.phoenixIsRTL;
+                if (phoenixIsRTL) {
+                    var linkDefault = document.getElementById('style-default');
+                    var userLinkDefault = document.getElementById('user-style-default');
+                    linkDefault.setAttribute('disabled', true);
+                    document.querySelector('html').setAttribute('dir', 'rtl');
+                } else {
+                    var linkRTL = document.getElementById('style-rtl');
+                    var userLinkRTL = document.getElementById('user-style-rtl');
+                    linkRTL.setAttribute('disabled', true);
+                }
+            </script>
+        </head>
+
+        <nav class="navbar navbar-top fixed-top navbar-expand" id="navbarDefault" th:fragment="topMenu">
+            <div class="collapse navbar-collapse justify-content-between">
+                <div class="navbar-logo">
+                    <button class="btn navbar-toggler navbar-toggler-humburger-icon hover-bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+                    <a class="navbar-brand me-1 me-sm-3" th:href="@{/dashboard}">
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-center"><img th:src="@{/images/logo_nobg.png}" alt="Entity" width="27" />
+                                <p class="logo-text ms-2 d-none d-sm-block">Entity Euclase</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="search-box navbar-top-search-box d-none d-lg-block" data-list='{"valueNames":["title"]}' style="width:25rem;">
+                    <form class="position-relative" data-bs-toggle="search" data-bs-display="static">
+                        <input class="form-control search-input fuzzy-search rounded-pill form-control-sm" type="search" placeholder="Search..." aria-label="Search" />
+                        <span class="fas fa-search search-box-icon"></span>
+                    </form>
+                </div>
+                <ul class="navbar-nav navbar-nav-icons flex-row">
+                    <li class="nav-item">
+                        <div class="theme-control-toggle fa-icon-wait px-2">
+                            <h5 class="mb-2 text-1100 text-primary" th:text="${session.firstName == null} ? 'Hi' : ${'Hi ' + session.firstName}">Name</h5>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="theme-control-toggle fa-icon-wait px-2">
+                            <input class="form-check-input ms-0 theme-control-toggle-input" type="checkbox" data-theme-control="phoenixTheme" value="dark" id="themeControlToggle" />
+                            <label class="mb-0 theme-control-toggle-label theme-control-toggle-light" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Switch theme" style="height:32px;width:32px;"><span class="icon" data-feather="moon"></span></label>
+                            <label class="mb-0 theme-control-toggle-label theme-control-toggle-dark" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Switch theme" style="height:32px;width:32px;"><span class="icon" data-feather="sun"></span></label>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" style="min-width: 2.25rem" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="outside">
+                            <span class="d-block" style="height:20px;width:20px;">
+                                <span data-feather="bell" style="height:20px;width:20px;"></span>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end notification-dropdown-menu py-0 shadow border navbar-dropdown-caret" id="navbarDropdownNotfication" aria-labelledby="navbarDropdownNotfication">
+                            <div class="card position-relative border-0">
+                                <div class="card-header p-2">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="text-body-emphasis mb-0">Notifications</h5>
+                                        <button class="btn btn-link p-0 fs-9 fw-normal" type="button">Mark all as read</button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="scrollbar-overlay" style="height: 27rem;">
+                                        <div class="px-2 px-sm-3 py-3 notification-card position-relative read border-bottom">
+                                            <div class="d-flex align-items-center justify-content-between position-relative" th:each="rec : ${notification}">
+                                                <div class="d-flex">
+                                                    <div class="avatar avatar-m status-online me-3"><img class="rounded-circle" th:src="@{/images/icons/avatar.webp}" alt="" />
+                                                    </div>
+                                                    <div class="me-3 flex-1">
+                                                        <h4 class="fs--1 text-black" th:text="${rec.sentBy}">Brian Okon</h4>
+                                                        <p class="fs--1 text-1000 mb-2 mb-sm-3 fw-normal">
+                                                            <span class='me-1 fs--2'>💬</span>
+                                                            <span class="ms-2 text-1000 fw-bold fs--2" th:text="${rec.message}">Message</span>
+                                                        </p>
+                                                        <p class="text-800 fs--1 mb-0">
+                                                            <span class="me-1 fas fa-clock"></span>
+                                                            <span class="fw-bold" th:text="${rec.createdAt}">10:41 AM </span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown notification-dropdown">
+                                                    <button class="btn fs-10 btn-sm dropdown-toggle dropdown-caret-none transition-none" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10 text-body"></span></button>
+                                                    <div class="dropdown-menu py-2"><a class="dropdown-item" href="#!">Mark as unread</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer p-0 border-top border-translucent border-0">
+                                    <div class="my-2 text-center fw-bold fs-10 text-body-tertiary text-opactity-85"><a class="fw-bolder" href="../pages/notifications.html">Notification history</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+                            <div class="avatar avatar-l ">
+                                <img class="rounded-circle " th:src="@{'/images/profile/' + ${session.profileImage}}" alt="" />
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border" aria-labelledby="navbarDropdownUser">
+                            <div class="card position-relative border-0">
+                                <div class="card-body p-0">
+                                    <div class="text-center pt-4 pb-3">
+                                        <div class="avatar avatar-xl ">
+                                            <img class="rounded-circle img-fluid" th:src="@{'/images/profile/' + ${session.profileImage}}"  src="" alt="" />
+                                        </div>
+                                        <h6 class="mt-2 text-black" th:text="${session.firstName + ' ' + session.lastName}">Entity Software</h6>
+                                    </div>
+                                </div>
+                                <div class="overflow-auto scrollbar" style="height: 10rem;">
+                                    <ul class="nav d-flex flex-column mb-2 pb-1">
+                                        <li class="nav-item"><a class="nav-link px-3" th:href="@{/account/details}"> <span class="me-2 text-900 fa fa-user"></span><span>Profile</span></a></li>
+                                        <li class="nav-item"><a class="nav-link px-3" th:href="@{/dashboard}"><span class="me-2 text-900 fa fa-tachometer"></span>Dashboard</a></li>
+                                        <li class="nav-item"><a class="nav-link px-3" th:href="@{/faq}"> <span class="me-2 text-900 fa fa-question-circle"></span>Help Center</a></li>
+                                        <li class="nav-item"><a class="nav-link px-3" href="#!"> <span class="me-2 text-900 fa fa-globe"></span>Language</a></li>
+                                    </ul>
+                                </div>
+                                <div class="card-footer p-0 border-top">                                        
+                                    <div class="my-2 text-center fw-bold fs--2 text-600">
+                                        <a class="text-600 me-1" href="#!" th:href="@{/privacy}">Privacy policy</a>&bull;
+                                        <a class="text-600 mx-1" href="#!" th:href="@{/terms}">Terms</a>&bull;
+                                        <a class="text-600 ms-1" href="#!" th:href="@{/cookies}">Cookies</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link lh-1 pe-0" href="#!" data-bs-target="#confirmLogout" data-bs-toggle="modal">
+                            <span class="fa fa-sign-out-alt text-danger" style="height:20px;width:20px;"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <nav class="navbar navbar-vertical navbar-expand-lg" th:fragment="leftMenu">
+            <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+                <div class="navbar-vertical-content">
+                    <ul class="navbar-nav flex-column" id="navbarVerticalNav">
+                        <li class="nav-item">
+                            <div class="nav-item-wrapper"><a class="nav-link dropdown-indicator label-1" href="#home" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-home">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown-indicator-icon-wrapper">
+                                            <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                                        </div>
+                                        <span class="nav-link-icon"><span class="fa fa-home text-primary"></span></span>
+                                        <span class="nav-link-text">Home</span>
+                                    </div>
+                                </a>
+                                <div class="parent-wrapper label-1">
+                                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="home">
+                                        <li class="collapsed-nav-item-title d-none">Home</li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/dashboard}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Dashboard</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/change-password}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Change Password</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/security-question}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Update Security Question</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/twofa/}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Two Factor Authentication</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <p class="navbar-vertical-label">Documents &AMP; Template</p>
+                            <hr class="navbar-vertical-line" />
+                            <div class="nav-item-wrapper">
+                                <a class="nav-link dropdown-indicator label-1" href="#documents" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="documents">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown-indicator-icon-wrapper">
+                                            <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                                        </div>
+                                        <span class="nav-link-icon">
+                                            <span class="fa fa-file-alt text-primary"></span>
+                                        </span>
+                                        <span class="nav-link-text">Documents</span>
+                                    </div>
+                                </a>
+                                <div class="parent-wrapper label-1">
+                                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="documents">
+                                        <li class="collapsed-nav-item-title d-none">Document &AMP; Files</li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/document/}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">New Document</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/pending}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Pending Documents</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/draft}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Draft Documents</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/my}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">My Documents</span>
+                                                </div>
+                                            </a>
+                                            <!-- more inner pages-->
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/signature}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Manage Signature</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- parent pages-->
+                            <div class="nav-item-wrapper">
+                                <a class="nav-link dropdown-indicator label-1" href="#workflow" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="workflow">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown-indicator-icon-wrapper">
+                                            <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                                        </div>
+                                        <span class="nav-link-icon"><span class="fa fa-cogs text-primary"></span></span>
+                                        <span class="nav-link-text">Workflow &AMP; Template</span>
+                                    </div>
+                                </a>
+                                <div class="parent-wrapper label-1">
+                                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="workflow">
+                                        <li class="collapsed-nav-item-title d-none">Workflow &AMP; Template</li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/setup/document/group}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Manage Document Group</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/setup/document/type}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Manage Document Type</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/setup/template}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Manage Document Template</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/setup/workflow}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Manage Document Workflow</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="nav-item-wrapper">
+                                <a class="nav-link dropdown-indicator label-1" href="#digitization" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="digitization">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown-indicator-icon-wrapper">
+                                            <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                                        </div>
+                                        <span class="nav-link-icon"><span class="fa fa-qrcode text-primary"></span></span>
+                                        <span class="nav-link-text">Document Digitization</span>
+                                    </div>
+                                </a>
+                                <div class="parent-wrapper label-1">
+                                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="digitization">
+                                        <li class="collapsed-nav-item-title d-none">Document Digitization</li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/scan}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Scan Document</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/upload}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Upload Document</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <!-- label-->
+                            <p class="navbar-vertical-label">Setup &AMP; System Users</p>
+                            <hr class="navbar-vertical-line" />
+                            <div class="nav-item-wrapper">
+                                <a class="nav-link dropdown-indicator label-1" href="#setup" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="setup">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown-indicator-icon-wrapper">
+                                            <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                                        </div>
+                                        <span class="nav-link-icon"><span class="fa fa-wrench text-primary"></span></span>
+                                        <span class="nav-link-text">Setup</span>
+                                    </div>
+                                </a>
+                                <div class="parent-wrapper label-1">
+                                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="setup">
+                                        <li class="collapsed-nav-item-title d-none">Setup</li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/setup/branch}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Branch</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/setup/department}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Department</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/setup/department/unit}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Department Units</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/setup/designation}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Designation</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/setup/grade-level}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Grade Level</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/setup/holidays}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Public Holidays</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/setup/sla}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">SLA</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- parent pages-->
+                            <div class="nav-item-wrapper"><a class="nav-link dropdown-indicator label-1" href="#users" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-icons">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown-indicator-icon-wrapper">
+                                            <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                                        </div>
+                                        <span class="nav-link-icon"><span class="fa fa-user-cog text-primary"></span></span>
+                                        <span class="nav-link-text">System Users</span>
+                                    </div>
+                                </a>
+                                <div class="parent-wrapper label-1">
+                                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="users">
+                                        <li class="collapsed-nav-item-title d-none">System Users
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/user}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">New User</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/user/list}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">User Listing</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/user/role}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Roles &AMP; Permission</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <p class="navbar-vertical-label">Reports</p>
+                            <hr class="navbar-vertical-line" />
+                            <div class="nav-item-wrapper">
+                                <a class="nav-link dropdown-indicator label-1" href="#report" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="report">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown-indicator-icon-wrapper">
+                                            <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                                        </div>
+                                        <span class="nav-link-icon"><span class="fa fa-chart-pie text-primary"></span></span>
+                                        <span class="nav-link-text">Reports</span>
+                                    </div>
+                                </a>
+                                <div class="parent-wrapper label-1">
+                                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="report">
+                                        <li class="collapsed-nav-item-title d-none">Report</li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/report/audit}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Audit Log</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/report/user}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">User Listing</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/report/document}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Document Listing</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="navbar-vertical-footer">
+                <button class="btn navbar-vertical-toggle border-0 fw-semibold w-100 white-space-nowrap d-flex align-items-center">
+                    <span class="uil uil-left-arrow-to-left fs-8"></span>
+                    <span class="uil uil-arrow-from-right fs-8"></span>
+                    <span class="navbar-vertical-footer-text ms-2">Collapsed View</span>
+                </button>
+            </div>
+        </nav>
+
+        <footer class="footer position-absolute" th:fragment="footer">
+            <div class="row g-0 justify-content-between align-items-center h-100">
+                <div class="col-12 col-sm-auto text-center">
+                    <p class="mb-0 mt-2 mt-sm-0 text-500 text-secondary">Electronic Document Manager
+                        <span class="d-none d-sm-inline-block"></span>
+                        <span class="d-none d-sm-inline-block mx-1">|</span>
+                        <br class="d-sm-none" /><span th:text="${#dates.year(#dates.createNow())}"></span> &copy;<a class="mx-1" href="https://entitysc.com">Entity Software Company</a>
+                    </p>
+                </div>
+                <div class="col-12 col-sm-auto text-center">
+                    <p class="mb-0 text-600">v1.0</p>
+                </div>
+            </div>
+        </footer>
+
+        <div th:fragment="scriptfiles">
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script th:src="@{/js/popper.min.js}"></script>
+            <script th:src="@{/js/bootstrap.min.js}"></script>
+            <script th:src="@{/js/anchor.min.js}"></script>
+            <script th:src="@{/js/is.min.js}"></script>
+            <script th:src="@{/js/all.min.js}"></script>
+            <script th:src="@{/js/lodash.min.js}"></script>
+            <script th:src="@{/js/list.min.js}"></script>
+            <script th:src="@{/js/feather.min.js}"></script>
+            <script th:src="@{/js/dayjs.min.js}"></script>
+            <script th:src="@{/js/phoenix.js}"></script>
+            <script th:src="@{/js/echarts.min.js}"></script>
+            <script th:src="@{/js/sweetalert2.min.js}"></script>
+            <script th:src="@{/js/euclase.js}"></script>
+            <form id="logoutForm" th:action="@{/logout}" method="POST">
+                <div class="modal fade" id="confirmLogout" tabindex="-1" role="dialog" aria-labelledby="confirmLogout" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
+                            </div>
+                            <div class="modal-body">
+                                <h6>Confirm you want to logout</h6><br/>
+                                <button type="submit" class="btn btn-primary btn-sm">Logout</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <script type="text/javascript">
+                var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+                (function () {
+                    var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+                    s1.async = true;
+                    s1.src = 'https://embed.tawk.to/65528542cec6a912820f7c3c/1hf55h3eg';
+                    s1.charset = 'UTF-8';
+                    s1.setAttribute('crossorigin', '*');
+                    s0.parentNode.insertBefore(s1, s0);
+                })();
+            </script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" class="navbar-vertical-collapsed" lang="en-US" dir="ltr" data-navigation-type="default" data-navbar-horizontal-shape="default">
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
+            <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+            <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-md-12">
+                        <div class="mb-8">
+                            <h4 class="mb-2 text-primary">Euclase Dashboard</h4>
+                            <h6 class="text-700 fw-semi-bold">Electronic Document Management Solution</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 col-md-12 col-sm-12">
+                        <div id="monthlyDocuments" class="bar-charts-ext mb-50 pb-50"></div>
+                        <table class="table table-responsive table-sm table-striped fs--1 mb-0 mt-5 border-200" id="xticketTable">
+                            <thead>
+                                <tr>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="closedBy">Request By</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="serviceUnit">Document Type</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="dateClosed">Priority</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="ticketType">SLA</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="rating">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
+                                <tr th:each="rec : ${dataList}" class="position-static">
+                                    <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.entityName}" class="entityName align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.serviceUnitName}" class="serviceUnit align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.ticketTypeName}" class="ticketType align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.closedAt}" class="dateClosed align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.closedBy}" class="closedBy align-middle white-space-nowrap start ps-3"></td>
+                                    <td class="ticketId align-middle white-space-nowrap start ps-3">
+                                        <a th:href="@{'/ticket/view/details?seid=' + ${rec.ticketId}}" th:text="${rec.ticketId}"></a>
+                                    </td>
+                                    <td th:text="${rec.initialSla}" class="sla align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.slaViolated}" class="slaViolated align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.ticketEscalationCount}" class="escalation align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.ticketReassignedCount}" class="reassigned align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.rating}" class="rating align-middle white-space-nowrap start ps-3"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-4 col-md-12 col-sm-12">
+                        <h5 class="text-primary mb-3">Quick Link</h5>
+                        <div class="row g-4 mb-5">
+                            <div class="col-lg-6 col-sm-6 col-md-6">
+                                <a th:href="@{/document/}">
+                                    <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/18.png}" alt="" height="46" width="46" />
+                                        <div class="ms-3">
+                                            <p class="text-secondary">Create Document</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-md-6">
+                                <a th:href="@{/document/my}">
+                                    <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/19.png}" alt="" height="46" width="46" />
+                                        <div class="ms-3">
+                                            <p class="text-secondary">My Documents</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-md-6">
+                                <a th:href="@{/document/draft}">
+                                    <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/26.png}" alt="" height="46" width="46" />
+                                        <div class="ms-3">
+                                            <p class="text-secondary">Draft Documents</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-md-6">
+                                <a th:href="@{/document/archive}">
+                                    <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/14.png}" alt="" height="46" width="46" />
+                                        <div class="ms-3">
+                                            <p class="text-secondary">Archive Document</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row g-4 mb-5">
+                            <div class="col-lg-6 col-sm-6 col-md-6">
+                                <a th:href="@{/document/signature}">
+                                    <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/18.png}" alt="" height="46" width="46" />
+                                        <div class="ms-3">
+                                            <p class="text-secondary">My Signature</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-md-6">
+                                <a th:href="@{/account/details}">
+                                    <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/19.png}" alt="" height="46" width="46" />
+                                        <div class="ms-3">
+                                            <p class="text-secondary">My Profile</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-md-6">
+                                <a th:href="@{/change-password}">
+                                    <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/26.png}" alt="" height="46" width="46" />
+                                        <div class="ms-3">
+                                            <p class="text-secondary">Change Password</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-md-6">
+                                <a th:href="@{/document/archive}">
+                                    <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/14.png}" alt="" height="46" width="46" />
+                                        <div class="ms-3">
+                                            <p class="text-secondary">Archive Document</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <th:block th:replace="~{fragments/entityscFragments :: footer}"></th:block>
+            </div>
+        </main>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+        <script th:inline="javascript">
+            /* -------------------------------------------------------------------------- */
+            /*                   Monthly Documents Processed                              */
+            /* -------------------------------------------------------------------------- */
+            var monthlyDocumentsChart = echarts.init(document.getElementById('monthlyDocuments'));
+            var monthlyDocumentsOption = {
+                title: {
+                    text: 'This Month Documents'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {},
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['1', '2', '3', '4', '5', '6', '7','8', '9', '10', '11', '12', '13', '14','15', '16', '17', '18', '19', '20', '21','22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
+                    boundaryGap: false
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                },
+                series: [
+                    {
+                        name: 'Documents',
+                        type: 'line',
+                        data: [10, 11, 13, 11, 12, 12, 9,3,32,10,17,35,23,10,51,16,98,11,13,10,9,4,15,11,21,20,10,27,29,30,22]
+
+                    },
+                    {
+                        name: 'Violated SLA',
+                        type: 'line',
+                        data: [9, 6, 4, 5, 7, 4, 2,30,12,56,22,10,16,10,57,23,11,19,22,28,30,34,32,10,11,19,27,45,34,10,11]
+                    }
+                ]
+            };
+            monthlyDocumentsOption && monthlyDocumentsChart.setOption(monthlyDocumentsOption);
+        </script>
+    </body>
+</html>

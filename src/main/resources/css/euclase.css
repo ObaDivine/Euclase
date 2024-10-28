@@ -1,0 +1,166 @@
+/**
+* Company Name: Entity Software
+* Application Name: Electronic Document Management System
+* Updated: Sep 18 2023 with Bootstrap v5.3.2
+* Company URL: https://entitysc.com/euclase
+* Author: Brian Okon
+*/
+
+html, body{
+    font-family: "Montserrat" !important;
+    font-size: 16px !important;
+    color: black;
+}
+
+.text-primary{
+    color: #ee4f1e !important;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.text-sm{
+    font-size: 13px !important;
+}
+
+.form-icon{
+    color: #ee4f1e !important;
+}
+
+.btn-primary{
+    background-color: #ee4f1e !important;
+}
+
+.userInput {
+    display: flex;
+    justify-content: center;
+}
+
+.inputs {
+    margin: 5px;
+    height: 35px;
+    width: 35px;
+    border: 2px solid whitesmoke !important;
+    border-radius: 5px;
+    text-align: center;
+    font-family: "Montserrat";
+    font-size: 1.2rem;
+    color: #ee4f1e !important;
+}
+
+#qrcode-image{
+    position: relative;
+    height: 350px;
+    width: 320px;
+}
+
+.btn-xs{
+    height: auto !important;
+    width: auto !important;
+    padding: 2px;
+}
+
+#loader {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    --c:no-repeat linear-gradient(#ee4f1e 0 0);
+    background: var(--c),var(--c),var(--c),var(--c);
+    background-size: 21px 21px;
+    animation: l5 1.5s infinite cubic-bezier(0.3,1,0,1);
+}
+@keyframes l5 {
+    0%   {
+        background-position: 0    0,100% 0   ,100% 100%,0 100%
+    }
+    33%  {
+        background-position: 0    0,100% 0   ,100% 100%,0 100%;
+        width:60px;
+        height: 60px
+    }
+    66%  {
+        background-position: 100% 0,100% 100%,0    100%,0 0   ;
+        width:60px;
+        height: 60px
+    }
+    100% {
+        background-position: 100% 0,100% 100%,0    100%,0 0
+    }
+}
+
+#top {
+    display: none;
+}
+
+.colored-toast.swal2-icon-success {
+    background-color: gray !important;
+    padding: 5px !important;
+    font-size: 13px !important;
+}
+
+.colored-toast.swal2-icon-error {
+    background-color: gray !important;
+    padding: 5px !important;
+    font-size: 13px !important;
+}
+
+.colored-toast.swal2-icon-info {
+    background-color: gray !important;
+    padding: 5px !important;
+    font-size: 13px !important;
+}
+
+.colored-toast .swal2-title {
+    color: white;
+}
+
+.password-visibility {
+    float: right;
+    margin-left: -25px;
+    margin-top: -25px;
+    position: relative;
+    padding-right: 10px;
+    z-index: 2;
+    padding-right: 20px;
+}
+
+.asterisk {
+    float: right;
+    margin-left: -25px;
+    margin-top: -25px;
+    position: relative;
+    padding-right: 5px;
+    z-index: 2;
+}
+
+#signature{
+    max-height: 200px;
+    max-width: 200px;
+    min-height: 200px;
+    min-width: 200px;
+}
+
+.approval-signature{
+    max-height: 40px !important;
+    max-width: 200px !important;
+}
+
+#inputter-signature{
+    max-height: 60px !important;
+    max-width: 200px !important;
+}
+
+#img-doc-types{
+    padding: 20px;
+    max-height: 250px;
+    max-width: 375px;
+}
+
+.bar-charts-ext{
+    height: 250px !important;
+    width: 800px !important;
+    max-width: 800px !important;
+}

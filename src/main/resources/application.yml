@@ -1,0 +1,228 @@
+####### Entity Software - Euclase Config #########
+---
+server:
+    error:
+        include-message: never
+        include-binding-errors: always
+        include-exception: false
+        include-stacktrace: never
+    tomcat:
+        basedir: C:/Euclase/Log
+        accesslog:
+            enabled: true
+    temp:
+        dir: C:\Euclase\temp
+    connection-timeout: 120000
+
+logging:
+    file:
+        name: C:/Euclase/logs/euclase.log
+    level:
+        root: INFO
+upload:
+    base:
+        dir: C:/Euclase/bulk/upload
+    max:
+        record: 100
+jwt:
+    security:
+        key: j3H5Ld5nYmGWyULy6xwpOgfSH++NgKXnJMq20vpfd+8=t
+    access:
+        validity: 60000
+             
+spring:
+    cloud:
+        loadbalancer:
+            ribbon:
+                enabled: false
+    config:
+        activate:
+            profile: dev
+    datasource:
+        initialization-mode: ALWAYS
+        password: Anaconda1521@
+        username: entityscdbuser
+        #driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver  
+        #url: jdbc:sqlserver://localhost;databaseName=euclase;;encrypt=true;trustServerCertificate=true
+        driverClassName: org.postgresql.Driver
+        url: jdbc:postgresql://209.159.155.84/pylon
+    jpa:
+        hibernate:
+            ddl-auto: update
+            #dialect: org.hibernate.dialect.SQLServer2012Dialect
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+        show-sql: true
+        open-in-view: false
+    servlet:
+        multipart:
+            max-file-size: 200MB
+            max-request-size: 250MB
+            file-size-threshold: 5MB
+        
+euclase:
+    temp:
+        dir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\temp
+    document:
+        archivedir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\documents\archive
+        prefix:
+            usegeneric: false
+            generic: DOC
+        id:
+            allowuser: false
+    image:
+        dir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\images\profile
+    default:
+        password: Password12#
+    client:
+        name: Entity Software
+        address: 1 Ebun Otti Estate, Mende, Lagos, Nigeria
+    reset:
+        time: 1
+    otp:
+        expiry:
+            insec: 60
+    encryption:
+        key:
+            mian: FLWSECK-f6be2996841f1da0dfb7e27b9a3bd5bf-X
+            web: onLi8HHFXqFwWBeh
+    password:
+        change:
+            days: 30
+        retry:
+            count: 3
+    mail:
+        username: info@entitysc.com
+        password: Anaconda1521@
+        host: smtp.zoho.com
+        port: 587
+        protocol: smtp
+        trust: smtp.zoho.com
+admin:
+    consol:
+        ip: 127.0.0.1,172.20.0.78
+pylon:
+    test:
+        url: https://pylon/api/
+    profile:
+        image:
+            url: https://entitysc.com/pylon/images/profile/
+    qrcode:
+        issuer: Entity Software Euclase
+        image:
+            url: https://entitysc.com/pylon/images/qrcode/
+    api:
+        account:
+            statement: https://entitysc.com/pylon/api/v1/wallet/history
+        twofactor:
+            enable: https://entitysc.com/pylon/api/v1/user/twofa
+            validate: https://entitysc.com/pylon/api/v1/user/validate/twofa
+        validate:
+            pin: https://entitysc.com/pylon/api/v1/app/user/validate/pin
+            securityquestion: https://entitysc.com/pylon/api/v1/app/user/validate/security-question
+        otp: https://entitysc.com/pylon/api/v1/notification/otp
+        qrcode:
+            generate: https://entitysc.com/pylon/api/v1/qrcode
+        beneficiary:
+            list: https://entitysc.com/pylon/api/v1/funds-transfer/beneficiary/list
+            add: https://entitysc.com/pylon/api/v1/funds-transfer/beneficiary/add
+            delete: https://entitysc.com/pylon/api/v1/funds-transfer/beneficiary/delete
+        dashboard: https://entitysc.com/pylon/api/v1/dashboard
+        signin: https://entitysc.com/pylon/api/v1/app/user/signin
+        signup: https://entitysc.com/pylon/api/v1/app/user/signup/web
+        changedefaultpassword: https://entitysc.com/pylon/api/v1/edms/password/default
+        changepassword: https://entitysc.com/pylon/api/v1/app/user/change-password
+        forgotpassword: https://entitysc.com/pylon/api/v1/app/user/forgot-password
+        changepin: https://entitysc.com/pylon/api/v1/app/user/change-pin
+        changesecurityquestion: https://entitysc.com/pylon/api/v1/app/user/change-security-question
+        activation: https://entitysc.com/pylon/api/v1/app/user/signup/activation
+        totp: https://entitysc.com/pylon/api/v1/authenticator/google/otp
+        profile:
+            details: https://entitysc.com/pylon/api/v1/dashboard
+        appuser:
+            group:
+               fetch: https://entitysc.com/pylon/api/v1/group/role/details
+               update: https://entitysc.com/pylon/api/v1/group/role/update
+            list: https://entitysc.com/pylon/api/v1/app/user/list
+            create: https://entitysc.com/pylon/api/v1/app/user/signup/edms
+            update: https://entitysc.com/pylon/api/v1/app/user/edms/update
+            delete: https://entitysc.com/pylon/api/v1/app/user/delete
+            fetch: https://entitysc.com/pylon/api/v1/app/user/details
+            role:
+              list: https://entitysc.com/pylon/api/v1/role/group/list
+              fetch: https://entitysc.com/pylon/api/v1/role/group/details
+              create: https://entitysc.com/pylon/api/v1/role/group/create
+              update: https://entitysc.com/pylon/api/v1/role/group/update
+              delete: https://entitysc.com/pylon/api/v1/role/group/delete
+        department:
+            list: https://entitysc.com/pylon/api/v1/department/list
+            create: https://entitysc.com/pylon/api/v1/department/create
+            update: https://entitysc.com/pylon/api/v1/department/update
+            delete: https://entitysc.com/pylon/api/v1/department/delete
+            fetch: https://entitysc.com/pylon/api/v1/department
+        designation:
+            list: https://entitysc.com/pylon/api/v1/designation/list
+            create: https://entitysc.com/pylon/api/v1/designation/create
+            update: https://entitysc.com/pylon/api/v1/designation/update
+            delete: https://entitysc.com/pylon/api/v1/designation/delete
+            fetch: https://entitysc.com/pylon/api/v1/designation
+        departmentunit:
+            department: https://entitysc.com/pylon/api/v1/department/unit
+            list: https://entitysc.com/pylon/api/v1/unit/list
+            create: https://entitysc.com/pylon/api/v1/unit/create
+            update: https://entitysc.com/pylon/api/v1/unit/update
+            delete: https://entitysc.com/pylon/api/v1/unit/delete
+            fetch: https://entitysc.com/pylon/api/v1/unit
+        branch:
+            list: https://entitysc.com/pylon/api/v1/branch/list
+            create: https://entitysc.com/pylon/api/v1/branch/create
+            update: https://entitysc.com/pylon/api/v1/branch/update
+            delete: https://entitysc.com/pylon/api/v1/branch/delete
+            fetch: https://entitysc.com/pylon/api/v1/branch
+        gradelevel:
+            list: https://entitysc.com/pylon/api/v1/grade-level/list
+            create: https://entitysc.com/pylon/api/v1/grade-level/create
+            update: https://entitysc.com/pylon/api/v1/grade-level/update
+            delete: https://entitysc.com/pylon/api/v1/grade-level/delete
+            fetch: https://entitysc.com/pylon/api/v1/grade-level
+        document:
+            group:
+                list: https://entitysc.com/pylon/api/v1/document/group/list
+                create: https://entitysc.com/pylon/api/v1/document/group/create
+                update: https://entitysc.com/pylon/api/v1/document/group/update
+                delete: https://entitysc.com/pylon/api/v1/document/group/delete
+                fetch: https://entitysc.com/pylon/api/v1/document/group
+            type:
+                list: https://entitysc.com/pylon/api/v1/document/type/list
+                create: https://entitysc.com/pylon/api/v1/document/type/create
+                update: https://entitysc.com/pylon/api/v1/document/type/update
+                delete: https://entitysc.com/pylon/api/v1/document/type/delete
+                fetch: https://entitysc.com/pylon/api/v1/document/type
+            create: https://entitysc.com/pylon/api/v1/document
+            process: https://entitysc.com/pylon/api/v1/document/process
+            search: https://entitysc.com/pylon/api/v1/document/search
+            signature: https://entitysc.com/pylon/api/v1/document/signature
+            archive: https://entitysc.com/pylon/api/v1/document/archive
+            approve: https://entitysc.com/pylon/api/v1/document/approve
+            details: https://entitysc.com/pylon/api/v1/document/details
+            self: https://entitysc.com/pylon/api/v1/document/self
+            pending: https://entitysc.com/pylon/api/v1/document/pending
+            draft:
+                fetch: https://entitysc.com/pylon/api/v1/document/draft
+                delete: https://entitysc.com/pylon/api/v1/document/draft/delete
+            template:
+                update: https://entitysc.com/pylon/api/v1/document/template/update
+            workflow:
+                update: https://entitysc.com/pylon/api/v1/document/workflow/update
+                history: https://entitysc.com/pylon/api/v1/document/workflow/history
+        holidays:
+            list: https://entitysc.com/pylon/api/v1/holidays/list
+            create: https://entitysc.com/pylon/api/v1/holidays/create
+            update: https://entitysc.com/pylon/api/v1/holidays/update
+            delete: https://entitysc.com/pylon/api/v1/holidays/delete
+            fetch: https://entitysc.com/pylon/api/v1/holidays
+        sla:
+            list: https://entitysc.com/pylon/api/v1/sla/list
+            create: https://entitysc.com/pylon/api/v1/sla/create
+            update: https://entitysc.com/pylon/api/v1/sla/update
+            delete: https://entitysc.com/pylon/api/v1/sla/delete
+            fetch: https://entitysc.com/pylon/api/v1/sla

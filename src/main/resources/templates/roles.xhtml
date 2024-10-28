@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
+            <div class="container-fluid px-0">
+                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
+                <div class="content">
+                    <div class="row">
+                        <div class="offset-lg-1 col-lg-8 col-md-12 col-sm-12">
+                            <div class="col-auto mb-3">
+                                <nav class="mb-3" aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/user}">Application User</a></li>
+                                        <li class="breadcrumb-item active">Roles</li>
+                                    </ol>
+                                </nav>
+                                <h4 class="mb-2 text-secondary">Application Roles</h4>
+                                <h6 class="text-700 fw-semi-bold">Manage application and user roles</h6>
+                            </div>                           
+                            <div class="row g-0 border-top border-bottom border-300">
+                                <div class="col-sm-4">
+                                    <div class="nav flex-sm-column border-bottom border-bottom-sm-0 border-end-sm border-300 fs--1 vertical-tab h-100 justify-content-between" role="tablist" aria-orientation="vertical">
+                                        <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center active" id="groupTab" data-bs-toggle="tab" data-bs-target="#groupTabContent" role="tab" aria-controls="groupTabContent" aria-selected="true"> 
+                                            <span class="me-sm-2 fs-4 nav-icons" data-feather="tag"></span>
+                                            <span class="d-none d-sm-inline text-primary">Role Group</span>
+                                        </a>
+                                        <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center" id="rolesTab" data-bs-toggle="tab" data-bs-target="#rolesTabContent" role="tab" aria-controls="rolesTabContent" aria-selected="false"> 
+                                            <span class="me-sm-2 fs-4 nav-icons" data-feather="package"></span>
+                                            <span class="d-none d-sm-inline text-primary">Roles</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="tab-content py-3 ps-sm-4 h-100">
+                                        <div th:attr="class=${transType == 'role' ? 'tab-pane fade show active' : 'tab-pane fade'}" id="groupTabContent" role="tabpanel">
+                                            <h4 class="mb-3 d-sm-none">Role Grouping</h4>
+                                            <form th:object="${euclasePayload}" th:action="@{/user/role/group}" method="POST">
+                                                <input type="hidden" th:field="*{id}" />
+                                                <div class="form-icon-container">
+                                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{roleName}" placeholder="Enter role group name" required="required"/>
+                                                    <span class="text-primary asterisk">*</span>
+                                                    <span class="fas fa-user-tag text-900 fs--1 form-icon text-primary"></span>
+                                                </div>
+                                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
+                                                <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                                    <div class="table-responsive ms-n1 ps-1 scrollbar">
+                                                        <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
+                                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="code">Role</th>
+                                                                    <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
+                                                                <tr th:each="rec : ${dataList}" class="position-static">
+                                                                    <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
+                                                                    <td th:text="${rec.groupName}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                                    <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
+                                                                        <a class="text-success" href="#!" th:href="@{'/user/role/edit?seid=' + ${rec.id}}">Update</a>
+                                                                        &VerticalBar;
+                                                                        <a class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">Delete</a>
+                                                                        <div class="modal fade" th:id="'a' +${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
+                                                                            <div class="modal-dialog">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
+                                                                                        <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>                                                                   
+                                                                                    </div>
+                                                                                    <div class="modal-body">
+                                                                                        <h6>Confirm you want to delete this role</h6><br/>
+                                                                                        <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/user/role/delete?seid=' + ${rec.id}}">Delete</a>
+                                                                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div th:attr="class=${transType != 'role' ? 'tab-pane fade show active' : 'tab-pane fade'}" id="rolesTabContent" role="tabpanel" aria-labelledby="rolesTab">
+                                            <div class="d-flex flex-column h-100">
+                                                <h5 class="mb-3 text-primary">Add Roles to Group</h5>
+                                                <form th:object="${euclasePayload}" th:action="@{/user/group/roles/fetch}" method="POST">
+                                                    <div class="form-icon-container">
+                                                        <select class="form-select form-control-sm form-icon-input" aria-label="groupName" th:field="*{groupName}" required="required">
+                                                            <option value="">---Select role group---</option>
+                                                            <option th:each="fa : ${dataList}" th:value="${fa.groupName}" th:text="${fa.groupName}"></option>
+                                                        </select>
+                                                        <span class="fas fa-layer-group text-900 fs--1 form-icon text-primary"></span>
+                                                    </div>
+                                                    <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="submit">Fetch permission</button>
+                                                </form>
+                                                <br/>
+                                                <form th:object="${euclasePayload}" th:action="@{/user/group/roles/update}" method="POST">
+                                                    <input type="hidden" th:field="*{roleName}" />
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-sm-12 col-md-12" th:each="rec : ${groupRolesPayload}">
+                                                            <div th:switch="${rec.roleExist}">
+                                                                <span th:case="${'false'}">
+                                                                    <input class="form-check-input" type="checkbox"  name="role" th:value="${rec.roleName}" />
+                                                                    <label class="form-check-label"  th:text="${#strings.replace(rec.roleName, '_', ' ')}"></label>  
+                                                                </span>
+                                                                <span th:case="${'true'}">
+                                                                    <input class="form-check-input" type="checkbox"  name="role" th:value="${rec.roleName}" checked="checked" />
+                                                                    <label class="form-check-label"  th:text="${rec.roleName}"></label>  
+                                                                </span>
+                                                            </div>  
+                                                        </div>                                                                                  
+                                                    </div>
+                                                    <a th:if="${groupRolesPayload != null}" href="" data-bs-toggle="modal" data-bs-target="#confirmGroupRolesUpdate" class="btn btn-sm btn-primary border-20">Submit</a>
+                                                    <div class="modal fade" id="confirmGroupRolesUpdate" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+    </body>
+</html>
