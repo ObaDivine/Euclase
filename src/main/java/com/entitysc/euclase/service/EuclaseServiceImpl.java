@@ -162,7 +162,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     private String processSearchDocumentUrl;
     @Value("${pylon.api.document.signature}")
     private String processDocumentSignatureUrl;
-    @Value("${pylon.api.document.archiving}")
+    @Value("${pylon.api.document.archive}")
     private String processDocumentArchivingUrl;
 
     /**
@@ -332,10 +332,11 @@ public class EuclaseServiceImpl implements EuclaseService {
             PylonPayload pylonPayload = new PylonPayload();
             pylonPayload.setChannel("WEB");
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Profile Details");
+            pylonPayload.setRequestType("Dashboard");
             //Connect to Pylon API
-            String urlEncode = genericService.urlEncodeString(genericService.encryptString(username.trim()));
-            String response = genericService.callPylonAPI(profileDetailsUrl + "?id=" + urlEncode, "GET", token, "Profile Details");
+            String usernameEncode = genericService.urlEncodeString(genericService.encryptString(username.trim()));
+            String appTypeEncode = genericService.urlEncodeString(genericService.encryptString("Euclase"));
+            String response = genericService.callPylonAPI(profileDetailsUrl + "?id=" + usernameEncode + "&appType=" + appTypeEncode, "GET", token, "Dashboard");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -367,7 +368,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Document Template");
+            pylonPayload.setRequestType("DocumentTemplate");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response = genericService.callPylonAPI(updateDocumentWorkflowUrl, gson.toJson(pylonPayload), token, "Document Workflow");
@@ -508,7 +509,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Department Unit");
+            pylonPayload.setRequestType("DepartmentUnit");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response;
@@ -855,7 +856,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Grade Level");
+            pylonPayload.setRequestType("GradeLevel");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response;
@@ -1238,8 +1239,6 @@ public class EuclaseServiceImpl implements EuclaseService {
      *
      *******************
      * @param documentGroupCode
-     *
-     * @param documentGroupCode
      * @return
      */
     @Override
@@ -1384,12 +1383,11 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public DataListResponsePayload processFetchDocumentDetails(String documentType, String id) {
+    public DataListResponsePayload processFetchDocumentDetails(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String encodedDocumentType = genericService.urlEncodeString(genericService.encryptString(documentType.trim()));
-            String response = genericService.callPylonAPI(fetchDocumentDetailsUrl + "?dt=" + encodedDocumentType + "&id=" + encodedParam, "GET", token, "Documents Details");
+            String response = genericService.callPylonAPI(fetchDocumentDetailsUrl + "?id=" + encodedParam, "GET", token, "Documents Details");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
@@ -1481,11 +1479,12 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public DataListResponsePayload processSearchDocument(String search) {
+    public DataListResponsePayload processSearchDocument(String search, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(search.trim()));
-            String response = genericService.callPylonAPI(processSearchDocumentUrl + "?search=" + encodedParam, "GET", token, "Search Documents");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(processSearchDocumentUrl + "?search=" + encodedParam + "&principal=" + encodedPrincipal, "GET", token, "Search Documents");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
@@ -1849,9 +1848,9 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setTransType("Default Password");
+            pylonPayload.setTransType("DefaultPassword");
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("Change Password");
+            pylonPayload.setRequestType("ChangePassword");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response = genericService.callPylonAPI(changeDefaultPasswordUrl, gson.toJson(pylonPayload), token, "Change Password");
@@ -1987,7 +1986,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
-            pylonPayload.setRequestType("SLA");
+            pylonPayload.setRequestType("Sla");
             pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
             //Connect to Pylon API
             String response;

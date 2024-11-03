@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
@@ -29,10 +28,10 @@ public class CronJob {
     Gson gson;
     @Value("${euclase.document.archivedir}")
     private String archiveDirectory;
-    @Value("${pylon.api.document.archiving}")
+    @Value("${pylon.api.document.archive}")
     private String processDocumentArchivingUrl;
 
-    @Scheduled(fixedDelay = 10000)
+//    @Scheduled(fixedDelay = 10000)
     public void archiveDocuments() {
         String token = genericService.generatePylonAPIToken();
         try {

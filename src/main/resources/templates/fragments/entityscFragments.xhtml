@@ -101,8 +101,8 @@
                     </a>
                 </div>
                 <div class="search-box navbar-top-search-box d-none d-lg-block" data-list='{"valueNames":["title"]}' style="width:25rem;">
-                    <form class="position-relative" data-bs-toggle="search" data-bs-display="static">
-                        <input class="form-control search-input fuzzy-search rounded-pill form-control-sm" type="search" placeholder="Search..." aria-label="Search" />
+                    <form class="position-relative" data-bs-toggle="search" data-bs-display="static" th:action="@{/document/search}">
+                        <input class="form-control search-input search form-control-sm rounded-5" type="search" placeholder="Search" aria-label="Search" id="search" name="search" />
                         <span class="fas fa-search search-box-icon"></span>
                     </form>
                 </div>
@@ -351,7 +351,7 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/upload}">
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/archive}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Upload Document</span>
                                                 </div>
                                             </a>

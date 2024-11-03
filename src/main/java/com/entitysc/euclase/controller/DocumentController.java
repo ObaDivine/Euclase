@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -76,6 +77,7 @@ public class DocumentController {
         requestPayload.setDocumentId(documentId);
         requestPayload.setAllowUserDocumentId(allowUserDocumentId);
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("slaList", euclaseService.processFetchSLAList().getData());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -84,6 +86,7 @@ public class DocumentController {
 
     @PostMapping("/init")
     public String documentInit(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processCreateDocument(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             requestPayload.setEditorData(response.getData().getDocumentTemplateBody());
@@ -91,12 +94,14 @@ public class DocumentController {
             requestPayload.setDocumentTemplateName(response.getData().getDocumentTemplateName());
             requestPayload.setDocumentTypeName(response.getData().getDocumentTypeName());
             model.addAttribute("euclasePayload", requestPayload);
+            model.addAttribute("slaList", euclaseService.processFetchSLAList().getData());
             model.addAttribute("alertMessage", response.getResponseMessage());
             model.addAttribute("alertMessageType", "success");
             resetAlertMessage();
             return "documentprocess";
         }
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("slaList", euclaseService.processFetchSLAList().getData());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         return "documentinit";
@@ -104,6 +109,7 @@ public class DocumentController {
 
     @PostMapping("/process")
     public String processDocument(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processDocument(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -129,13 +135,14 @@ public class DocumentController {
     }
 
     @GetMapping("/details")
-    public String documentDetails(@RequestParam("dt") String dt, @RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
+    public String documentDetails(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession, HttpServletRequest httpRequest, RedirectAttributes redirAttr) {
         EuclasePayload requestPayload = new EuclasePayload();
-        DataListResponsePayload response = euclaseService.processFetchDocumentDetails(dt, seid);
+        DataListResponsePayload response = euclaseService.processFetchDocumentDetails(seid);
         if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
-            alertMessage = response.getResponseMessage();
-            alertMessageType = "error";
-            return "redirect:/document/pending";
+            String requestUrl = httpRequest.getHeader("Referer");
+            redirAttr.addFlashAttribute(alertMessage, response.getResponseMessage());
+            redirAttr.addFlashAttribute(alertMessageType, "error");
+            return "redirect:" + requestUrl;
         }
         requestPayload.setDocumentTemplateName(response.getPayload().getDocumentTemplateName());
         requestPayload.setDocumentType(response.getPayload().getDocumentType());
@@ -171,9 +178,9 @@ public class DocumentController {
     }
 
     @GetMapping("/draft/details")
-    public String draftDocumentDetails(@RequestParam("dt") String dt, @RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
+    public String draftDocumentDetails(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
-        DataListResponsePayload response = euclaseService.processFetchDocumentDetails(dt, seid);
+        DataListResponsePayload response = euclaseService.processFetchDocumentDetails(seid);
         BeanUtils.copyProperties(response.getPayload(), requestPayload);
         requestPayload.setDocumentType("Expense");
         //Generate document id
@@ -198,14 +205,14 @@ public class DocumentController {
     }
 
     @GetMapping("/approve/details")
-    public String approveDocument(@RequestParam("dt") String dt, @RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
+    public String approveDocument(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
 //        requestPayload.setProfileImage(httpSession.getAttribute("profileImage").toString());
 //        requestPayload.setFirstName(httpSession.getAttribute("firstName").toString());
 //        requestPayload.setLastName(httpSession.getAttribute("lastName").toString());
 //        requestPayload.setUsername(httpSession.getAttribute("username").toString());
 //        requestPayload.setSignatureLink(httpSession.getAttribute("signatureLink").toString());
-        DataListResponsePayload response = euclaseService.processFetchDocumentDetails(dt, seid);
+        DataListResponsePayload response = euclaseService.processFetchDocumentDetails(seid);
         if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
             alertMessageType = "error";
@@ -235,6 +242,7 @@ public class DocumentController {
 
     @PostMapping("/approve")
     public String approveDocument(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processApproveDocument(requestPayload);
         alertMessage = response.getResponseMessage();
         alertMessageType = "success";
@@ -262,7 +270,7 @@ public class DocumentController {
     @GetMapping("/search")
     public String documentSearch(@RequestParam("search") String search, Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
-        model.addAttribute("dataList", euclaseService.processSearchDocument(search).getData());
+        model.addAttribute("dataList", euclaseService.processSearchDocument(search, principal.getName()).getData());
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
@@ -282,6 +290,7 @@ public class DocumentController {
 
     @PostMapping("/signature/process")
     public String uploadSignature(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processDocumentSignature(requestPayload);
         alertMessage = response.getResponseMessage();
         alertMessageType = "success";
@@ -310,6 +319,10 @@ public class DocumentController {
     @GetMapping("/archive")
     public String upload(Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
+        requestPayload.setUsername(principal.getName());
+        String documentId = euclaseService.generateDocumentId((String) httpSession.getAttribute("documentArchiveGroupCode"));
+        requestPayload.setDocumentId(documentId);
+        requestPayload.setAllowUserDocumentId(String.valueOf(false));
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
@@ -319,6 +332,7 @@ public class DocumentController {
 
     @PostMapping("/archive/process")
     public String uploadDocument(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processDocumentArchiving(requestPayload);
         alertMessage = response.getResponseMessage();
         alertMessageType = "success";

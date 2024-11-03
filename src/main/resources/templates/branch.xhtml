@@ -5,87 +5,94 @@
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
-            <div class="container-fluid px-0">
-                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
-                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
-                <div class="content">
-                    <div class="row">
-                        <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
-                            <div class="col-auto mb-3">
-                                <nav class="mb-3" aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                        <li class="breadcrumb-item active">Branch</li>
-                                    </ol>
-                                </nav>
-                                <h4 class="mb-2 text-secondary">Branch Setup</h4>
-                                <h6 class="text-700 fw-semi-bold">Setup branch for managing the document</h6>
-                            </div>                           
-                            <form th:object="${euclasePayload}" th:action="@{/setup/branch/}" method="POST">
-                                <input type="hidden" th:field="*{id}" />
-                                <div class="form-icon-container">
-                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{branchCode}" placeholder="Enter branch code" required="required"/>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-terminal text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{branchName}" placeholder="Enter branch name" required="required"/>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-stream text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{location}" placeholder="Enter branch location" required="required"/>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-map-marker text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="status" th:field="*{status}" required="required">
-                                        <option value="Enabled">Enabled</option>
-                                        <option value="Disabled">Disabled</option>
-                                    </select>
-                                    <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
-                                <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p class="mb-2">Create or update branch. Proceed?</p>
-                                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                            </div>
+            <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+            <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
+            <div class="content">
+                <div class="row">
+                    <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
+                        <div class="col-auto mb-3">
+                            <nav class="mb-3" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Branch</li>
+                                </ol>
+                            </nav>
+                            <h4 class="mb-2 text-secondary">Branch Setup</h4>
+                            <h6 class="text-700 fw-semi-bold">Setup branch for managing the document</h6>
+                        </div>                           
+                        <form th:object="${euclasePayload}" th:action="@{/setup/branch/}" method="POST">
+                            <input type="hidden" th:field="*{id}" />
+                            <div class="form-icon-container">
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{branchCode}" placeholder="Enter branch code" required="required"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-terminal text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{branchName}" placeholder="Enter branch name" required="required"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-stream text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{location}" placeholder="Enter branch location" required="required"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-map-marker text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <select class="form-select form-icon-input" data-choices="data-choices" th:field="*{branchHead}">
+                                    <option value="">---Select branch head---</option>
+                                    <option th:each="fa : ${userList}" th:value="${fa.username}" th:text="${fa.firstName + ', ' + fa.lastName}"></option>
+                                </select>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-user-tag text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <select class="form-select form-control-sm form-icon-input" aria-label="status" th:field="*{status}" required="required">
+                                    <option value="Enabled">Enabled</option>
+                                    <option value="Disabled">Disabled</option>
+                                </select>
+                                <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
+                            <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="mb-2">Create or update branch. Proceed?</p>
+                                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="row">
-                        <div class="offset-lg-2 col-sm-12 col-md-12 col-lg-6">
-                            <div class="border-top border-dashed border-300 py-4">
-                                <div class="d-flex flex-between-center">
-                                    <div>
-                                        <div class="d-flex align-items-center mb-1"><span class="fa-solid fa-th-list me-2 fs--1 text-700"></span>
-                                            <p class="text-1000 mb-0 lh-1">Branch Listing</p>
-                                        </div>
-                                        <p class="fs--1 text-700 mb-0"><span>Entity Euclase</span>
-                                            <span class="text-400 mx-1">| </span><a th:href="@{/setup/branch/list}">Branch Listing</a>
-                                            <span class="text-400 mx-1">| </span>
-                                            <span class="text-nowrap">Total of <b><span th:text="${branchCount}" class="text-primary"></span></b> Branches Created</span></p>
+                </div>
+                <div class="row">
+                    <div class="offset-lg-2 col-sm-12 col-md-12 col-lg-6">
+                        <div class="border-top border-dashed border-300 py-4">
+                            <div class="d-flex flex-between-center">
+                                <div>
+                                    <div class="d-flex align-items-center mb-1"><span class="fa-solid fa-th-list me-2 fs--1 text-700"></span>
+                                        <p class="text-1000 mb-0 lh-1">Branch Listing</p>
                                     </div>
-                                    <div class="font-sans-serif btn-reveal-trigger">
-                                        <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h"></span></button>
-                                        <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item text-danger" href="#!">Delete</a><a class="dropdown-item" href="#!">Download</a><a class="dropdown-item" href="#!">Report abuse </a></div>
-                                    </div>
+                                    <p class="fs--1 text-700 mb-0"><span>Entity Euclase</span>
+                                        <span class="text-400 mx-1">| </span><a th:href="@{/setup/branch/list}">Branch Listing</a>
+                                        <span class="text-400 mx-1">| </span>
+                                        <span class="text-nowrap">Total of <b><span th:text="${branchCount}" class="text-primary"></span></b> Branches Created</span></p>
+                                </div>
+                                <div class="font-sans-serif btn-reveal-trigger">
+                                    <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h"></span></button>
+                                    <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item text-danger" href="#!">Delete</a><a class="dropdown-item" href="#!">Download</a><a class="dropdown-item" href="#!">Report abuse </a></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <th:block th:replace="~{fragments/entityscFragments :: footer}"></th:block>
             </div>
         </main>
         <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>

@@ -54,11 +54,11 @@ public class GenericServiceImpl implements GenericService {
     public String generateRequestString(String token, PylonPayload requestPayload) {
         StringJoiner rawString = new StringJoiner(":");
         switch (requestPayload.getRequestType()) {
-            case "SignIn" ->  {
+            case "SignIn" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getPassword().trim());
             }
-            case "SignUp" ->  {
+            case "SignUp" -> {
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
                 }
@@ -81,45 +81,45 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getStartTime().trim());
                 rawString.add(requestPayload.getEndTime().trim());
                 rawString.add(requestPayload.getStatus().trim());
-                rawString.add(requestPayload.getHod().trim());
-                rawString.add(requestPayload.getTeamLead().trim());
+                rawString.add(requestPayload.getAccessLevel().trim());
                 rawString.add(requestPayload.getRequestId().trim());
                 rawString.add(requestPayload.getPrincipal().trim());
             }
-            case "ChangePassword" ->  {
+            case "ChangePassword" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getCurrentPassword().trim());
                 rawString.add(requestPayload.getNewPassword().trim());
                 rawString.add(requestPayload.getConfirmNewPassword().trim());
             }
-            case "ForgotPassword" ->  {
+            case "ForgotPassword" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getNewPassword().trim());
                 rawString.add(requestPayload.getConfirmNewPassword().trim());
                 rawString.add(requestPayload.getSecurityQuestion().trim());
                 rawString.add(requestPayload.getSecurityAnswer().trim());
             }
-            case "ChangePin" ->  {
+            case "ChangePin" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getCurrentPin().trim());
                 rawString.add(requestPayload.getNewPin().trim());
                 rawString.add(requestPayload.getConfirmNewPin().trim());
             }
-            case "ChangeSecurityQuestion" ->  {
+            case "ChangeSecurityQuestion" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getSecurityQuestion().trim());
                 rawString.add(requestPayload.getSecurityAnswer().trim());
             }
-            case "Department" ->  {
+            case "Department" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
                 }
                 rawString.add(requestPayload.getDepartmentCode().trim());
                 rawString.add(requestPayload.getDepartmentName().trim());
+                rawString.add(requestPayload.getHod().trim());
                 rawString.add(requestPayload.getStatus().trim());
             }
-            case "DepartmentUnit" ->  {
+            case "DepartmentUnit" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
@@ -127,9 +127,10 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getDepartmentUnitCode().trim());
                 rawString.add(requestPayload.getDepartmentUnitName().trim());
                 rawString.add(requestPayload.getDepartmentCode().trim());
+                rawString.add(requestPayload.getTeamLead().trim());
                 rawString.add(requestPayload.getStatus().trim());
             }
-            case "Designation" ->  {
+            case "Designation" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
@@ -138,7 +139,7 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getDesignationName().trim());
                 rawString.add(requestPayload.getStatus().trim());
             }
-            case "Branch" ->  {
+            case "Branch" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
@@ -146,9 +147,10 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getBranchCode().trim());
                 rawString.add(requestPayload.getBranchName().trim());
                 rawString.add(requestPayload.getLocation().trim());
+                rawString.add(requestPayload.getBranchHead().trim());
                 rawString.add(requestPayload.getStatus().trim());
             }
-            case "GradeLevel" ->  {
+            case "GradeLevel" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
@@ -158,7 +160,7 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getOrdinalValue().trim());
                 rawString.add(requestPayload.getStatus().trim());
             }
-            case "DocumentGroup" ->  {
+            case "DocumentGroup" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
@@ -167,7 +169,7 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getDocumentGroupName().trim());
                 rawString.add(requestPayload.getStatus().trim());
             }
-            case "DocumentType" ->  {
+            case "DocumentType" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
@@ -177,11 +179,11 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getDocumentTypeName().trim());
                 rawString.add(requestPayload.getStatus().trim());
             }
-            case "DocumentTemplate" ->  {
+            case "DocumentTemplate" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(String.valueOf(requestPayload.getId()));
             }
-            case "Document" ->  {
+            case "Document" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getDocumentId().trim());
                 rawString.add(requestPayload.getTag().trim());
@@ -195,37 +197,44 @@ public class GenericServiceImpl implements GenericService {
                     rawString.add(requestPayload.getReferenceDocument().trim());
                 }
             }
-            case "DocumentUpload" ->  {
+            case "DocumentUpload" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getDocumentId().trim());
                 rawString.add(requestPayload.getComment().trim());
             }
-            case "DocumentApprove" ->  {
+            case "DocumentApprove" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getDocumentId().trim());
                 rawString.add(requestPayload.getComment().trim());
                 rawString.add(requestPayload.getStatus().trim());
             }
-            case "RoleGroup" ->  {
+            case "DocumentArchiving" -> {
+                rawString.add(requestPayload.getUsername().trim());
+                rawString.add(requestPayload.getDocumentId().trim());
+                rawString.add(requestPayload.getNarration().trim());
+                rawString.add(requestPayload.getTag().trim());
+                rawString.add(requestPayload.getAccessLevel().trim());
+            }
+            case "RoleGroup" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 if (requestPayload.getId() != 0) {
                     rawString.add(String.valueOf(requestPayload.getId()));
                 }
                 rawString.add(requestPayload.getRoleName().trim());
             }
-            case "GroupRoles" ->  {
+            case "GroupRoles" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getRoleName().trim());
                 rawString.add(requestPayload.getRole().trim());
             }
-            case "EmailPassword" ->  {
+            case "EmailPassword" -> {
                 rawString.add(requestPayload.getEmail().trim());
             }
-            case "Activation" ->  {
+            case "Activation" -> {
                 rawString.add(requestPayload.getMobileNumber().trim());
                 rawString.add(requestPayload.getOtp().trim());
             }
-            case "Totp" ->  {
+            case "Totp" -> {
                 rawString.add(requestPayload.getEmail().trim());
                 rawString.add(requestPayload.getOtp1().trim());
                 rawString.add(requestPayload.getOtp2().trim());
@@ -235,26 +244,44 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getOtp6().trim());
                 rawString.add(requestPayload.getRequestId().trim());
             }
-            case "DateRange" ->  {
+            case "DateRange" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getStartDate().trim());
                 rawString.add(requestPayload.getEndDate().trim());
             }
-            case "QRCode" ->  {
+            case "QRCode" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getIssuer().trim());
             }
-            case "OTP" ->  {
+            case "OTP" -> {
                 rawString.add(requestPayload.getRecipient().trim());
                 rawString.add(requestPayload.getMessage().trim());
             }
-            case "PIN" ->  {
+            case "PIN" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getPin().trim());
             }
-            case "TwoFactor" ->  {
+            case "TwoFactor" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getPin().trim());
+            }
+            case "Sla" -> {
+                rawString.add(requestPayload.getUsername().trim());
+                if (requestPayload.getId() != 0) {
+                    rawString.add(String.valueOf(requestPayload.getId()));
+                }
+                rawString.add(requestPayload.getSlaName().trim());
+                rawString.add(requestPayload.getSlaPriority().trim());
+                rawString.add(requestPayload.getSlaValue().trim());
+                rawString.add(requestPayload.getSlaPeriod().trim());
+            }
+            case "PublicHoliday" -> {
+                rawString.add(requestPayload.getUsername().trim());
+                if (requestPayload.getId() != 0) {
+                    rawString.add(String.valueOf(requestPayload.getId()));
+                }
+                rawString.add(requestPayload.getPublicHolidayName().trim());
+                rawString.add(requestPayload.getPublicHolidayDate().trim());
             }
         }
 

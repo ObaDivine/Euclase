@@ -5,183 +5,182 @@
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
-            <div class="container-fluid px-0">
-                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
-                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
-                <div class="content">
-                    <div class="row">
-                        <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
-                            <div class="col-auto mb-3">
-                                <nav class="mb-3" aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/user/list}">Application User List</a></li>
-                                        <li class="breadcrumb-item active">Users</li>
-                                    </ol>
-                                </nav>
-                                <h4 class="mb-2 text-secondary">Application User</h4>
-                                <h6 class="text-700 fw-semi-bold">Create application users</h6>
-                            </div>                           
-                            <form th:object="${euclasePayload}" th:action="@{/user/new}" method="POST">
-                                <input type="hidden" th:field="*{id}" />
-                                <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="title" th:field="*{title}" required="required">
-                                        <option value="Mr">Mr</option>
-                                        <option value="Miss">Miss</option>
-                                        <option value="Mrs">Mrs</option>
-                                        <option value="Ms">Ms</option>
-                                    </select>
-                                    <span class="fas fa-tenge text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{lastName}" placeholder="Enter last name" required="required"/>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-font text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{firstName}" placeholder="Enter first name" required="required"/>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-font text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{middleName}" placeholder="Enter middle name"/>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-font text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <input type="date" class="form-control form-control-sm form-icon-input" th:field="*{dob}" placeholder="Enter date of birth" required="required"/>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-calendar text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="gender" th:field="*{gender}" required="required">
-                                        <option value="Female">Female</option>
-                                        <option value="Male">Male</option>
-                                    </select>
-                                    <span class="fas fa-male text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{mobileNumber}" placeholder="Enter mobile number" required="required"/>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-mobile text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <input type="email" class="form-control form-control-sm form-icon-input" th:field="*{email}" placeholder="Enter email" required="required"/>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-envelope text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{username}" placeholder="Enter username" required="required"/>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-user text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <h6 class="text-700 fw-semi-bold text-secondary mt-3 mb-2">Branch, Department, Unit &AMP; Designation</h6>
-                                <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="branchCode" th:field="*{branchCode}" required="required">
-                                        <option value="">---Select branch---</option>
-                                        <option th:each="fa : ${branchList}" th:value="${fa.branchCode}" th:text="${fa.branchName}"></option>
-                                    </select>
-                                    <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="departmentCode" th:field="*{departmentCode}" required="required" th:onchange="|getUnits()|">
-                                        <option value="">---Select department---</option>
-                                        <option th:each="fa : ${departmentList}" th:value="${fa.departmentCode}" th:text="${fa.departmentName}"></option>
-                                    </select>
-                                    <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="departmentUnitCode" th:field="*{departmentUnitCode}" required="required">
-                                        <option value="">---Select unit---</option>
-                                        <option th:each="fa : ${departmentUnitList}" th:value="${fa.departmentUnitCode}" th:text="${fa.departmentUnitName}"></option>
-                                    </select>
-                                    <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="gradeLevelCode" th:field="*{gradeLevelCode}" required="required">
-                                        <option value="">---Select grade level---</option>
-                                        <option th:each="fa : ${gradeLevelList}" th:value="${fa.gradeLevelCode}" th:text="${fa.gradeLevelName}"></option>
-                                    </select>
-                                    <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="designationCode" th:field="*{designationCode}" required="required">
-                                        <option value="">---Select designation---</option>
-                                        <option th:each="fa : ${designationList}" th:value="${fa.designationCode}" th:text="${fa.designationName}"></option>
-                                    </select>
-                                    <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="role" th:field="*{role}" required="required">
-                                        <option value="">---Select role---</option>
-                                        <option th:each="fa : ${roleList}" th:value="${fa.groupName}" th:text="${fa.groupName}"></option>
-                                    </select>
-                                    <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="form-icon-container">
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="status" th:field="*{status}" required="required">
-                                        <option value="Enabled">Enabled</option>
-                                        <option value="Disabled">Disabled</option>
-                                    </select>
-                                    <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <h6 class="text-700 fw-semi-bold text-secondary mt-3 mb-2">Access Control</h6>
-                                <div class="form-icon-container">
-                                    <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{loginDays}" 
-                                           placeholder="Enter Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday" required="required" />
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-calendar text-900 fs--1 form-icon text-primary"></span>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="startTime">Start Time</span>
-                                    <input type="time" class="form-control form-control-sm form-icon-input" th:field="*{startTime}" required="required"/>
-                                    <span class="input-group-text" id="endTime">End Time</span>
-                                    <input type="time" class="form-control form-control-sm form-icon-input" th:field="*{endTime}" required="required"/>
-                                </div>
-                                <div class="form-icon-container">
-                                    <input class="form-check-input" type="checkbox"  th:field="*{hod}" value="True" th:attr="checked=${hod == 'True'}"/>
-                                    <label class="form-check-label">Check If User is Head of Department</label> 
-                                </div>
-                                <div class="form-icon-container">
-                                    <input class="form-check-input" type="checkbox"  th:field="*{teamLead}" value="True"/>
-                                    <label class="form-check-label">Check If User is Team Lead of a Unit</label> 
-                                </div>
-                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
-                                <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
-                                            </div>
-                                            <div class="modal-body">
-                                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                            </div>
+            <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+            <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
+            <div class="content">
+                <div class="row">
+                    <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
+                        <div class="col-auto mb-3">
+                            <nav class="mb-3" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/user/list}">Application User List</a></li>
+                                    <li class="breadcrumb-item active">Users</li>
+                                </ol>
+                            </nav>
+                            <h4 class="mb-2 text-secondary">Application User</h4>
+                            <h6 class="text-700 fw-semi-bold">Create application users</h6>
+                        </div>                           
+                        <form th:object="${euclasePayload}" th:action="@{/user/new}" method="POST">
+                            <input type="hidden" th:field="*{id}" />
+                            <div class="form-icon-container">
+                                <select class="form-select form-control-sm form-icon-input" aria-label="title" th:field="*{title}" required="required">
+                                    <option value="Mr">Mr</option>
+                                    <option value="Miss">Miss</option>
+                                    <option value="Mrs">Mrs</option>
+                                    <option value="Ms">Ms</option>
+                                </select>
+                                <span class="fas fa-tenge text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{lastName}" placeholder="Enter last name" required="required"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-font text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{firstName}" placeholder="Enter first name" required="required"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-font text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{middleName}" placeholder="Enter middle name"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-font text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <input type="date" class="form-control form-control-sm form-icon-input" th:field="*{dob}" placeholder="Enter date of birth" required="required"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-calendar text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <select class="form-select form-control-sm form-icon-input" aria-label="gender" th:field="*{gender}" required="required">
+                                    <option value="Female">Female</option>
+                                    <option value="Male">Male</option>
+                                </select>
+                                <span class="fas fa-male text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{mobileNumber}" placeholder="Enter mobile number" required="required"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-mobile text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <input type="email" class="form-control form-control-sm form-icon-input" th:field="*{email}" placeholder="Enter email" required="required"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-envelope text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{username}" placeholder="Enter username" required="required"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-user text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <h6 class="text-700 fw-semi-bold text-secondary mt-3 mb-2">Branch, Department, Unit &AMP; Designation</h6>
+                            <div class="form-icon-container">
+                                <select class="form-select form-control-sm form-icon-input" aria-label="branchCode" th:field="*{branchCode}" required="required">
+                                    <option value="">---Select branch---</option>
+                                    <option th:each="fa : ${branchList}" th:value="${fa.branchCode}" th:text="${fa.branchName}"></option>
+                                </select>
+                                <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <select class="form-select form-control-sm form-icon-input" aria-label="departmentCode" th:field="*{departmentCode}" required="required" th:onchange="|getUnits()|">
+                                    <option value="">---Select department---</option>
+                                    <option th:each="fa : ${departmentList}" th:value="${fa.departmentCode}" th:text="${fa.departmentName}"></option>
+                                </select>
+                                <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <select class="form-select form-control-sm form-icon-input" aria-label="departmentUnitCode" th:field="*{departmentUnitCode}" required="required">
+                                    <option value="">---Select unit---</option>
+                                    <option th:each="fa : ${departmentUnitList}" th:value="${fa.departmentUnitCode}" th:text="${fa.departmentUnitName}"></option>
+                                </select>
+                                <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <select class="form-select form-control-sm form-icon-input" aria-label="gradeLevelCode" th:field="*{gradeLevelCode}" required="required">
+                                    <option value="">---Select grade level---</option>
+                                    <option th:each="fa : ${gradeLevelList}" th:value="${fa.gradeLevelCode}" th:text="${fa.gradeLevelName}"></option>
+                                </select>
+                                <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <select class="form-select form-control-sm form-icon-input" aria-label="designationCode" th:field="*{designationCode}" required="required">
+                                    <option value="">---Select designation---</option>
+                                    <option th:each="fa : ${designationList}" th:value="${fa.designationCode}" th:text="${fa.designationName}"></option>
+                                </select>
+                                <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <select class="form-select form-control-sm form-icon-input" aria-label="role" th:field="*{role}" required="required">
+                                    <option value="">---Select role---</option>
+                                    <option th:each="fa : ${roleList}" th:value="${fa.groupName}" th:text="${fa.groupName}"></option>
+                                </select>
+                                <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <select class="form-select form-control-sm form-icon-input" aria-label="status" th:field="*{status}" required="required">
+                                    <option value="Enabled">Enabled</option>
+                                    <option value="Disabled">Disabled</option>
+                                </select>
+                                <span class="fas fa-circle-check text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <h6 class="text-700 fw-semi-bold text-secondary mt-3 mb-2">Access Control</h6>
+                            <div class="form-icon-container">
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{loginDays}" 
+                                       placeholder="Enter Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday" required="required" />
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-calendar text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="startTime">Start Time</span>
+                                <input type="time" class="form-control form-control-sm form-icon-input" th:field="*{startTime}" required="required"/>
+                                <span class="input-group-text" id="endTime">End Time</span>
+                                <input type="time" class="form-control form-control-sm form-icon-input" th:field="*{endTime}" required="required"/>
+                            </div>
+                            <div class="form-icon-container">
+                                <input class="form-check-input" type="checkbox"  th:field="*{hod}" value="True" th:attr="checked=${hod == 'True'}"/>
+                                <label class="form-check-label">Check If User is Head of Department</label> 
+                            </div>
+                            <div class="form-icon-container">
+                                <input class="form-check-input" type="checkbox"  th:field="*{teamLead}" value="True"/>
+                                <label class="form-check-label">Check If User is Team Lead of a Unit</label> 
+                            </div>
+                            <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
+                            <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
+                                        </div>
+                                        <div class="modal-body">
+                                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="row">
-                        <div class="offset-lg-2 col-sm-12 col-md-12 col-lg-6">
-                            <div class="border-top border-dashed border-300 py-4">
-                                <div class="d-flex flex-between-center">
-                                    <div>
-                                        <div class="d-flex align-items-center mb-1"><span class="fa-solid fa-th-list me-2 fs--1 text-700"></span>
-                                            <p class="text-1000 mb-0 lh-1">Application User Listing</p>
-                                        </div>
-                                        <p class="fs--1 text-700 mb-0"><span>Entity Euclase</span>
-                                            <span class="text-400 mx-1">| </span><a th:href="@{/user/list}">Application User Listing</a>
-                                            <span class="text-400 mx-1">| </span>
-                                            <span class="text-nowrap">Total of <b><span th:text="${userCount}" class="text-primary text-900"></span></b> Users Profiled</span></p>
+                </div>
+                <div class="row">
+                    <div class="offset-lg-2 col-sm-12 col-md-12 col-lg-6">
+                        <div class="border-top border-dashed border-300 py-4">
+                            <div class="d-flex flex-between-center">
+                                <div>
+                                    <div class="d-flex align-items-center mb-1"><span class="fa-solid fa-th-list me-2 fs--1 text-700"></span>
+                                        <p class="text-1000 mb-0 lh-1">Application User Listing</p>
                                     </div>
+                                    <p class="fs--1 text-700 mb-0"><span>Entity Euclase</span>
+                                        <span class="text-400 mx-1">| </span><a th:href="@{/user/list}">Application User Listing</a>
+                                        <span class="text-400 mx-1">| </span>
+                                        <span class="text-nowrap">Total of <b><span th:text="${userCount}" class="text-primary text-900"></span></b> Users Profiled</span></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <th:block th:replace="~{fragments/entityscFragments :: footer}"></th:block>
             </div>
         </main>
         <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>

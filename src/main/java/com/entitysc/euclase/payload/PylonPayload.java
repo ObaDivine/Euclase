@@ -131,6 +131,9 @@ public class PylonPayload {
     private String deleteId;
     private String beneficiary;
     private int[] itemCounts;
+    private int[] documentCount;
+    private int[] documentViolatedSLACount;
+    private int[] daysToDate;
     private String securityQuestion;
     private String securityAnswer;
     private String balanceBf;
@@ -148,6 +151,7 @@ public class PylonPayload {
     private String gradeLevelName;
     private String hod;
     private String teamLead;
+    private String branchHead;
     private String documentGroupCode;
     private String documentGroupName;
     private String documentTypeCode;
@@ -171,8 +175,9 @@ public class PylonPayload {
     private String commentTo;
     private List<MultipartFile> uploadedFiles;
     private String carbonCopy;
-    public String slaExpiry;
-    public String slaVoilated;
+    private String slaExpiry;
+    private String slaViolated;
+    private String slaViolatedBy;
     private String originalFileName;
     private String search;
     private String signatureLink;
@@ -197,4 +202,6 @@ public class PylonPayload {
     private String slaPeriod;
     private String slaValue;
     private String slaPriority;
+    private String accessLevel;
+    private String approvalRoute;
 }

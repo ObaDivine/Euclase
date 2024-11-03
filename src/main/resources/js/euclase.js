@@ -1,6 +1,6 @@
 var options = new List('listTable', {
     valueNames: ['id', 'date', 'createdBy', 'document', 'priority', 'sla', 'comment', 'username', 'name', 'mobile', 'email', 'gender', 'dob',
-	'branch', 'department', 'unit', 'designation', 'grade', 'code', 'location', 'position', 'type'
+	'branch', 'department', 'unit', 'designation', 'grade', 'code', 'location', 'position', 'type', 'tag', 'hod', 'teamLead', 'branchHead'
     ],
     page: 10,
     pagination: true

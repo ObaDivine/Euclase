@@ -4,8 +4,6 @@ import com.entitysc.euclase.constant.ResponseCodes;
 import com.entitysc.euclase.payload.EuclasePayload;
 import com.entitysc.euclase.payload.PylonResponsePayload;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -35,15 +33,17 @@ public class SetupController {
     @GetMapping("/department")
     public String department(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession session) {
         model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());
+        model.addAttribute("departmentCount", euclaseService.processFetchDepartmentList().getData().size());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
-        model.addAttribute("departmentCount", euclaseService.processFetchDepartmentList().getData().size());
         return "department";
     }
 
     @PostMapping("/department/")
     public String department(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processCreateDepartment(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -51,6 +51,7 @@ public class SetupController {
             return "redirect:/setup/department";
         }
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());
         model.addAttribute("departmentCount", euclaseService.processFetchDepartmentList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
@@ -76,6 +77,7 @@ public class SetupController {
             return "redirect:/setup/department/list";
         }
         model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());
         model.addAttribute("departmentCount", euclaseService.processFetchDepartmentList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
@@ -96,14 +98,16 @@ public class SetupController {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
+        model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());
         model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
-        resetAlertMessage();
         model.addAttribute("unitCount", euclaseService.processFetchDepartmentUnitList().getData().size());
+        resetAlertMessage();
         return "departmentunit";
     }
 
     @PostMapping("/department/unit/")
     public String departmentUnit(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processCreateDepartmentUnit(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -111,10 +115,11 @@ public class SetupController {
             return "redirect:/setup/department/unit";
         }
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());
         model.addAttribute("unitCount", euclaseService.processFetchDepartmentUnitList().getData().size());
+        model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
-        model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
         return "departmentunit";
     }
 
@@ -137,10 +142,11 @@ public class SetupController {
             return "redirect:/setup/department/unit/list";
         }
         model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());
         model.addAttribute("unitCount", euclaseService.processFetchDepartmentUnitList().getData().size());
+        model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
-        model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
         resetAlertMessage();
         return "departmentunit";
     }
@@ -165,6 +171,7 @@ public class SetupController {
 
     @PostMapping("/designation/")
     public String designation(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processCreateDesignation(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -215,15 +222,17 @@ public class SetupController {
     @GetMapping("/branch")
     public String branch(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession session) {
         model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());
+        model.addAttribute("branchCount", euclaseService.processFetchBranchList().getData().size());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
-        model.addAttribute("branchCount", euclaseService.processFetchBranchList().getData().size());
         resetAlertMessage();
         return "branch";
     }
 
     @PostMapping("/branch/")
     public String branch(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processCreateBranch(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -231,6 +240,7 @@ public class SetupController {
             return "redirect:/setup/branch";
         }
         model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());
         model.addAttribute("branchCount", euclaseService.processFetchBranchList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
@@ -256,6 +266,7 @@ public class SetupController {
             return "redirect:/setup/branch/list";
         }
         model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());
         model.addAttribute("branchCount", euclaseService.processFetchBranchList().getData().size());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
@@ -283,6 +294,7 @@ public class SetupController {
 
     @PostMapping("/grade-level/")
     public String gradeLevel(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processCreateGradeLevel(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -351,6 +363,7 @@ public class SetupController {
 
     @PostMapping("/document/type/create")
     public String documentType(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processCreateDocumentType(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -401,7 +414,7 @@ public class SetupController {
     }
 
     /**
-     * ************ Document Group
+     * *Document Group
      *
      ***************
      * @param model
@@ -420,6 +433,7 @@ public class SetupController {
 
     @PostMapping("/document/group/create")
     public String documentGroup(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processCreateDocumentGroup(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -479,6 +493,7 @@ public class SetupController {
 
     @PostMapping("/template/create")
     public String templateCreate(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processUpdateDocumentTemplate(requestPayload);
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
@@ -542,17 +557,17 @@ public class SetupController {
 
     @PostMapping("/workflow/create")
     public String workflowCreate(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processUpdateDocumentWorkflow(requestPayload);
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
         return "documentworkflow";
     }
-    
-     /**
-     * ************ Public Holidays
+
+    /**
+     * Public Holidays
      *
-     ***************
      * @param model
      * @param session
      * @return
@@ -569,6 +584,7 @@ public class SetupController {
 
     @PostMapping("/holidays/create")
     public String publicHoliday(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processCreatePublicHoliday(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -615,11 +631,10 @@ public class SetupController {
         alertMessageType = "success";
         return "redirect:/setup/holidays/list";
     }
-    
+
     /**
-     * ************ Service Level Agreement
+     * Service Level Agreement
      *
-     ***************
      * @param model
      * @param session
      * @return
@@ -629,6 +644,7 @@ public class SetupController {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
+        model.addAttribute("slaList", euclaseService.processFetchSLAList().getData());
         model.addAttribute("documentCount", euclaseService.processFetchSLAList().getData().size());
         resetAlertMessage();
         return "sla";
@@ -636,6 +652,7 @@ public class SetupController {
 
     @PostMapping("/sla/create")
     public String sla(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processCreateSLA(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -682,7 +699,7 @@ public class SetupController {
         alertMessageType = "success";
         return "redirect:/setup/sla/list";
     }
-    
+
     private void resetAlertMessage() {
         alertMessage = "";
         alertMessageType = "";

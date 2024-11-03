@@ -8,12 +8,20 @@
 
 html, body{
     font-family: "Montserrat" !important;
-    font-size: 16px !important;
-    color: black;
+    font-size: 15px !important;
+    color: #36454F;
+}
+
+h1,h2,h3,h4,h5,h6{
+    color: #36454F;
 }
 
 .text-primary{
-    color: #ee4f1e !important;
+    color: #E31E25 !important;
+}
+
+.text-secondary{
+    color: #404e8d  !important;
 }
 
 .text-right{
@@ -25,11 +33,11 @@ html, body{
 }
 
 .form-icon{
-    color: #ee4f1e !important;
+    color: #E31E25 !important;
 }
 
 .btn-primary{
-    background-color: #ee4f1e !important;
+    background-color: #E31E25 !important;
 }
 
 .userInput {
@@ -46,7 +54,7 @@ html, body{
     text-align: center;
     font-family: "Montserrat";
     font-size: 1.2rem;
-    color: #ee4f1e !important;
+    color: #E31E25 !important;
 }
 
 #qrcode-image{
@@ -67,7 +75,7 @@ html, body{
     top: 50%;
     width: 40px;
     height: 40px;
-    --c:no-repeat linear-gradient(#ee4f1e 0 0);
+    --c:no-repeat linear-gradient(#E31E25 0 0);
     background: var(--c),var(--c),var(--c),var(--c);
     background-size: 21px 21px;
     animation: l5 1.5s infinite cubic-bezier(0.3,1,0,1);
@@ -163,4 +171,8 @@ html, body{
     height: 250px !important;
     width: 800px !important;
     max-width: 800px !important;
+}
+
+#euclaseTable{
+    font-size: 14px !important;
 }

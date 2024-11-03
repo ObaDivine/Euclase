@@ -5,52 +5,80 @@
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
-            <div class="container-fluid px-0">
-                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
-                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
-                <div class="content">
-                    <div class="row">
-                        <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
-                            <div class="col-auto mb-3">
-                                <nav class="mb-3" aria-label="breadcrumb">
-                                    <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                        <li class="breadcrumb-item active">Archive</li>
-                                    </ol>
-                                </nav>
-                                <h4 class="mb-2 text-secondary">Document Archiving</h4>
-                                <h6 class="text-700 fw-semi-bold">Upload document for archiving</h6>
+            <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+            <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
+            <div class="content">
+                <div class="row">
+                    <div class="offset-lg-2 col-lg-6 col-md-12 col-sm-12">
+                        <div class="col-auto mb-3">
+                            <nav class="mb-3" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/document/new}">Document</a></li>
+                                    <li class="breadcrumb-item active">Archive</li>
+                                </ol>
+                            </nav>
+                            <h4 class="mb-2 text-secondary">Document Archiving</h4>
+                            <h6 class="text-700 fw-semi-bold">Upload document for archiving</h6>
+                        </div>
+                        <p class="text-700 fw-semi-bold text-secondary mt-2">
+                            Euclase supports archiving any kind of documents including JPEG, PNG, TIFF, DOC, PPT, XLS, PDF & ZIP
+                        </p>
+                        <form th:object="${euclasePayload}" th:action="@{/document/archive/process}" method="POST" enctype="multipart/form-data">
+                            <div class="form-icon-container">
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{documentId}"  required="required" th:readonly="${allowUserDocumentId == 'true' ? ' ' : 'readonly'}"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-terminal text-900 fs--1 form-icon text-primary"></span>
                             </div>
-                            <p>
-                                Euclase supports archiving any kind of documents. This could be JPEG, PNG, TIFF, DOC, PPT, XLS, PDF
-                            </p>
-                            <form th:object="${euclasePayload}" th:action="@{/document/upload/process}" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" th:field="*{id}" />
-                                <div class="form-icon-container">
-                                    <input type="file" class="form-control form-control-sm form-icon-input" th:field="*{uploadedFile}" required="required"/>
-                                    <span class="text-primary asterisk">*</span>
-                                    <span class="fas fa-signature text-900 fs--1 form-icon text-primary"></span>
-                                </div>                               
-                                <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
-                                <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p class="mb-2">Document(s) would be archived. Proceed?</p>
-                                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                            </div>
+                            <div class="form-icon-container">
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{tag}" placeholder="Enter tags id like classified, confidential, mobile number" required="required"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-tags text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <textarea class="form-control form-control-sm form-icon-input" th:field="*{narration}" placeholder="Enter comment or narration" required="required"></textarea>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-comments text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <h6 class="text-700 fw-semi-bold text-secondary mt-3">Access Level Required</h6>
+                            <div class="form-icon-container">
+                                <select class="form-select form-control-sm form-icon-input" aria-label="accessLevel" th:field="*{accessLevel}" required="required">
+                                    <option value="">---Select access level---</option>
+                                    <option value="5">Executive Management Only</option>
+                                    <option value="4">Management Staff Only</option>
+                                    <option value="3">Department Members Only</option>
+                                    <option value="2">Unit Staff Only</option>
+                                    <option value="1">All Staff</option>
+                                </select>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-level-down-alt text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <h6 class="text-700 fw-semi-bold text-secondary mt-3">Upload Files</h6>
+                            <div class="form-icon-container">
+                                <input type="file" class="form-control form-control-sm form-icon-input" th:field="*{uploadedFile}" required="required"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-signature text-900 fs--1 form-icon text-primary"></span>
+                            </div>                               
+                            <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
+                            <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="mb-2">Document(s) would be archived. Proceed?</p>
+                                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
+                <th:block th:replace="~{fragments/entityscFragments :: footer}"></th:block>
             </div>
         </main>
         <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>

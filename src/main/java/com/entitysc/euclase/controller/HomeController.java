@@ -202,7 +202,12 @@ public class HomeController implements ErrorController {
         httpSession.setAttribute("enableMFA", response.getData().getEnableTwoFactorAuth());
         httpSession.setAttribute("itemCounts", String.valueOf(response.getData().getItemCounts()));
         httpSession.setAttribute("signatureLink", response.getData().getSignatureLink());
-        
+        httpSession.setAttribute("documentCount",response.getData().getDocumentCount());
+        httpSession.setAttribute("documentViolatedSLACount", response.getData().getDocumentViolatedSLACount());
+        httpSession.setAttribute("daysToDate", response.getData().getDaysToDate());
+        httpSession.setAttribute("dataList", response.getData());
+        httpSession.setAttribute("documentArchiveGroupCode", response.getData().getDocumentGroupCode());
+
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("notification", null);
         model.addAttribute("alertMessage", alertMessage);

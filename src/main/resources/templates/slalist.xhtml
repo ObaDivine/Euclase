@@ -5,99 +5,97 @@
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
-            <div class="container-fluid px-0">
-                <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
-                <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
-                <div class="content">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <div id="listTable" data-list='{"valueNames":[],"page":10,"pagination":true}'> 
-                                <div class="col-auto mb-3">
-                                    <nav class="mb-3" aria-label="breadcrumb">
-                                        <ol class="breadcrumb mb-0">
-                                            <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
-                                            <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                            <li class="breadcrumb-item"><a href="#" th:href="@{/setup/sla}">Service Level Agreement</a></li>
-                                            <li class="breadcrumb-item active">Service Level Agreement Listing</li>
-                                        </ol>
-                                    </nav>
-                                    <h4 class="mb-2 text-secondary">Service Level Agreement Listing</h4>
-                                    <h6 class="text-700 fw-semi-bold">Listing of all service level agreement setup in the organization</h6>
-                                </div>                              
-                                <div class="table-responsive ms-n1 ps-1 scrollbar">
-                                    <div class="offset-lg-2 col-lg-10 col-md-12 col-sm-12 mb-2">
-                                        <div class="input-group mb-3">
-                                            <input class="form-control form-control-sm search-input search" type="search" placeholder="Search record" aria-label="Search" />
-                                            <div class="input-group-append">
-                                                <a class="btn btn-sm btn-primary" th:href="@{/setup/holidays}">Add SLA</a>
-                                                <button id="csv" class="btn btn-sm btn-secondary">Export to CSV</button> 
-                                                <button id="pdf" class="btn btn-sm btn-secondary">Export to PDF</button>
-                                                <button id="json" class="btn btn-sm btn-secondary">Export to JSON</button>
-                                            </div>
+            <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+            <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="listTable" data-list='{"valueNames":[],"page":10,"pagination":true}'> 
+                            <div class="col-auto mb-3">
+                                <nav class="mb-3" aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/setup/sla}">Service Level Agreement</a></li>
+                                        <li class="breadcrumb-item active">Service Level Agreement Listing</li>
+                                    </ol>
+                                </nav>
+                                <h4 class="mb-2 text-secondary">Service Level Agreement Listing</h4>
+                                <h6 class="text-700 fw-semi-bold">Listing of all service level agreement setup in the organization</h6>
+                            </div>                              
+                            <div class="table-responsive ms-n1 ps-1 scrollbar">
+                                <div class="offset-lg-2 col-lg-10 col-md-12 col-sm-12 mb-2">
+                                    <div class="input-group mb-3">
+                                        <input class="form-control form-control-sm search-input search" type="search" placeholder="Search record" aria-label="Search" />
+                                        <div class="input-group-append">
+                                            <a class="btn btn-sm btn-primary rounded-5" th:href="@{/setup/sla}">Add SLA</a>
+                                            <button id="csv" class="btn btn-sm btn-secondary rounded-5">Export to CSV</button> 
+                                            <button id="pdf" class="btn btn-sm btn-secondary rounded-5">Export to PDF</button>
+                                            <button id="json" class="btn btn-sm btn-secondary rounded-5">Export to JSON</button>
                                         </div>
                                     </div>
-                                    <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
-                                        <thead>
-                                            <tr>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="slaName">Sla Name</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="sla">SLA</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="priority">Priority Level</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Created By</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
-                                            <tr th:each="rec : ${dataList}" class="position-static">
-                                                <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.slaName}" class="slaName align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.slaValue} + ' ' + ${rec.slaPeriod} " class="sla align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.slaPriority}" class="priority align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.createdBy}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.status}" class="status align-middle white-space-nowrap start ps-3"></td>
-                                                <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
-                                                    <a class="text-success" href="#!" th:href="@{'/setup/sla/edit?seid=' + ${rec.id}}">
-                                                        <span class="fas fa-edit" data-bs-toggle="tooltip" data-bs-placement="right" title="Update SLA"></span>
-                                                    </a>
-                                                    <a class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">
-                                                        <span class="fas fa-trash" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete SLA"></span>
-                                                    </a>
-                                                    <div class="modal fade" th:id="'a' + ${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>                                                                   
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <h6>Confirm you want to delete this SLA</h6><br/>
-                                                                    <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/setup/sla/delete?seid=' + ${rec.id}}">Delete</a>
-                                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                                                </div>
+                                </div>
+                                <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="slaName">Sla Name</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="sla">SLA</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="priority">Priority Level</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Created By</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
+                                        <tr th:each="rec : ${dataList}" class="position-static">
+                                            <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.slaName}" class="slaName align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.slaValue} + ' ' + ${rec.slaPeriod}" class="sla align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.slaPriority}" class="priority align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.createdBy}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
+                                            <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
+                                                <a class="text-success" href="#!" th:href="@{'/setup/sla/edit?seid=' + ${rec.id}}">
+                                                    <span class="fas fa-edit" data-bs-toggle="tooltip" data-bs-placement="right" title="Update SLA"></span>
+                                                </a>
+                                                <a class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">
+                                                    <span class="fas fa-trash" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete SLA"></span>
+                                                </a>
+                                                <div class="modal fade" th:id="'a' + ${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>                                                                   
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h6>Confirm you want to delete this SLA</h6><br/>
+                                                                <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/setup/sla/delete?seid=' + ${rec.id}}">Delete</a>
+                                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row align-items-center justify-content-between py-2 pe-0 fs--1">
+                                <div class="col-auto d-flex">
+                                    <p class="mb-0 d-none d-sm-block me-3 fw-semi-bold text-900" data-list-info="data-list-info"></p>
+                                    <a class="fw-semi-bold" href="#!" data-list-view="*">View all<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+                                    <a class="fw-semi-bold d-none" href="#!" data-list-view="less">View Less<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
                                 </div>
-                                <div class="row align-items-center justify-content-between py-2 pe-0 fs--1">
-                                    <div class="col-auto d-flex">
-                                        <p class="mb-0 d-none d-sm-block me-3 fw-semi-bold text-900" data-list-info="data-list-info"></p>
-                                        <a class="fw-semi-bold" href="#!" data-list-view="*">View all<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
-                                        <a class="fw-semi-bold d-none" href="#!" data-list-view="less">View Less<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
-                                    </div>
-                                    <div class="col-auto d-flex">
-                                        <button class="page-link" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
-                                        <ul class="mb-0 pagination"></ul>
-                                        <button class="page-link pe-0" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
-                                    </div>
+                                <div class="col-auto d-flex">
+                                    <button class="page-link" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+                                    <ul class="mb-0 pagination"></ul>
+                                    <button class="page-link pe-0" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div> 
+                <th:block th:replace="~{fragments/entityscFragments :: footer}"></th:block>
+            </div>
         </main>
         <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
     </body>

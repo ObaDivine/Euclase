@@ -38,6 +38,9 @@ public class EuclasePayload {
     private String totp;
     private String enableTwoFactorAuth;
     private int[] itemCounts;
+    private int[] documentCount;
+    private int[] documentViolatedSLACount;
+    private int[] daysToDate;
     private String profileImage;
     private String status;
     private String departmentCode;
@@ -61,6 +64,7 @@ public class EuclasePayload {
     private String transactionDate;
     private String hod;
     private String teamLead;
+    private String branchHead;
     private String uniqueId;
     private String documentType;
     private String documentId;
@@ -85,7 +89,8 @@ public class EuclasePayload {
     private MultipartFile uploadedFile;
     private String carbonCopy;
     public String slaExpiry;
-    public String slaVoilated;
+    public String slaViolated;
+    private String slaViolatedBy;
     private String originalFileName;
     private String createdAt;
     private String createdBy;
@@ -118,4 +123,6 @@ public class EuclasePayload {
     private String slaPeriod;
     private String slaValue;
     private String slaPriority;
+    private String accessLevel;
+    private String approvalRoute;
 }

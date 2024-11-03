@@ -155,7 +155,7 @@ public interface EuclaseService {
 
     DataListResponsePayload processFetchDraftDocuments(String principal);
 
-    DataListResponsePayload processFetchDocumentDetails(String documentType, String id);
+    DataListResponsePayload processFetchDocumentDetails(String id);
 
     DataListResponsePayload processFetchDocumentWorkflow(String documentType, String id);
 
@@ -163,7 +163,7 @@ public interface EuclaseService {
 
     PylonResponsePayload processDeleteDraftDocument(String documentType, String id);
 
-    DataListResponsePayload processSearchDocument(String search);
+    DataListResponsePayload processSearchDocument(String search, String principal);
 
     PylonResponsePayload processDocumentSignature(EuclasePayload requestPayload);
 
