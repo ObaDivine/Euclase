@@ -61,16 +61,19 @@ spring:
         
 euclase:
     temp:
-        dir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\temp
+        dir: C:\Apps\Java\EntitySC\euclase\target\euclase-1.0\WEB-INF\classes\temp
     document:
-        archivedir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\documents\archive
+        allowkeyword:
+            date: LEAVE, TRAINING, 
+            amount: LOAN, PURCHASE, EXPENSE, INCOME, BUDGET, TRAINING, INVOICE
+        archivedir: C:\Apps\Java\EntitySC\euclase\target\euclase-1.0\WEB-INF\classes\documents\archive
         prefix:
             usegeneric: false
             generic: DOC
         id:
             allowuser: false
     image:
-        dir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\images\profile
+        dir: C:\Apps\Java\EntitySC\euclase\target\euclase-1.0\WEB-INF\classes\images\profile
     default:
         password: Password12#
     client:
@@ -105,124 +108,124 @@ pylon:
         url: https://pylon/api/
     profile:
         image:
-            url: http://localhost:8080/pylon/images/profile/
+            url: http://localhost:8082/pylon/images/profile/
     qrcode:
         issuer: Entity Software Euclase
         image:
-            url: http://localhost:8080/pylon/images/qrcode/
+            url: http://localhost:8082/pylon/images/qrcode/
     api:
         account:
-            statement: http://localhost:8080/pylon/api/v1/wallet/history
+            statement: http://localhost:8082/pylon/api/v1/wallet/history
         twofactor:
-            enable: http://localhost:8080/pylon/api/v1/user/twofa
-            validate: http://localhost:8080/pylon/api/v1/user/validate/twofa
+            enable: http://localhost:8082/pylon/api/v1/user/twofa
+            validate: http://localhost:8082/pylon/api/v1/user/validate/twofa
         validate:
-            pin: http://localhost:8080/pylon/api/v1/app/user/validate/pin
-            securityquestion: http://localhost:8080/pylon/api/v1/app/user/validate/security-question
-        otp: http://localhost:8080/pylon/api/v1/notification/otp
+            pin: http://localhost:8082/pylon/api/v1/app/user/validate/pin
+            securityquestion: http://localhost:8082/pylon/api/v1/app/user/validate/security-question
+        otp: http://localhost:8082/pylon/api/v1/notification/otp
         qrcode:
-            generate: http://localhost:8080/pylon/api/v1/qrcode
+            generate: http://localhost:8082/pylon/api/v1/qrcode
         beneficiary:
-            list: http://localhost:8080/pylon/api/v1/funds-transfer/beneficiary/list
-            add: http://localhost:8080/pylon/api/v1/funds-transfer/beneficiary/add
-            delete: http://localhost:8080/pylon/api/v1/funds-transfer/beneficiary/delete
-        dashboard: http://localhost:8080/pylon/api/v1/dashboard
-        signin: http://localhost:8080/pylon/api/v1/app/user/signin
-        signup: http://localhost:8080/pylon/api/v1/app/user/signup/web
-        changedefaultpassword: http://localhost:8080/pylon/api/v1/edms/password/default
-        changepassword: http://localhost:8080/pylon/api/v1/app/user/change-password
-        forgotpassword: http://localhost:8080/pylon/api/v1/app/user/forgot-password
-        changepin: http://localhost:8080/pylon/api/v1/app/user/change-pin
-        changesecurityquestion: http://localhost:8080/pylon/api/v1/app/user/change-security-question
-        activation: http://localhost:8080/pylon/api/v1/app/user/signup/activation
-        totp: http://localhost:8080/pylon/api/v1/authenticator/google/otp
+            list: http://localhost:8082/pylon/api/v1/funds-transfer/beneficiary/list
+            add: http://localhost:8082/pylon/api/v1/funds-transfer/beneficiary/add
+            delete: http://localhost:8082/pylon/api/v1/funds-transfer/beneficiary/delete
+        dashboard: http://localhost:8082/pylon/api/v1/dashboard
+        signin: http://localhost:8082/pylon/api/v1/app/user/signin
+        signup: http://localhost:8082/pylon/api/v1/app/user/signup/web
+        changedefaultpassword: http://localhost:8082/pylon/api/v1/edms/password/default
+        changepassword: http://localhost:8082/pylon/api/v1/app/user/change-password
+        forgotpassword: http://localhost:8082/pylon/api/v1/app/user/forgot-password
+        changepin: http://localhost:8082/pylon/api/v1/app/user/change-pin
+        changesecurityquestion: http://localhost:8082/pylon/api/v1/app/user/change-security-question
+        activation: http://localhost:8082/pylon/api/v1/app/user/signup/activation
+        totp: http://localhost:8082/pylon/api/v1/authenticator/google/otp
         profile:
-            details: http://localhost:8080/pylon/api/v1/dashboard
+            details: http://localhost:8082/pylon/api/v1/dashboard
         appuser:
             group:
-               fetch: http://localhost:8080/pylon/api/v1/group/role/details
-               update: http://localhost:8080/pylon/api/v1/group/role/update
-            list: http://localhost:8080/pylon/api/v1/app/user/list
-            create: http://localhost:8080/pylon/api/v1/app/user/signup/edms
-            update: http://localhost:8080/pylon/api/v1/app/user/edms/update
-            delete: http://localhost:8080/pylon/api/v1/app/user/delete
-            fetch: http://localhost:8080/pylon/api/v1/app/user/details
+               fetch: http://localhost:8082/pylon/api/v1/group/role/details
+               update: http://localhost:8082/pylon/api/v1/group/role/update
+            list: http://localhost:8082/pylon/api/v1/app/user/list
+            create: http://localhost:8082/pylon/api/v1/app/user/signup/edms
+            update: http://localhost:8082/pylon/api/v1/app/user/edms/update
+            delete: http://localhost:8082/pylon/api/v1/app/user/delete
+            fetch: http://localhost:8082/pylon/api/v1/app/user/details
             role:
-              list: http://localhost:8080/pylon/api/v1/role/group/list
-              fetch: http://localhost:8080/pylon/api/v1/role/group/details
-              create: http://localhost:8080/pylon/api/v1/role/group/create
-              update: http://localhost:8080/pylon/api/v1/role/group/update
-              delete: http://localhost:8080/pylon/api/v1/role/group/delete
+              list: http://localhost:8082/pylon/api/v1/role/group/list
+              fetch: http://localhost:8082/pylon/api/v1/role/group/details
+              create: http://localhost:8082/pylon/api/v1/role/group/create
+              update: http://localhost:8082/pylon/api/v1/role/group/update
+              delete: http://localhost:8082/pylon/api/v1/role/group/delete
         department:
-            list: http://localhost:8080/pylon/api/v1/department/list
-            create: http://localhost:8080/pylon/api/v1/department/create
-            update: http://localhost:8080/pylon/api/v1/department/update
-            delete: http://localhost:8080/pylon/api/v1/department/delete
-            fetch: http://localhost:8080/pylon/api/v1/department
+            list: http://localhost:8082/pylon/api/v1/department/list
+            create: http://localhost:8082/pylon/api/v1/department/create
+            update: http://localhost:8082/pylon/api/v1/department/update
+            delete: http://localhost:8082/pylon/api/v1/department/delete
+            fetch: http://localhost:8082/pylon/api/v1/department
         designation:
-            list: http://localhost:8080/pylon/api/v1/designation/list
-            create: http://localhost:8080/pylon/api/v1/designation/create
-            update: http://localhost:8080/pylon/api/v1/designation/update
-            delete: http://localhost:8080/pylon/api/v1/designation/delete
-            fetch: http://localhost:8080/pylon/api/v1/designation
+            list: http://localhost:8082/pylon/api/v1/designation/list
+            create: http://localhost:8082/pylon/api/v1/designation/create
+            update: http://localhost:8082/pylon/api/v1/designation/update
+            delete: http://localhost:8082/pylon/api/v1/designation/delete
+            fetch: http://localhost:8082/pylon/api/v1/designation
         departmentunit:
-            department: http://localhost:8080/pylon/api/v1/department/unit
-            list: http://localhost:8080/pylon/api/v1/unit/list
-            create: http://localhost:8080/pylon/api/v1/unit/create
-            update: http://localhost:8080/pylon/api/v1/unit/update
-            delete: http://localhost:8080/pylon/api/v1/unit/delete
-            fetch: http://localhost:8080/pylon/api/v1/unit
+            department: http://localhost:8082/pylon/api/v1/department/unit
+            list: http://localhost:8082/pylon/api/v1/unit/list
+            create: http://localhost:8082/pylon/api/v1/unit/create
+            update: http://localhost:8082/pylon/api/v1/unit/update
+            delete: http://localhost:8082/pylon/api/v1/unit/delete
+            fetch: http://localhost:8082/pylon/api/v1/unit
         branch:
-            list: http://localhost:8080/pylon/api/v1/branch/list
-            create: http://localhost:8080/pylon/api/v1/branch/create
-            update: http://localhost:8080/pylon/api/v1/branch/update
-            delete: http://localhost:8080/pylon/api/v1/branch/delete
-            fetch: http://localhost:8080/pylon/api/v1/branch
+            list: http://localhost:8082/pylon/api/v1/branch/list
+            create: http://localhost:8082/pylon/api/v1/branch/create
+            update: http://localhost:8082/pylon/api/v1/branch/update
+            delete: http://localhost:8082/pylon/api/v1/branch/delete
+            fetch: http://localhost:8082/pylon/api/v1/branch
         gradelevel:
-            list: http://localhost:8080/pylon/api/v1/grade-level/list
-            create: http://localhost:8080/pylon/api/v1/grade-level/create
-            update: http://localhost:8080/pylon/api/v1/grade-level/update
-            delete: http://localhost:8080/pylon/api/v1/grade-level/delete
-            fetch: http://localhost:8080/pylon/api/v1/grade-level
+            list: http://localhost:8082/pylon/api/v1/grade-level/list
+            create: http://localhost:8082/pylon/api/v1/grade-level/create
+            update: http://localhost:8082/pylon/api/v1/grade-level/update
+            delete: http://localhost:8082/pylon/api/v1/grade-level/delete
+            fetch: http://localhost:8082/pylon/api/v1/grade-level
         document:
             group:
-                list: http://localhost:8080/pylon/api/v1/document/group/list
-                create: http://localhost:8080/pylon/api/v1/document/group/create
-                update: http://localhost:8080/pylon/api/v1/document/group/update
-                delete: http://localhost:8080/pylon/api/v1/document/group/delete
-                fetch: http://localhost:8080/pylon/api/v1/document/group
+                list: http://localhost:8082/pylon/api/v1/document/group/list
+                create: http://localhost:8082/pylon/api/v1/document/group/create
+                update: http://localhost:8082/pylon/api/v1/document/group/update
+                delete: http://localhost:8082/pylon/api/v1/document/group/delete
+                fetch: http://localhost:8082/pylon/api/v1/document/group
             type:
-                list: http://localhost:8080/pylon/api/v1/document/type/list
-                create: http://localhost:8080/pylon/api/v1/document/type/create
-                update: http://localhost:8080/pylon/api/v1/document/type/update
-                delete: http://localhost:8080/pylon/api/v1/document/type/delete
-                fetch: http://localhost:8080/pylon/api/v1/document/type
-            create: http://localhost:8080/pylon/api/v1/document
-            process: http://localhost:8080/pylon/api/v1/document/process
-            search: http://localhost:8080/pylon/api/v1/document/search
-            signature: http://localhost:8080/pylon/api/v1/document/signature
-            archive: http://localhost:8080/pylon/api/v1/document/archive
-            approve: http://localhost:8080/pylon/api/v1/document/approve
-            details: http://localhost:8080/pylon/api/v1/document/details
-            self: http://localhost:8080/pylon/api/v1/document/self
-            pending: http://localhost:8080/pylon/api/v1/document/pending
+                list: http://localhost:8082/pylon/api/v1/document/type/list
+                create: http://localhost:8082/pylon/api/v1/document/type/create
+                update: http://localhost:8082/pylon/api/v1/document/type/update
+                delete: http://localhost:8082/pylon/api/v1/document/type/delete
+                fetch: http://localhost:8082/pylon/api/v1/document/type
+            create: http://localhost:8082/pylon/api/v1/document
+            process: http://localhost:8082/pylon/api/v1/document/process
+            search: http://localhost:8082/pylon/api/v1/document/search
+            signature: http://localhost:8082/pylon/api/v1/document/signature
+            archive: http://localhost:8082/pylon/api/v1/document/archive
+            approve: http://localhost:8082/pylon/api/v1/document/approve
+            details: http://localhost:8082/pylon/api/v1/document/details
+            self: http://localhost:8082/pylon/api/v1/document/self
+            pending: http://localhost:8082/pylon/api/v1/document/pending
             draft:
-                fetch: http://localhost:8080/pylon/api/v1/document/draft
-                delete: http://localhost:8080/pylon/api/v1/document/draft/delete
+                fetch: http://localhost:8082/pylon/api/v1/document/draft
+                delete: http://localhost:8082/pylon/api/v1/document/draft/delete
             template:
-                update: http://localhost:8080/pylon/api/v1/document/template/update
+                update: http://localhost:8082/pylon/api/v1/document/template/update
             workflow:
-                update: http://localhost:8080/pylon/api/v1/document/workflow/update
-                history: http://localhost:8080/pylon/api/v1/document/workflow/history
+                update: http://localhost:8082/pylon/api/v1/document/workflow/update
+                history: http://localhost:8082/pylon/api/v1/document/workflow/history
         holidays:
-            list: http://localhost:8080/pylon/api/v1/holidays/list
-            create: http://localhost:8080/pylon/api/v1/holidays/create
-            update: http://localhost:8080/pylon/api/v1/holidays/update
-            delete: http://localhost:8080/pylon/api/v1/holidays/delete
-            fetch: http://localhost:8080/pylon/api/v1/holidays
+            list: http://localhost:8082/pylon/api/v1/holidays/list
+            create: http://localhost:8082/pylon/api/v1/holidays/create
+            update: http://localhost:8082/pylon/api/v1/holidays/update
+            delete: http://localhost:8082/pylon/api/v1/holidays/delete
+            fetch: http://localhost:8082/pylon/api/v1/holidays
         sla:
-            list: http://localhost:8080/pylon/api/v1/sla/list
-            create: http://localhost:8080/pylon/api/v1/sla/create
-            update: http://localhost:8080/pylon/api/v1/sla/update
-            delete: http://localhost:8080/pylon/api/v1/sla/delete
-            fetch: http://localhost:8080/pylon/api/v1/sla
+            list: http://localhost:8082/pylon/api/v1/sla/list
+            create: http://localhost:8082/pylon/api/v1/sla/create
+            update: http://localhost:8082/pylon/api/v1/sla/update
+            delete: http://localhost:8082/pylon/api/v1/sla/delete
+            fetch: http://localhost:8082/pylon/api/v1/sla

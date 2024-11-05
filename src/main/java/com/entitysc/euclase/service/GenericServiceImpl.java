@@ -190,11 +190,21 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getDocumentType().trim());
                 rawString.add(requestPayload.getPurpose().trim());
                 rawString.add(requestPayload.getNarration().trim());
-                if (requestPayload.getCarbonCopy() != null) {
+                rawString.add(requestPayload.getAccessLevel().trim());
+                if (!requestPayload.getCarbonCopy().equalsIgnoreCase("")) {
                     rawString.add(requestPayload.getCarbonCopy().trim());
                 }
-                if (requestPayload.getReferenceDocument() != null) {
+                if (!requestPayload.getReferenceDocument().equalsIgnoreCase("")) {
                     rawString.add(requestPayload.getReferenceDocument().trim());
+                }
+                if (!requestPayload.getStartDate().equalsIgnoreCase("")) {
+                    rawString.add(requestPayload.getStartDate().trim());
+                }
+                if (!requestPayload.getEndDate().equalsIgnoreCase("")) {
+                    rawString.add(requestPayload.getEndDate().trim());
+                }
+                if (!requestPayload.getAmount().equalsIgnoreCase("")) {
+                    rawString.add(requestPayload.getAmount().trim());
                 }
             }
             case "DocumentUpload" -> {

@@ -44,6 +44,10 @@ public class DocumentController {
     private String alertMessageType = "";
     @Value("${euclase.document.id.allowuser}")
     private String allowUserDocumentId;
+    @Value("${euclase.document.allowkeyword.date}")
+    private String allowDateKeywords;
+    @Value("${euclase.document.allowkeyword.amount}")
+    private String allowAmountKeywords;
     @Autowired
     MessageSource messageSource;
 
@@ -51,6 +55,8 @@ public class DocumentController {
     public String document(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("documentTypes", euclaseService.processFetchDocumentTypeList("All").getData());
+        model.addAttribute("addDate", false);
+        model.addAttribute("addAmount", false);
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -76,6 +82,8 @@ public class DocumentController {
         String documentId = euclaseService.generateDocumentId(response.getData().getDocumentGroupCode());
         requestPayload.setDocumentId(documentId);
         requestPayload.setAllowUserDocumentId(allowUserDocumentId);
+        model.addAttribute("addDate", addDateField(response.getData().getDocumentTypeName()));
+        model.addAttribute("addAmount", addAmountField(response.getData().getDocumentTypeName()));
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("slaList", euclaseService.processFetchSLAList().getData());
         model.addAttribute("alertMessage", alertMessage);
@@ -102,6 +110,8 @@ public class DocumentController {
         }
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("slaList", euclaseService.processFetchSLAList().getData());
+        model.addAttribute("addDate", addDateField(requestPayload.getDocumentType()));
+        model.addAttribute("addAmount", addAmountField(requestPayload.getDocumentType()));
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         return "documentinit";
@@ -301,14 +311,19 @@ public class DocumentController {
     public String scan(Model model, Principal principal, HttpSession httpSession) {
         try {
             Imaging imaging = new Imaging("myApp", 0);
-            RequestOutputItem out = new RequestOutputItem(Imaging.OUTPUT_SAVE, Imaging.FORMAT_PDF).setSavePath("C\\Brian\\Aspire.pdf");
-            Request req = new Request().addOutputItem(out);
-            Result resultX = new AspriseScanUI().setRequest(req).setInstruction("Scan <b>test</b>").showDialog(null, "Dialog Title", true, null);
-
             List<Source> sourcesWithCaps = imaging.scanListSources(false, "all", true, true);
-            Result result = imaging.scan(Request.fromJson("{" + "\"output_settings\" : [ {" + "  \"type\" : \"save\","
-                    + "  \"format\" : \"pdf\"," + "  \"save_path\" : \"C\\\\Brian\\\\Aspire.pdf\"" + "} ]" + "}"), "select", true, false);
+            Result result = new AspriseScanUI().setRequest(Request.fromJson(
+                    "{"
+                    + "\"output_settings\" : [ {"
+                    + "  \"type\" : \"save\","
+                    + "  \"format\" : \"pdf\","
+                    + "  \"save_path\" : \"${TMP}\\\\${TMS}${EXT}\""
+                    + "} ]"
+                    + "}"))
+                    .setInstruction("Scan <b>test</b>")
+                    .showDialog(null, "Dialog Title", true, null);
             String okon = "The main man";
+
         } catch (Exception ex) {
             String kalis = "The man";
         }
@@ -337,6 +352,32 @@ public class DocumentController {
         alertMessage = response.getResponseMessage();
         alertMessageType = "success";
         return "redirect:/document/archive";
+    }
+
+    private boolean addDateField(String documentType) {
+        String[] keyword = allowDateKeywords.split(",");
+        boolean keywordMatch = false;
+        if (keyword.length > 0) {
+            for (String s : keyword) {
+                if (documentType.toUpperCase().contains(s.trim())) {
+                    keywordMatch = true;
+                }
+            }
+        }
+        return keywordMatch;
+    }
+
+    private boolean addAmountField(String documentType) {
+        String[] keyword = allowAmountKeywords.split(",");
+        boolean keywordMatch = false;
+        if (keyword.length > 0) {
+            for (String s : keyword) {
+                if (documentType.toUpperCase().contains(s.trim())) {
+                    keywordMatch = true;
+                }
+            }
+        }
+        return keywordMatch;
     }
 
     private void resetAlertMessage() {

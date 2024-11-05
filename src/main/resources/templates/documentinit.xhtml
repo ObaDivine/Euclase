@@ -53,6 +53,19 @@
                                 <span class="text-primary asterisk">*</span>
                                 <span class="fas fa-comments text-900 fs--1 form-icon text-primary"></span>
                             </div>
+                            <div class="form-icon-container" th:if="${addDate == true}">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text text-primary" id="startDate">Start Date</span>
+                                    <input class="form-control" type="date" aria-label="StartDate" aria-describedby="startDate" th:field="*{startDate}" required="required" />
+                                    <span class="input-group-text text-primary" id="endDate">End Date</span>
+                                    <input class="form-control" type="date" aria-label="endDate" aria-describedby="endDate" th:field="*{endDate}" required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-icon-container" th:if="${addAmount == true}">
+                                <input type="number" class="form-control form-control-sm form-icon-input" th:field="*{amount}" placeholder="Enter transaction amount" required="required" min="0.1" step="0.1"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-coins text-900 fs--1 form-icon text-primary"></span>
+                            </div>
                             <h6 class="text-700 fw-semi-bold text-secondary mt-3">Carbon Copy Notification</h6>
                             <div class="form-icon-container">
                                 <input class="form-control form-control-sm form-icon-input" th:field="*{carbonCopy}" placeholder="Enter emails to copy" pattern="^(([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)(\\s*,\\s*|\\s*$))*$"/>

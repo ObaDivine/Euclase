@@ -968,6 +968,9 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setUploadedFiles(null);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setStartDate(requestPayload.getStartDate() == null ? "" : requestPayload.getStartDate());
+            pylonPayload.setEndDate(requestPayload.getEndDate() == null ? "" : requestPayload.getEndDate());
+            pylonPayload.setAmount(requestPayload.getAmount() == null ? "" : requestPayload.getAmount());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
             pylonPayload.setRequestType("DocumentUpload");
@@ -1001,6 +1004,9 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setDocumentTemplateBody(requestPayload.getEditorData());
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setStartDate(requestPayload.getStartDate() == null ? "" : requestPayload.getStartDate());
+            pylonPayload.setEndDate(requestPayload.getEndDate() == null ? "" : requestPayload.getEndDate());
+            pylonPayload.setAmount(requestPayload.getAmount() == null ? "" : requestPayload.getAmount());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setToken(token);
             pylonPayload.setRequestType("Document");
