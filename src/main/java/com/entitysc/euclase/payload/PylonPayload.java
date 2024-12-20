@@ -161,6 +161,8 @@ public class PylonPayload {
     private String documentTemplateName;
     private String documentTemplateBody;
     private String documentWorkflowBody;
+    private boolean documentTemplateFormatted;
+    private boolean documentWorkflowFormatted;
     private String uniqueId;
     private String serviceType;
     private String documentId;
@@ -204,4 +206,8 @@ public class PylonPayload {
     private String slaPriority;
     private String accessLevel;
     private String approvalRoute;
+    private int version;
+    private String documentName;
+    private String documentExt;
+    private String host;
 }

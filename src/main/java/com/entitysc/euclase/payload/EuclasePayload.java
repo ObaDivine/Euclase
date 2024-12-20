@@ -59,6 +59,8 @@ public class EuclasePayload {
     private String documentGroupName;
     private String documentTypeCode;
     private String documentTypeName;
+    private boolean documentTemplateFormatted;
+    private boolean documentWorkflowFormatted;
     private String leaveDays;
     private String purpose;
     private String transactionDate;
@@ -88,8 +90,8 @@ public class EuclasePayload {
     private List<MultipartFile> uploadedFiles;
     private MultipartFile uploadedFile;
     private String carbonCopy;
-    public String slaExpiry;
-    public String slaViolated;
+    private String slaExpiry;
+    private String slaViolated;
     private String slaViolatedBy;
     private String originalFileName;
     private String createdAt;
@@ -125,4 +127,8 @@ public class EuclasePayload {
     private String slaPriority;
     private String accessLevel;
     private String approvalRoute;
+    private int version;
+    private String documentName;
+    private String documentExt;
+    private String host;
 }

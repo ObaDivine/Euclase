@@ -15,6 +15,8 @@ public interface GenericService {
     String generateRequestString(String token, PylonPayload requestPayload);
 
     String encryptString(String textToEncrypt);
+    
+    String decryptString(String textToDecrypt, String encryptionKey);
 
     String urlEncodeString(String urlToEncrypt);
 

@@ -104,20 +104,20 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .colored-toast.swal2-icon-success {
-    background-color: gray !important;
-    padding: 5px !important;
+    background-color: #E31E25 !important;
+    padding: 10px !important;
     font-size: 13px !important;
 }
 
 .colored-toast.swal2-icon-error {
-    background-color: gray !important;
-    padding: 5px !important;
+    background-color: #E31E25 !important;
+    padding: 10px !important;
     font-size: 13px !important;
 }
 
 .colored-toast.swal2-icon-info {
-    background-color: gray !important;
-    padding: 5px !important;
+    background-color: #E31E25 !important;
+    padding: 10px !important;
     font-size: 13px !important;
 }
 
@@ -145,10 +145,8 @@ h1,h2,h3,h4,h5,h6{
 }
 
 #signature{
-    max-height: 200px;
-    max-width: 200px;
-    min-height: 200px;
-    min-width: 200px;
+    height: auto;
+    width: auto;
 }
 
 .approval-signature{
@@ -175,4 +173,19 @@ h1,h2,h3,h4,h5,h6{
 
 #euclaseTable{
     font-size: 14px !important;
+}
+
+.action-icons{
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+.search-input{
+    min-width: 300px;
+    max-width: 300px;
+    margin-right: 5px;
+}
+
+.bg-whitesmoke{
+    background-color: whitesmoke;
 }

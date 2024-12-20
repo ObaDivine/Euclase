@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.entitysc.euclase.service.EuclaseService;
 import com.entitysc.euclase.service.GenericService;
 import jakarta.servlet.RequestDispatcher;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContext;
@@ -50,6 +51,8 @@ public class HomeController implements ErrorController {
     GenericService genericService;
     private String alertMessage = "";
     private String alertMessageType = "";
+    @Value("${euclase.encryption.key.web}")
+    private String encryptionKey;
     private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
 
@@ -96,6 +99,13 @@ public class HomeController implements ErrorController {
                 return "redirect:/dashboard";
             }
             default -> {
+                //Check if password has expired
+                if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.ID_EXPIRED.getResponseCode())) {
+                    model.addAttribute("euclasePayload", requestPayload);
+                    model.addAttribute("alertMessage", response.getResponseMessage());
+                    model.addAttribute("alertMessageType", "error");
+                    return "changedefaultpassword";
+                }
                 //Remove the Google Authenticator Code
                 requestPayload.setOtp("");
                 model.addAttribute("euclasePayload", requestPayload);
@@ -117,9 +127,21 @@ public class HomeController implements ErrorController {
         return "redirect:/";
     }
 
-    @GetMapping("/signup/activate")
-    public String signupActivation(Model model, HttpServletRequest request, HttpSession httpSession) {
+    @GetMapping("/about")
+    public String about(Model model, HttpServletRequest request, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", alertMessageType);
+        resetAlertMessage();
+        return "about";
+    }
+
+    @GetMapping("/signup/activate")
+    public String signupActivation(@RequestParam("seid") String seid, Model model, HttpServletRequest request, HttpSession httpSession) {
+        String decryptedParam = genericService.decryptString(seid, encryptionKey);
+        EuclasePayload requestPayload = new EuclasePayload();
+        requestPayload.setUsername(decryptedParam);
+        model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -189,24 +211,24 @@ public class HomeController implements ErrorController {
 
     @GetMapping("/dashboard")
     public String dashboard(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal, Model model) {
-        PylonResponsePayload response = euclaseService.processFetchProfileDetails(principal.getName());
-        httpSession.setAttribute("profileImage", response.getData().getUsername() + ".png");
-        httpSession.setAttribute("firstName", response.getData().getFirstName());
-        httpSession.setAttribute("lastName", response.getData().getLastName());
-        httpSession.setAttribute("title", response.getData().getSalutation());
-        httpSession.setAttribute("mobileNumber", response.getData().getMobileNumber());
-        httpSession.setAttribute("mobileNumberVerified", response.getData().getMobileNumberVerified());
-        httpSession.setAttribute("walletId", response.getData().getWalletId());
-        httpSession.setAttribute("walletBalance", response.getData().getWalletBalance());
-        httpSession.setAttribute("username", response.getData().getUsername());
-        httpSession.setAttribute("enableMFA", response.getData().getEnableTwoFactorAuth());
-        httpSession.setAttribute("itemCounts", String.valueOf(response.getData().getItemCounts()));
-        httpSession.setAttribute("signatureLink", response.getData().getSignatureLink());
-        httpSession.setAttribute("documentCount",response.getData().getDocumentCount());
-        httpSession.setAttribute("documentViolatedSLACount", response.getData().getDocumentViolatedSLACount());
-        httpSession.setAttribute("daysToDate", response.getData().getDaysToDate());
+        DataListResponsePayload response = euclaseService.processFetchProfileDetails(principal.getName());
+        httpSession.setAttribute("profileImage", response.getPayload().getUsername() + ".png");
+        httpSession.setAttribute("firstName", response.getPayload().getFirstName());
+        httpSession.setAttribute("lastName", response.getPayload().getLastName());
+        httpSession.setAttribute("title", response.getPayload().getSalutation());
+        httpSession.setAttribute("mobileNumber", response.getPayload().getMobileNumber());
+        httpSession.setAttribute("mobileNumberVerified", response.getPayload().getMobileNumberVerified());
+        httpSession.setAttribute("walletId", response.getPayload().getWalletId());
+        httpSession.setAttribute("walletBalance", response.getPayload().getWalletBalance());
+        httpSession.setAttribute("username", response.getPayload().getUsername());
+        httpSession.setAttribute("enableMFA", response.getPayload().getEnableTwoFactorAuth());
+        httpSession.setAttribute("itemCounts", String.valueOf(response.getPayload().getItemCounts()));
+        httpSession.setAttribute("signatureLink", response.getPayload().getSignatureLink());
+        httpSession.setAttribute("documentCount", response.getPayload().getDocumentCount());
+        httpSession.setAttribute("documentViolatedSLACount", response.getPayload().getDocumentViolatedSLACount());
+        httpSession.setAttribute("daysToDate", response.getPayload().getDaysToDate());
         httpSession.setAttribute("dataList", response.getData());
-        httpSession.setAttribute("documentArchiveGroupCode", response.getData().getDocumentGroupCode());
+        httpSession.setAttribute("documentArchiveGroupCode", response.getPayload().getDocumentGroupCode());
 
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("notification", null);
@@ -220,7 +242,7 @@ public class HomeController implements ErrorController {
     public String user(HttpServletRequest request, HttpServletResponse response, Principal principal, Model model, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
-        model.addAttribute("departmentUnitList", null);
+        model.addAttribute("departmentUnitList", euclaseService.processFetchDepartmentUnitList().getData());
         model.addAttribute("designationList", euclaseService.processFetchDesignationList().getData());
         model.addAttribute("branchList", euclaseService.processFetchBranchList().getData());
         model.addAttribute("gradeLevelList", euclaseService.processFetchGradeLevelList().getData());
@@ -235,6 +257,7 @@ public class HomeController implements ErrorController {
 
     @PostMapping("/user/new")
     public String user(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setPrincipal(principal.getName());
         PylonResponsePayload response = euclaseService.processCreateAppUser(principal.getName(), requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -243,7 +266,7 @@ public class HomeController implements ErrorController {
         }
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
-        model.addAttribute("departmentUnitList", null);
+        model.addAttribute("departmentUnitList", euclaseService.processFetchDepartmentUnitList().getData());
         model.addAttribute("designationList", euclaseService.processFetchDesignationList().getData());
         model.addAttribute("branchList", euclaseService.processFetchBranchList().getData());
         model.addAttribute("gradeLevelList", euclaseService.processFetchGradeLevelList().getData());
@@ -276,7 +299,7 @@ public class HomeController implements ErrorController {
         }
         model.addAttribute("euclasePayload", response.getData());
         model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
-        model.addAttribute("departmentUnitList", null);
+        model.addAttribute("departmentUnitList", euclaseService.processFetchDepartmentUnitList().getData());
         model.addAttribute("designationList", euclaseService.processFetchDesignationList().getData());
         model.addAttribute("branchList", euclaseService.processFetchBranchList().getData());
         model.addAttribute("gradeLevelList", euclaseService.processFetchGradeLevelList().getData());
@@ -299,7 +322,7 @@ public class HomeController implements ErrorController {
         }
         model.addAttribute("euclasePayload", response.getData());
         model.addAttribute("departmentList", euclaseService.processFetchDepartmentList().getData());
-        model.addAttribute("departmentUnitList", null);
+        model.addAttribute("departmentUnitList", euclaseService.processFetchDepartmentUnitList().getData());
         model.addAttribute("designationList", euclaseService.processFetchDesignationList().getData());
         model.addAttribute("branchList", euclaseService.processFetchBranchList().getData());
         model.addAttribute("gradeLevelList", euclaseService.processFetchGradeLevelList().getData());
@@ -332,6 +355,7 @@ public class HomeController implements ErrorController {
 
     @PostMapping("/user/role/group")
     public String createRoleGroup(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processCreateRoleGroup(requestPayload);
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -387,6 +411,7 @@ public class HomeController implements ErrorController {
 
     @PostMapping("/user/group/roles/update")
     public String updateGroupRoles(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processUpdateGroupRoles(requestPayload);
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("dataList", euclaseService.processFetchRoleList().getData());
@@ -411,6 +436,7 @@ public class HomeController implements ErrorController {
 
     @PostMapping("/user/update/")
     public String updateUser(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processUpdateUser(requestPayload, principal.getName());
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());

@@ -110,13 +110,13 @@
                                 <div class="scrollbar">
                                     <ul class="nav nav-underline flex-nowrap mb-3 pb-1" id="myTab" role="tablist">
                                         <li class="nav-item me-3">
-                                            <a class="nav-link text-nowrap active" id="upload-tab" data-bs-toggle="tab" href="#tab-upload" role="tab" aria-controls="tab-upload" aria-selected="true">
-                                                <span class="fas fa-upload me-2"></span>Supporting Document<span class="text-700 fw-normal" th:text="'(' + ${documentList} + ')'"> 0</span>
+                                            <a class="nav-link text-nowrap active text-secondary" id="upload-tab" data-bs-toggle="tab" href="#tab-upload" role="tab" aria-controls="tab-upload" aria-selected="true">
+                                                <span class="fas fa-upload me-2"></span>Supporting Document<span class="text-700 fw-normal" th:text="' (' + ${#lists.size(documentList)} + ')'"> 0</span>
                                             </a>
                                         </li>
                                         <li class="nav-item me-3">
-                                            <a class="nav-link text-nowrap" id="workflow-tab" data-bs-toggle="tab" href="#tab-workflow" role="tab" aria-controls="tab-workflow" aria-selected="true">
-                                                <span class="fas fa-stream me-2"></span>Document Workflow<span class="text-700 fw-normal" th:text="'(' + ${workflowList} + ')'">0</span>
+                                            <a class="nav-link text-nowrap text-secondary" id="workflow-tab" data-bs-toggle="tab" href="#tab-workflow" role="tab" aria-controls="tab-workflow" aria-selected="true">
+                                                <span class="fas fa-stream me-2"></span>Document Workflow<span class="text-700 fw-normal" th:text="' (' + ${#lists.size(workflowList)} + ')'">0</span>
                                             </a>
                                         </li>
                                     </ul>

@@ -21,7 +21,7 @@
                             <h4 class="mb-2 text-secondary">Signature</h4>
                             <h6 class="text-700 fw-semi-bold">Setup user signature for document signing</h6>
                         </div>
-                        <img id="signature" src="" alt="" class="img-thumbnail mb-2" th:src="@{${euclasePayload.signatureLink}}" />
+                        <img id="signature" src="" alt="" class="img-thumbnail mb-5 mt-5" th:src="@{${session.signatureLink}}" />
                         <form th:object="${euclasePayload}" th:action="@{/document/signature/process}" method="POST" enctype="multipart/form-data">
                             <input type="hidden" th:field="*{id}" />
                             <div class="form-icon-container">

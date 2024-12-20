@@ -18,37 +18,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-8 col-md-12 col-sm-12">
-                        <div id="monthlyDocuments" class="bar-charts-ext mb-50 pb-50"></div>
-                        <table class="table table-responsive table-sm table-striped fs--1 mb-0 mt-5 border-200" id="xticketTable">
-                            <thead>
-                                <tr>
-                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
-                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="requestBy">Request By</th>
-                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="documentId">Document Id</th>
-                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="document">Document Type</th>
-                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="priority">Priority</th>
-                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="sla">SLA</th>
-                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="rating">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
-                                <tr th:each="rec : ${dataList}" class="position-static">
-                                    <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                    <td th:text="${rec.requestBy}" class="requestBy align-middle white-space-nowrap start ps-3"></td>
-                                    <td class="ticketId align-middle white-space-nowrap start ps-3">
-                                        <a th:href="@{'/document/view/details?seid=' + ${rec.documentId}}" th:text="${rec.documentId}"></a>
-                                    </td>
-                                    <td th:text="${rec.documentTypeName}" class="serviceUnit align-middle white-space-nowrap start ps-3"></td>
-                                    <td th:text="${rec.priority}" class="priority align-middle white-space-nowrap start ps-3"></td>
-                                    <td th:text="${rec.slaExpiry}" class="sla align-middle white-space-nowrap start ps-3"></td>
-                                    <td class="ticketId align-middle white-space-nowrap start ps-3">
-                                        <a th:href="@{'/document/view/details?seid=' + ${rec.documentId}}" th:text="${rec.documentId}">
-                                            <span class="fas fa-eye"></span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div id="monthlyDocuments" class="bar-charts-ext"></div>
                     </div>
                     <div class="col-lg-4 col-md-12 col-sm-12">
                         <h5 class="text-primary mb-3 pl-15">Quick Link</h5>
@@ -101,15 +71,6 @@
                                 </a>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-md-6">
-                                <a th:href="@{/account/details}">
-                                    <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/19.png}" alt="" height="46" width="46" />
-                                        <div class="ms-3">
-                                            <p class="text-secondary">My Profile</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-md-6">
                                 <a th:href="@{/change-password}">
                                     <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/26.png}" alt="" height="46" width="46" />
                                         <div class="ms-3">
@@ -118,16 +79,42 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="col-lg-6 col-sm-6 col-md-6">
-                                <a th:href="@{/document/archive}">
-                                    <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/14.png}" alt="" height="46" width="46" />
-                                        <div class="ms-3">
-                                            <p class="text-secondary">Archive Document</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+                        <h4 class="text-primary">Pending Documents</h4>
+                        <table class="table table-responsive table-sm table-striped fs--1 mb-0 mt-5 border-200" id="xticketTable">
+                            <thead>
+                                <tr>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="requestBy">Created By</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="documentId">Document Id</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="document">Document Type</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="priority">Priority</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="sla">SLA</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="rating">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="list" id="deal-tables-body" th:if="${session.dataList != null}">
+                                <tr th:each="rec : ${session.dataList}" class="position-static">
+                                    <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.createdBy}" class="requestBy align-middle white-space-nowrap start ps-3"></td>
+                                    <td class="ticketId align-middle white-space-nowrap start ps-3">
+                                        <a th:href="@{'/document/details?seid=' + ${rec.documentId}}" th:text="${rec.documentId}"></a>
+                                    </td>
+                                    <td th:text="${rec.documentTypeName}" class="serviceUnit align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.priority}" class="priority align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.slaExpiry}" class="sla align-middle white-space-nowrap start ps-3"></td>
+                                    <td class="ticketId align-middle white-space-nowrap start ps-3">
+                                        <a class="text-success"  href="#!" th:href="@{'/document/approve/details?seid=' + ${rec.documentId}}">
+                                            <span class="fas fa-eye action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="Approve Document"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <th:block th:replace="~{fragments/entityscFragments :: footer}"></th:block>

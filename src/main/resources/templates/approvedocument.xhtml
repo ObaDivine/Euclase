@@ -22,64 +22,103 @@
                             <h4 class="mb-2 text-secondary">Approve Document</h4>
                             <h6 class="text-700 fw-semi-bold">Approve pending document</h6>
                         </div>
+                        <div id="toolbar-container"></div>
+                        <textarea th:object="${euclasePayload}" th:field="*{editor}"></textarea>
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <div class="scrollbar">
+                                    <ul class="nav nav-underline flex-nowrap mb-3 pb-1" id="myTab" role="tablist">
+                                        <li class="nav-item me-3">
+                                            <a class="nav-link text-nowrap active text-primary" id="supporting-doc-tab" data-bs-toggle="tab" href="#tab-supporting-doc" role="tab" aria-controls="tab-supporting-doc" aria-selected="true">
+                                                <span class="fas fa-upload me-2"></span>Supporting Documents<span class="text-700 fw-normal" th:text="' (' + ${#lists.size(documentList)} + ')'"> 0</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item me-3">
+                                            <a class="nav-link text-nowrap text-primary" id="approval-tab" data-bs-toggle="tab" href="#tab-approval" role="tab" aria-controls="tab-approval" aria-selected="true">
+                                                <span class="fas fa-thumbs-up me-2"></span>Approvals<span class="text-700 fw-normal" th:text="' (' + ${#lists.size(workflowList)} + ')'">0</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item me-3">
+                                            <a class="nav-link text-nowrap text-primary" id="reference-tab" data-bs-toggle="tab" href="#tab-reference" role="tab" aria-controls="tab-reference" aria-selected="true">
+                                                <span class="fas fa-thumbs-up me-2"></span>References<span class="text-700 fw-normal" th:text="' (' + ${#lists.size(workflowList)} + ')'">0</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-content" id="profileTabContent">
+                                    <div class="tab-pane fade show active" id="tab-supporting-doc" role="tabpanel" aria-labelledby="supporting-doc-tab">
+                                        <div class="border-top border-bottom border-200"  id="listTable" data-list='{"valueNames":[],"page":10,"pagination":true}'>
+                                            <div class="table-responsive ms-n1 ps-1 scrollbar">
+                                                <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Document</th>
+                                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Upload By</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="list" id="deal-tables-body" th:if="${documentList != null}">
+                                                        <tr th:each="rec : ${documentList}" th:if="${rec.transType == 'Upload'}" class="position-static">
+                                                            <td class="code align-middle white-space-nowrap start ps-3">
+                                                                <a th:href="@{${rec.documentLink}}" th:text="${rec.originalFileName}" target="_blank"></a>
+                                                            </td>
+                                                            <td th:text="${rec.createdBy}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>  
+                                    <div class="tab-pane fade" id="tab-approval" role="tabpanel" aria-labelledby="approval-tab">
+                                        <div class="table-responsive ms-n1 ps-1 scrollbar">
+                                            <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
+                                                        <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="approvingOfficer">Approving Officer</th>
+                                                        <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
+                                                        <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="signature">Signature</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="list" id="deal-tables-body" th:if="${workflowList != null}">
+                                                    <tr th:each="rec : ${workflowList}" class="position-static">
+                                                        <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
+                                                        <td th:text="${rec.commentFrom}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                        <td th:text="${rec.comment}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                        <td class="code align-middle white-space-nowrap start ps-3">
+                                                            <img  src="" alt="" class="img-thumbnail approval-signature" th:src="@{${rec.signatureLink}}" />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab-reference" role="tabpanel" aria-labelledby="reference-tab">
+                                        <div class="table-responsive ms-n1 ps-1 scrollbar">
+                                            <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Document</th>
+                                                        <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Upload By</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="list" id="deal-tables-body" th:if="${documentList != null}">
+                                                    <tr th:each="rec : ${documentList}" th:if="${rec.transType == 'Reference'}" class="position-static">
+                                                        <td class="code align-middle white-space-nowrap start ps-3">
+                                                            <a th:href="@{${rec.documentLink}}" th:text="${rec.originalFileName}" target="_blank"></a>
+                                                        </td>
+                                                        <td th:text="${rec.createdBy}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
                         <form th:object="${euclasePayload}" th:action="@{/document/approve}" method="POST" th:onsubmit="|fetchEditorData()|" enctype="multipart/form-data" >
                             <input type="hidden" th:field="*{documentId}" />
                             <input type="hidden" th:field="*{documentTemplateName}" />
                             <input type="hidden" th:field="*{documentType}" />                                
-                            <div id="toolbar-container"></div>
-                            <textarea th:field="*{editor}"></textarea>
-                            <div class="card mt-2">
-                                <div class="card-body">
-                                    <h6 class="text-700 fw-semi-bold text-secondary mt-2 mb-3">Initiator Supporting Document(s)</h6>
-                                    <div class="table-responsive ms-n1 ps-1 scrollbar">
-                                        <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
-                                            <thead>
-                                                <tr>
-                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Document</th>
-                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Link</th>
-                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Upload By</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="list" id="deal-tables-body" th:if="${documentList != null}">
-                                                <tr th:each="rec : ${documentList}" class="position-static">
-                                                    <td th:text="${rec.originalFileName}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                                    <td class="code align-middle white-space-nowrap start ps-3">
-                                                        <a th:href="@{${rec.documentLink}}" th:text="${rec.documentLink}" target="_blank"></a>
-                                                    </td>
-                                                    <td th:text="${rec.createdBy}" class="code align-middle white-space-nowrap start ps-3"></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mt-2">
-                                <div class="card-body">
-                                    <h6 class="text-700 fw-semi-bold text-secondary mt-2 mb-3">List of Approvals</h6>
-                                    <div class="table-responsive ms-n1 ps-1 scrollbar">
-                                        <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
-                                            <thead>
-                                                <tr>
-                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
-                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="approvingOfficer">Approving Officer</th>
-                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
-                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="signature">Signature</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="list" id="deal-tables-body" th:if="${workflowList != null}">
-                                                <tr th:each="rec : ${workflowList}" class="position-static">
-                                                    <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                                    <td th:text="${rec.commentFrom}" class="code align-middle white-space-nowrap start ps-3"></td>
-                                                    <td th:text="${rec.comment}" class="code align-middle white-space-nowrap start ps-3"></td>
-                                                    <td class="code align-middle white-space-nowrap start ps-3">
-                                                        <img  src="" alt="" class="img-thumbnail approval-signature" th:src="@{${rec.signatureLink}}" />
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="card mt-2">
                                 <div class="card-body">
                                     <h6 class="text-700 fw-semi-bold text-secondary mt-3">Attach Files</h6>
@@ -117,6 +156,7 @@
                                             <h6 class="modal-title text-primary">Entity Software - <span class="text-secondary">Euclase</span></h6>
                                         </div>
                                         <div class="modal-body">
+                                            <h6 class="text-secondary mb-2">Submit document for approval?</h6>
                                             <button id="submitForm" type="submit" class="btn btn-primary btn-sm">Submit</button>
                                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                         </div>

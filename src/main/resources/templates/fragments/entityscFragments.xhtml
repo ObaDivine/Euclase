@@ -40,6 +40,7 @@
             <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css"></link>
             <link th:href="@{/css/theme-rtl.min.css}" type="text/css" rel="stylesheet" id="style-rtl"></link>
             <link th:href="@{/css/theme.min.css}" type="text/css" rel="stylesheet" id="style-default"></link>
+            <link th:href="@{/css/choices.min.css}" type="text/css" rel="stylesheet"></link>
             <link th:href="@{/css/sweetalert2.min.css}" type="text/css" rel="stylesheet"></link>
             <link th:href="@{/css/euclase.css}" type="text/css" rel="stylesheet"></link>
             <script th:inline="javascript">
@@ -95,7 +96,7 @@
                     <a class="navbar-brand me-1 me-sm-3" th:href="@{/dashboard}">
                         <div class="d-flex align-items-center">
                             <div class="d-flex align-items-center"><img th:src="@{/images/logo_nobg.png}" alt="Entity" width="27" />
-                                <p class="logo-text ms-2 d-none d-sm-block">Entity Euclase</p>
+                                <p class="logo-text ms-2 d-none d-sm-block text-primary">Entity Euclase</p>
                             </div>
                         </div>
                     </a>
@@ -183,6 +184,7 @@
                                 </div>
                                 <div class="overflow-auto scrollbar" style="height: 10rem;">
                                     <ul class="nav d-flex flex-column mb-2 pb-1">
+                                        <li class="nav-item"><a class="nav-link px-3" th:href="@{/about}"> <span class="me-2 text-900 fa fa-uncharted"></span><span>About Euclase</span></a></li>
                                         <li class="nav-item"><a class="nav-link px-3" th:href="@{/account/details}"> <span class="me-2 text-900 fa fa-user"></span><span>Profile</span></a></li>
                                         <li class="nav-item"><a class="nav-link px-3" th:href="@{/dashboard}"><span class="me-2 text-900 fa fa-tachometer"></span>Dashboard</a></li>
                                         <li class="nav-item"><a class="nav-link px-3" th:href="@{/faq}"> <span class="me-2 text-900 fa fa-question-circle"></span>Help Center</a></li>
@@ -223,7 +225,7 @@
                                 </a>
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="home">
-                                        <li class="collapsed-nav-item-title d-none">Home</li>
+                                        <li class="collapsed-nav-item-title d-none text-primary">Home</li>
                                         <li class="nav-item"><a class="nav-link" th:href="@{/dashboard}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Dashboard</span>
                                                 </div>
@@ -241,6 +243,11 @@
                                         </li>
                                         <li class="nav-item"><a class="nav-link" th:href="@{/twofa/}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Two Factor Authentication</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item"><a class="nav-link" th:href="@{/about}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">About Euclase</span>
                                                 </div>
                                             </a>
                                         </li>
@@ -265,7 +272,7 @@
                                 </a>
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="documents">
-                                        <li class="collapsed-nav-item-title d-none">Document &AMP; Files</li>
+                                        <li class="collapsed-nav-item-title d-none text-primary">Document &AMP; Files</li>
                                         <li class="nav-item">
                                             <a class="nav-link" th:href="@{/document/}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">New Document</span>
@@ -309,7 +316,7 @@
                                 </a>
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="workflow">
-                                        <li class="collapsed-nav-item-title d-none">Workflow &AMP; Template</li>
+                                        <li class="collapsed-nav-item-title d-none text-primary">Workflow &AMP; Template</li>
                                         <li class="nav-item"><a class="nav-link" th:href="@{/setup/document/group}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Manage Document Group</span>
                                                 </div>
@@ -345,7 +352,7 @@
                                 </a>
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="digitization">
-                                        <li class="collapsed-nav-item-title d-none">Document Digitization</li>
+                                        <li class="collapsed-nav-item-title d-none text-primary">Document Digitization</li>
                                         <li class="nav-item"><a class="nav-link" th:href="@{/document/scan}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Scan Document</span>
                                                 </div>
@@ -376,7 +383,7 @@
                                 </a>
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="setup">
-                                        <li class="collapsed-nav-item-title d-none">Setup</li>
+                                        <li class="collapsed-nav-item-title d-none text-primary">Setup</li>
                                         <li class="nav-item">
                                             <a class="nav-link" th:href="@{/setup/branch}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Branch</span>
@@ -415,7 +422,7 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" th:href="@{/setup/sla}">
-                                                <div class="d-flex align-items-center"><span class="nav-link-text">SLA</span>
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Service Level Agreement</span>
                                                 </div>
                                             </a>
                                         </li>
@@ -434,8 +441,7 @@
                                 </a>
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="users">
-                                        <li class="collapsed-nav-item-title d-none">System Users
-                                        </li>
+                                        <li class="collapsed-nav-item-title d-none text-primary">System Users</li>
                                         <li class="nav-item">
                                             <a class="nav-link" th:href="@{/user}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">New User</span>
@@ -471,7 +477,7 @@
                                 </a>
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="report">
-                                        <li class="collapsed-nav-item-title d-none">Report</li>
+                                        <li class="collapsed-nav-item-title d-none text-primary">Report</li>
                                         <li class="nav-item">
                                             <a class="nav-link" th:href="@{/report/audit}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Audit Log</span>
@@ -515,7 +521,7 @@
                     </p>
                 </div>
                 <div class="col-12 col-sm-auto text-center">
-                    <p class="mb-0 text-600">v1.0</p>
+                    <p class="mb-0 text-600">v1.0.0</p>
                 </div>
             </div>
         </footer>
@@ -532,6 +538,7 @@
             <script th:src="@{/js/feather.min.js}"></script>
             <script th:src="@{/js/dayjs.min.js}"></script>
             <script th:src="@{/js/phoenix.js}"></script>
+            <script th:src="@{/js/choices.min.js}"></script>
             <script th:src="@{/js/echarts.min.js}"></script>
             <script th:src="@{/js/sweetalert2.min.js}"></script>
             <script th:src="@{/js/euclase.js}"></script>
@@ -551,7 +558,7 @@
                     </div>
                 </div>
             </form>
-            <script type="text/javascript">
+<!--            <script type="text/javascript">
                 var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
                 (function () {
                     var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
@@ -561,7 +568,7 @@
                     s1.setAttribute('crossorigin', '*');
                     s0.parentNode.insertBefore(s1, s0);
                 })();
-            </script>
+            </script>-->
         </div>
     </body>
 </html>

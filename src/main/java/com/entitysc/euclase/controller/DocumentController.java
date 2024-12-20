@@ -2,7 +2,6 @@ package com.entitysc.euclase.controller;
 
 import com.asprise.imaging.core.Imaging;
 import com.asprise.imaging.core.Request;
-import com.asprise.imaging.core.RequestOutputItem;
 import com.asprise.imaging.core.Result;
 import com.asprise.imaging.core.scan.twain.Source;
 import com.asprise.imaging.scan.ui.workbench.AspriseScanUI;
@@ -71,8 +70,22 @@ public class DocumentController {
         requestPayload.setDocumentTypeName(response.getData().getDocumentTypeName());
         requestPayload.setDocumentType(String.valueOf(response.getData().getId())); //Pass document type id for lookup
         //Check if the signature is set. Index 11 holds the signature
-        if (httpSession.getAttribute("signatureLink").toString() == null || httpSession.getAttribute("signatureLink").toString().equalsIgnoreCase("")) {
+        if (httpSession.getAttribute("signatureLink").toString() == null || httpSession.getAttribute("signatureLink").toString().equalsIgnoreCase("NA")) {
             alertMessage = messageSource.getMessage("appMessages.signature.notset", new Object[0], Locale.ENGLISH);
+            alertMessageType = "error";
+            return "redirect:/document/";
+        }
+
+        //Check if the template is well formatted
+        if (!response.getData().isDocumentTemplateFormatted()) {
+            alertMessage = messageSource.getMessage("appMessages.template.notformatted", new Object[0], Locale.ENGLISH);
+            alertMessageType = "error";
+            return "redirect:/document/";
+        }
+
+        //Check if the template is well formatted
+        if (!response.getData().isDocumentWorkflowFormatted()) {
+            alertMessage = messageSource.getMessage("appMessages.template.notformatted", new Object[0], Locale.ENGLISH);
             alertMessageType = "error";
             return "redirect:/document/";
         }
@@ -172,7 +185,7 @@ public class DocumentController {
         model.addAttribute("dataList", euclaseService.processFetchPendingDocuments(principal.getName()).getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
-        model.addAttribute("alertMessageType", "success");
+        model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
         return "pendingdocument";
     }
@@ -182,33 +195,38 @@ public class DocumentController {
         model.addAttribute("dataList", euclaseService.processFetchDraftDocuments(principal.getName()).getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
-        model.addAttribute("alertMessageType", "success");
+        model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
         return "draftdocument";
     }
 
     @GetMapping("/draft/details")
     public String draftDocumentDetails(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
-        EuclasePayload requestPayload = new EuclasePayload();
-        DataListResponsePayload response = euclaseService.processFetchDocumentDetails(seid);
-        BeanUtils.copyProperties(response.getPayload(), requestPayload);
-        requestPayload.setDocumentType("Expense");
-        //Generate document id
-        String documentId = seid;
-        requestPayload.setDocumentId(documentId);
-        requestPayload.setAllowUserDocumentId(allowUserDocumentId);
-        requestPayload.setDocumentType(response.getPayload().getDocumentTypeCode());
-        model.addAttribute("euclasePayload", requestPayload);
-        model.addAttribute("alertMessage", alertMessage);
-        model.addAttribute("alertMessageType", alertMessageType);
-        model.addAttribute("documentTypeList", euclaseService.processFetchDocumentTypeList(seid).getData());
-        resetAlertMessage();
-        return "expensedocinit";
+        DataListResponsePayload dataRecord = euclaseService.processFetchDocumentDetails(seid);
+        if (dataRecord.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            EuclasePayload requestPayload = new EuclasePayload();
+            BeanUtils.copyProperties(dataRecord.getPayload(), requestPayload);
+            requestPayload.setUsername(principal.getName());
+            requestPayload.setEditorData(dataRecord.getPayload().getDocumentTemplateBody());
+            requestPayload.setEditor(dataRecord.getPayload().getDocumentTemplateBody());
+            requestPayload.setDocumentTemplateName(dataRecord.getPayload().getDocumentTemplateName());
+            requestPayload.setDocumentTypeName(dataRecord.getPayload().getDocumentTypeName());
+            model.addAttribute("euclasePayload", requestPayload);
+            model.addAttribute("slaList", euclaseService.processFetchSLAList().getData());
+            model.addAttribute("alertMessage", dataRecord.getResponseMessage());
+            model.addAttribute("alertMessageType", "success");
+            resetAlertMessage();
+            return "documentprocess";
+        }
+        //Return to draft
+        alertMessage = dataRecord.getResponseMessage();
+        alertMessageType = "error";
+        return "redirect:/document/draft";
     }
 
     @GetMapping("/draft/delete")
-    public String deleteDraftDocument(@RequestParam("dt") String dt, @RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
-        PylonResponsePayload response = euclaseService.processDeleteDraftDocument(dt, seid);
+    public String deleteDraftDocument(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
+        PylonResponsePayload response = euclaseService.processDeleteDraftDocument(seid);
         alertMessage = response.getResponseMessage();
         alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
         return "redirect:/document/draft";
@@ -217,11 +235,6 @@ public class DocumentController {
     @GetMapping("/approve/details")
     public String approveDocument(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
-//        requestPayload.setProfileImage(httpSession.getAttribute("profileImage").toString());
-//        requestPayload.setFirstName(httpSession.getAttribute("firstName").toString());
-//        requestPayload.setLastName(httpSession.getAttribute("lastName").toString());
-//        requestPayload.setUsername(httpSession.getAttribute("username").toString());
-//        requestPayload.setSignatureLink(httpSession.getAttribute("signatureLink").toString());
         DataListResponsePayload response = euclaseService.processFetchDocumentDetails(seid);
         if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
@@ -230,7 +243,7 @@ public class DocumentController {
         }
 
         //Check if the signature is set. Index 11 holds the signature
-        if (httpSession.getAttribute("signatureLink").toString() == null || httpSession.getAttribute("signatureLink").toString().equalsIgnoreCase("")) {
+        if (httpSession.getAttribute("signatureLink").toString() == null || httpSession.getAttribute("signatureLink").toString().equalsIgnoreCase("NA")) {
             alertMessage = messageSource.getMessage("appMessages.signature.notset", new Object[0], Locale.ENGLISH);
             alertMessageType = "error";
             return "redirect:/document/pending";
@@ -260,9 +273,9 @@ public class DocumentController {
     }
 
     @GetMapping("/workflow")
-    public String documentWorkflow(@RequestParam("dt") String dt, @RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
+    public String documentWorkflow(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
-        DataListResponsePayload response = euclaseService.processFetchDocumentWorkflow(dt, seid);
+        DataListResponsePayload response = euclaseService.processFetchDocumentWorkflow(seid);
         if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
             alertMessageType = "error";

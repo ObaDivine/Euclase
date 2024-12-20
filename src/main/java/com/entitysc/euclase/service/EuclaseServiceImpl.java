@@ -14,6 +14,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;
@@ -326,7 +329,8 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public PylonResponsePayload processFetchProfileDetails(String username) {
+//    @Cacheable(value = "userProfile", key = "#username")
+    public DataListResponsePayload processFetchProfileDetails(String username) {
         String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
@@ -337,14 +341,14 @@ public class EuclaseServiceImpl implements EuclaseService {
             String usernameEncode = genericService.urlEncodeString(genericService.encryptString(username.trim()));
             String appTypeEncode = genericService.urlEncodeString(genericService.encryptString("Euclase"));
             String response = genericService.callPylonAPI(profileDetailsUrl + "?id=" + usernameEncode + "&appType=" + appTypeEncode, "GET", token, "Dashboard");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
+            if (responsePayload.getPayload().getStatus() != null && responsePayload.getPayload().getError() != null && responsePayload.getPayload().getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
             }
             return responsePayload;
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
@@ -356,6 +360,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CachePut(value = "userUpdate", key = "#username")
     public PylonResponsePayload processUpdateUser(EuclasePayload requestPayload, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -391,6 +396,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "department")
     public DataListResponsePayload processFetchDepartmentList() {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -452,6 +458,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "department", key = "#id")
     public PylonResponsePayload processDeleteDepartment(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -476,6 +483,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "department", key = "#id")
     public PylonResponsePayload processFetchDepartment(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -537,6 +545,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "unit", key = "#id")
     public PylonResponsePayload processDeleteDepartmentUnit(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -561,6 +570,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "unit", key = "#id")
     public PylonResponsePayload processFetchDepartmentUnit(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -585,6 +595,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "unit")
     public DataListResponsePayload processFetchDepartmentUnitList() {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -609,6 +620,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "unit", key = "#departmentCode")
     public DataListResponsePayload processFetchDepartmentUnitList(String departmentCode) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -666,6 +678,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "designation", key = "#id")
     public PylonResponsePayload processDeleteDesignation(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -690,6 +703,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "designation", key = "#id")
     public PylonResponsePayload processFetchDesignation(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -714,6 +728,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "designation")
     public DataListResponsePayload processFetchDesignationList() {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -775,6 +790,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "branch", key = "#id")
     public PylonResponsePayload processDeleteBranch(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -799,6 +815,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "branch", key = "#id")
     public PylonResponsePayload processFetchBranch(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -823,6 +840,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "branch")
     public DataListResponsePayload processFetchBranchList() {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -884,6 +902,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "gradeLevel", key = "#id")
     public PylonResponsePayload processDeleteGradeLevel(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -908,6 +927,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "gradeLevel", key = "#id")
     public PylonResponsePayload processFetchGradeLevel(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -932,6 +952,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "gradeLevel")
     public DataListResponsePayload processFetchGradeLevelList() {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1069,6 +1090,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "documentGroup", key = "#id")
     public PylonResponsePayload processDeleteDocumentGroup(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1093,6 +1115,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "documentGroup", key = "#id")
     public PylonResponsePayload processFetchDocumentGroup(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1117,6 +1140,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "documentGroup")
     public DataListResponsePayload processFetchDocumentGroupList() {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1173,6 +1197,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "documentType", key = "#id")
     public PylonResponsePayload processDeleteDocumentType(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1197,6 +1222,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "documentType", key = "#id")
     public PylonResponsePayload processFetchDocumentType(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1221,6 +1247,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "documentType")
     public DataListResponsePayload processFetchDocumentTypeList(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1260,6 +1287,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CachePut(value = "documentTemplate", key = "#requestPayload.id")
     public PylonResponsePayload processUpdateDocumentTemplate(EuclasePayload requestPayload) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1294,6 +1322,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "myDocument", key = "#principal")
     public DataListResponsePayload processFetchMyDocuments(String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1314,6 +1343,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+//    @Cacheable(value = "pendingDocument", key = "#principal")
     public DataListResponsePayload processFetchPendingDocuments(String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1334,6 +1364,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "draftDocument", key = "#principal")
     public DataListResponsePayload processFetchDraftDocuments(String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1354,6 +1385,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CachePut(value = "documentWorkflow", key = "#requestPayload.id")
     public PylonResponsePayload processUpdateDocumentWorkflow(EuclasePayload requestPayload) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1389,6 +1421,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "documentDetail", key = "#id")
     public DataListResponsePayload processFetchDocumentDetails(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1415,7 +1448,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setDocumentTemplateBody(requestPayload.getEditor());
-            pylonPayload.setUploadedFiles(requestPayload.getUploadedFiles());
+            pylonPayload.setUploadedFiles(null);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
@@ -1443,12 +1476,12 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public DataListResponsePayload processFetchDocumentWorkflow(String documentType, String id) {
+    @Cacheable(value = "documentWorkflow", key = "#id")
+    public DataListResponsePayload processFetchDocumentWorkflow(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String encodedDocumentType = genericService.urlEncodeString(genericService.encryptString(documentType.trim()));
-            String response = genericService.callPylonAPI(fetchDocumentWorkflowHistoryUrl + "?dt=" + encodedDocumentType + "&id=" + encodedParam, "GET", token, "Documents Workflow");
+            String response = genericService.callPylonAPI(fetchDocumentWorkflowHistoryUrl + "?id=" + encodedParam, "GET", token, "Documents Workflow");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             return responsePayload;
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
@@ -1464,12 +1497,12 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    public PylonResponsePayload processDeleteDraftDocument(String documentType, String id) {
+    @CacheEvict(value = "draftDocument", key = "#id")
+    public PylonResponsePayload processDeleteDraftDocument(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String encodedDocumentType = genericService.urlEncodeString(genericService.encryptString(documentType.trim()));
-            String response = genericService.callPylonAPI(processDeleteDraftDocumentUrl + "?dt=" + encodedDocumentType + "&id=" + encodedParam, "GET", token, "Delete Draft Documents");
+            String response = genericService.callPylonAPI(processDeleteDraftDocumentUrl + "?id=" + encodedParam, "GET", token, "Delete Draft Documents");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             return responsePayload;
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
@@ -1485,6 +1518,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "searchDocument", key = "#search")
     public DataListResponsePayload processSearchDocument(String search, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1574,6 +1608,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "user", key = "#id")
     public PylonResponsePayload processFetchAppUser(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1598,6 +1633,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "user", key = "#id")
     public PylonResponsePayload processDeleteAppUser(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1622,6 +1658,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "user")
     public DataListResponsePayload processFetchAppUserList() {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1653,6 +1690,7 @@ public class EuclaseServiceImpl implements EuclaseService {
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setHod(requestPayload.getHod() == null ? "False" : "True");
             pylonPayload.setTeamLead(requestPayload.getTeamLead() == null ? "False" : "True");
+            pylonPayload.setBranchHead(requestPayload.getBranchHead() == null ? "False" : "True");
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
@@ -1685,6 +1723,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "role")
     public DataListResponsePayload processFetchRoleList() {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1709,6 +1748,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "role", key = "#id")
     public PylonResponsePayload processFetchRoleGroup(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1770,6 +1810,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "role", key = "#id")
     public PylonResponsePayload processDeleteRoleGroup(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1794,6 +1835,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "group", key = "#groupName")
     public DataListResponsePayload processFetchGroupRoles(String groupName) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1814,6 +1856,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CachePut(value = "group", key = "#requestPayload.id")
     public PylonResponsePayload processUpdateGroupRoles(EuclasePayload requestPayload) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1916,6 +1959,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "holiday", key = "#id")
     public PylonResponsePayload processDeletePublicHoliday(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1940,6 +1984,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "holiday", key = "#id")
     public PylonResponsePayload processFetchPublicHoliday(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -1964,6 +2009,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "holiday")
     public DataListResponsePayload processFetchPublicHolidayList() {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -2020,6 +2066,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @CacheEvict(value = "sla", key = "#id")
     public PylonResponsePayload processDeleteSLA(String id, String principal) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -2044,6 +2091,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "sla", key = "#id")
     public PylonResponsePayload processFetchSLA(String id) {
         String token = genericService.generatePylonAPIToken();
         try {
@@ -2068,6 +2116,7 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
+    @Cacheable(value = "sla")
     public DataListResponsePayload processFetchSLAList() {
         String token = genericService.generatePylonAPIToken();
         try {

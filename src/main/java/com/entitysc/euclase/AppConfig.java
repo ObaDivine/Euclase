@@ -1,18 +1,24 @@
 package com.entitysc.euclase;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import jakarta.persistence.EntityManagerFactory;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 import javax.sql.DataSource;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
@@ -46,6 +52,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 @Import({WebSecurityConfig.class})
 @PropertySource("classpath:application.yml")
 @EnableTransactionManagement
+@EnableCaching
 public class AppConfig implements WebMvcConfigurer {
 
     @Autowired
@@ -134,6 +141,20 @@ public class AppConfig implements WebMvcConfigurer {
         config.setStringOutputType("base64");
         encryptor.setConfig(config);
         return encryptor;
+    }
+
+    @Bean
+    @Primary
+    public CacheManager cacheManager() {
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
+        cacheManager.setCaffeine(Caffeine.newBuilder()
+                .initialCapacity(200)
+                .expireAfterAccess(5, TimeUnit.MINUTES)
+                .maximumSize(500)
+                .weakKeys()
+                .recordStats());
+        return cacheManager;
+
     }
 
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom bg-white" id="top" style="display:none;">
+            <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+            <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
+            <div class="content">
+                <div class="p-5 bg-whitesmoke rounded-3">
+                    <div class="text-center">
+                        <img th:src="@{/images/logo_nobg.png}" alt="entitysc" width="120" height="120" src="" />
+                        <h3 class="text-body-emphasis text-primary">About Euclase</h3>
+                    </div>
+                    <p class="col-lg-8 mx-auto">
+                        Euclase is an electronic document management solution developed by Entity Software Company.
+                    </p>
+                    <p class="col-lg-8 mx-auto">Release Version: 1.0.0</p>
+                    <p class="col-lg-8 mx-auto">Release Date: October 2024</p>
+                    <p class="col-lg-8 mx-auto">
+                        &copy; <span th:text="${#dates.year(#dates.createNow())}"></span>
+                        <span>Entity Software</span>
+                    </p>
+                </div>
+                <th:block th:replace="~{fragments/entityscFragments :: footer}"></th:block>
+            </div>
+        </main>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+    </body>
+</html>

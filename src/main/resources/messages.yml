@@ -8,5 +8,9 @@ appMessages:
       middleware: Unable to reach the middleware server
   success:
     fundwallet: Wallet funded successfully
+  template:
+    notformatted: Template not properly formatted. Expects a valid HTML string
+  workflow:
+    notformatted: Workflow template not properly formatted. Expects a JSON
     
         

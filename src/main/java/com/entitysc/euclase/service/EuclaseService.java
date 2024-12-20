@@ -16,7 +16,7 @@ public interface EuclaseService {
 
     PylonResponsePayload forgotPassword(EuclasePayload requestPayload);
 
-    PylonResponsePayload processFetchProfileDetails(String username);
+    DataListResponsePayload processFetchProfileDetails(String username);
 
     String generateDocumentId(String documentType);
 
@@ -157,11 +157,11 @@ public interface EuclaseService {
 
     DataListResponsePayload processFetchDocumentDetails(String id);
 
-    DataListResponsePayload processFetchDocumentWorkflow(String documentType, String id);
+    DataListResponsePayload processFetchDocumentWorkflow(String id);
 
     PylonResponsePayload processApproveDocument(EuclasePayload requestPayload);
 
-    PylonResponsePayload processDeleteDraftDocument(String documentType, String id);
+    PylonResponsePayload processDeleteDraftDocument(String id);
 
     DataListResponsePayload processSearchDocument(String search, String principal);
 

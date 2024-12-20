@@ -1,6 +1,7 @@
 package com.entitysc.euclase.service;
 
 import com.entitysc.euclase.payload.PylonPayload;
+import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import java.io.File;
@@ -25,6 +26,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,8 @@ public class GenericServiceImpl implements GenericService {
     private String imageDirectory;
     @Value("${euclase.temp.dir}")
     private String tempFileDirectory;
+    @Autowired
+    Gson gson;
     Logger logger = LoggerFactory.getLogger(GenericServiceImpl.class);
 
     @Override
@@ -332,6 +336,33 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
+    public String decryptString(String textToDecrypt, String encryptionKey) {
+        try {
+            byte[] decode = Base64.getDecoder().decode(textToDecrypt.getBytes("UTF-8"));
+            ByteBuffer bb = ByteBuffer.wrap(decode);
+            byte[] iv = new byte[12];
+            bb.get(iv);
+            byte[] salt = new byte[16];
+            bb.get(salt);
+            byte[] cipherText = new byte[bb.remaining()];
+            bb.get(cipherText);
+            SecretKey aesKeyFromPassword = getAESKeyFromPassword(encryptionKey.toCharArray(), salt);
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE, aesKeyFromPassword, new GCMParameterSpec(128, iv));
+            byte[] plainText = cipher.doFinal(cipherText);
+            String decryptedResponse = new String(plainText, "UTF-8");
+            String[] splitString = decryptedResponse.split(":");
+            StringJoiner rawString = new StringJoiner(":");
+            for (String str : splitString) {
+                rawString.add(str.trim());
+            }
+            return rawString.toString();
+        } catch (Exception ex) {
+            return ex.getMessage();
+        }
+    }
+
+    @Override
     public String urlEncodeString(String urlToEncrypt) {
         try {
             return URLEncoder.encode(urlToEncrypt, StandardCharsets.UTF_8.toString());
@@ -497,7 +528,15 @@ public class GenericServiceImpl implements GenericService {
                         .body(requestBody)
                         .asString();
             }
-            logger.info("Pylon Service - " + app + " Request " + requestBody);
+            //Remove the hash and token from the request payload in the logger
+            PylonPayload payload = null;
+            if (!requestBody.equalsIgnoreCase("GET") && !requestBody.equalsIgnoreCase("DELETE")) {
+                payload = gson.fromJson(requestBody, PylonPayload.class);
+                payload.setHash(null);
+                payload.setToken(null);
+            }
+
+            logger.info("Pylon Service - " + app + " Request " + (payload == null ? requestBody : gson.toJson(payload)));
             //Log the error
             logger.info("Pylon Service - " + app + " Response " + httpResponse.getBody());
             return httpResponse.getBody();
@@ -508,7 +547,7 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public String callPylonAPI(String url, String requestJson, List<MultipartFile> uploadedFiles, String token, String app) {
+    public String callPylonAPI(String url, String requestBody, List<MultipartFile> uploadedFiles, String token, String app) {
         try {
             //Generate a collection of files
             Collection<File> files = new ArrayList<>();
@@ -534,10 +573,18 @@ public class GenericServiceImpl implements GenericService {
             Unirest.setTimeouts(0, 0);
             HttpResponse<String> httpResponse = Unirest.post(url)
                     .header("Authorization", "Bearer " + token)
-                    .field("requestPayload", requestJson)
+                    .field("requestPayload", requestBody)
                     .field("uploadedFiles", files)
                     .asString();
-            logger.info("Pylon Service - " + app + " Request " + requestJson);
+            //Remove the hash and token from the request payload in the logger
+            PylonPayload payload = null;
+            if (!requestBody.equalsIgnoreCase("GET") && !requestBody.equalsIgnoreCase("DELETE")) {
+                payload = gson.fromJson(requestBody, PylonPayload.class);
+                payload.setHash(null);
+                payload.setToken(null);
+                payload.setUploadedFiles(null);
+            }
+            logger.info("Pylon Service - " + app + " Request " + (payload == null ? requestBody : gson.toJson(payload)));
             //Log the error
             logger.info("Pylon Service - " + app + " Response " + httpResponse.getBody());
             return httpResponse.getBody();
