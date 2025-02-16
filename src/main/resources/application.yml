@@ -42,15 +42,15 @@ spring:
         initialization-mode: ALWAYS
         password: Anaconda1521@
         username: entityscdbuser
-        #driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver  
-        #url: jdbc:sqlserver://localhost;databaseName=euclase;;encrypt=true;trustServerCertificate=true
-        driverClassName: org.postgresql.Driver
-        url: jdbc:postgresql://209.159.155.84/pylon
+        driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver  
+        url: jdbc:sqlserver://localhost;databaseName=euclase;;encrypt=true;trustServerCertificate=true
+#        driverClassName: org.postgresql.Driver
+#        url: jdbc:postgresql://209.159.155.84/pylon
     jpa:
         hibernate:
             ddl-auto: update
-            #dialect: org.hibernate.dialect.SQLServer2012Dialect
-            dialect: org.hibernate.dialect.PostgreSQLDialect
+            dialect: org.hibernate.dialect.SQLServer2012Dialect
+            #dialect: org.hibernate.dialect.PostgreSQLDialect
         show-sql: true
         open-in-view: false
     servlet:
@@ -142,6 +142,8 @@ pylon:
         profile:
             details: http://localhost:8080/pylon/api/v1/dashboard
         appuser:
+            generic:
+               update: http://localhost:8080/pylon/api/v1/app/user/generic/update
             group:
                fetch: http://localhost:8080/pylon/api/v1/group/role/details
                update: http://localhost:8080/pylon/api/v1/group/role/update
@@ -188,6 +190,7 @@ pylon:
             delete: http://localhost:8080/pylon/api/v1/grade-level/delete
             fetch: http://localhost:8080/pylon/api/v1/grade-level
         document:
+            report: http://localhost:8080/pylon/api/v1/document/report
             group:
                 list: http://localhost:8080/pylon/api/v1/document/group/list
                 create: http://localhost:8080/pylon/api/v1/document/group/create
@@ -229,3 +232,27 @@ pylon:
             update: http://localhost:8080/pylon/api/v1/sla/update
             delete: http://localhost:8080/pylon/api/v1/sla/delete
             fetch: http://localhost:8080/pylon/api/v1/sla
+        backup:
+            list: http://localhost:8080/pylon/api/v1/document/backup/list
+            create: http://localhost:8080/pylon/api/v1/document/backup/create
+            update: http://localhost:8080/pylon/api/v1/document/backup/update
+            delete: http://localhost:8080/pylon/api/v1/document/backup/delete
+            fetch: http://localhost:8080/pylon/api/v1/document/backup
+        restore:
+            list: http://localhost:8080/pylon/api/v1/document/restore/list
+            create: http://localhost:8080/pylon/api/v1/document/restore/create
+        notification:
+            list: http://localhost:8080/pylon/api/v1/document/notification/list
+            create: http://localhost:8080/pylon/api/v1/document/notification/create
+            update: http://localhost:8080/pylon/api/v1/document/notification/update
+            delete: http://localhost:8080/pylon/api/v1/document/notification/delete
+            fetch: http://localhost:8080/pylon/api/v1/document/notification
+        pushnotification:
+            list: http://localhost:8080/pylon/api/v1/notification/push/list
+            create: http://localhost:8080/pylon/api/v1/notification/push/create
+            update: http://localhost:8080/pylon/api/v1/notification/push/update
+            delete: http://localhost:8080/pylon/api/v1/notification/push/delete
+            fetch: http://localhost:8080/pylon/api/v1/notification/push
+            selfupdate: http://localhost:8080/pylon/api/v1/notification/push/update/status
+            selflist: http://localhost:8080/pylon/api/v1/notification/push/user
+

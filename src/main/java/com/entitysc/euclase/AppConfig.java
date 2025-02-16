@@ -149,12 +149,11 @@ public class AppConfig implements WebMvcConfigurer {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .initialCapacity(200)
-                .expireAfterAccess(5, TimeUnit.MINUTES)
+                .expireAfterAccess(1, TimeUnit.MINUTES)
                 .maximumSize(500)
                 .weakKeys()
                 .recordStats());
         return cacheManager;
-
     }
 
 }

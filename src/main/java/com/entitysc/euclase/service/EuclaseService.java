@@ -20,7 +20,7 @@ public interface EuclaseService {
 
     String generateDocumentId(String documentType);
 
-    PylonResponsePayload processUpdateUser(EuclasePayload requestPayload, String principal);
+    PylonResponsePayload processUpdateUserGenericDetails(EuclasePayload requestPayload, String principal);
 
     /**
      * ********************Department Transactions ******************* @param
@@ -155,13 +155,13 @@ public interface EuclaseService {
 
     DataListResponsePayload processFetchDraftDocuments(String principal);
 
-    DataListResponsePayload processFetchDocumentDetails(String id);
+    DataListResponsePayload processFetchDocumentDetails(String id, String principal);
 
     DataListResponsePayload processFetchDocumentWorkflow(String id);
 
     PylonResponsePayload processApproveDocument(EuclasePayload requestPayload);
 
-    PylonResponsePayload processDeleteDraftDocument(String id);
+    PylonResponsePayload processDeleteDraftDocument(String id, String principal);
 
     DataListResponsePayload processSearchDocument(String search, String principal);
 
@@ -225,4 +225,59 @@ public interface EuclaseService {
     PylonResponsePayload processDeleteSLA(String id, String principal);
 
     DataListResponsePayload processFetchSLAList();
+
+    /**
+     * Backup and Restore
+     *
+     * @param requestPayload
+     * @return
+     */
+    PylonResponsePayload processCreateBackup(EuclasePayload requestPayload);
+
+    PylonResponsePayload processFetchBackup(String id);
+
+    PylonResponsePayload processDeleteBackup(String id, String principal);
+
+    DataListResponsePayload processFetchBackupList();
+
+    PylonResponsePayload processCreateRestore(String id, String principal);
+
+    DataListResponsePayload processFetchRestoreList();
+
+    /**
+     * Reports
+     *
+     *
+     * @param requestPayload
+     * @return
+     */
+    DataListResponsePayload processReports(EuclasePayload requestPayload);
+
+    /**
+     * Document Notification
+     *
+     * @param requestPayload
+     * @return
+     */
+    PylonResponsePayload processCreateNotification(EuclasePayload requestPayload);
+
+    PylonResponsePayload processFetchNotification(String id);
+
+    PylonResponsePayload processDeleteNotification(String id, String principal);
+
+    DataListResponsePayload processFetchNotificationList(String principal);
+
+    PylonResponsePayload processCreatePushNotification(EuclasePayload requestPayload, String principal);
+
+    PylonResponsePayload processDeletePushNotification(String id, String principal, boolean batch);
+
+    PylonResponsePayload processFetchPushNotification(String id, boolean batch)
+            ;
+
+    DataListResponsePayload processFetchPushNotificationList();
+
+    DataListResponsePayload processFetchUserPushNotification(String principal);
+
+    PylonResponsePayload processUpdateSelfPushNotification(String id, String principal, String readStatus);
+
 }

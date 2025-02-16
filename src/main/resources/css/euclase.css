@@ -28,6 +28,10 @@ h1,h2,h3,h4,h5,h6{
     text-align: right;
 }
 
+.text-left{
+    text-align: left;
+}
+
 .text-sm{
     font-size: 13px !important;
 }
@@ -66,7 +70,7 @@ h1,h2,h3,h4,h5,h6{
 .btn-xs{
     height: auto !important;
     width: auto !important;
-    padding: 2px;
+    padding: 4px;
 }
 
 #loader {
@@ -104,25 +108,28 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .colored-toast.swal2-icon-success {
-    background-color: #E31E25 !important;
+    background-color: white !important;
     padding: 10px !important;
     font-size: 13px !important;
+    border-color: #E31E25 !important;
 }
 
 .colored-toast.swal2-icon-error {
-    background-color: #E31E25 !important;
+    background-color: white !important;
     padding: 10px !important;
     font-size: 13px !important;
+    border-color: #E31E25 !important;
 }
 
 .colored-toast.swal2-icon-info {
-    background-color: #E31E25 !important;
+    background-color: white !important;
     padding: 10px !important;
     font-size: 13px !important;
+    border-color: #E31E25 !important;
 }
 
 .colored-toast .swal2-title {
-    color: white;
+    color: #E31E25;
 }
 
 .password-visibility {
@@ -188,4 +195,9 @@ h1,h2,h3,h4,h5,h6{
 
 .bg-whitesmoke{
     background-color: whitesmoke;
+}
+
+.filter-label{
+    min-width: 150px;
+    color: #E31E25;
 }

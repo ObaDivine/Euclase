@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class PylonPayload {
 
     private int id = 0;
+    private int batchId = 0;
     private String appType;
     private String title;
     private String gender;
@@ -79,6 +80,7 @@ public class PylonPayload {
     private String walletBalance;
     private String recipient;
     private String message;
+    private boolean messageRead;
     private String authorizationUrl;
     private String narration;
     private String transType;
@@ -210,4 +212,27 @@ public class PylonPayload {
     private String documentName;
     private String documentExt;
     private String host;
+    private String backupName;
+    private String folder;
+    private String runtime;
+    private String remoteDirectory;
+    private String remoteHost;
+    private String remoteHostUsername;
+    private String remoteHostPassword;
+
+    /*
+        Audit Log
+     */
+    private String refNo;
+    private String auditClass;
+    private String auditCategory;
+    private String auditAction;
+    private String oldValue;
+
+    /*
+        Document and Push Notification
+     */
+    private String notificationName;
+    private String notificationType;
+    private String notificationTrigger;
 }

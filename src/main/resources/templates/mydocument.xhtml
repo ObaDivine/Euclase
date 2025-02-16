@@ -28,9 +28,9 @@
                                     <div class="input-group mb-3">
                                         <input class="form-control form-control-sm search-input search" type="search" placeholder="Search table record" aria-label="Search" />
                                         <div class="input-group-append">
-                                            <button id="csv" class="btn btn-sm btn-secondary rounded-5">Export to CSV</button> 
-                                            <button id="pdf" class="btn btn-sm btn-secondary rounded-5">Export to PDF</button>
-                                            <button id="json" class="btn btn-sm btn-secondary rounded-5">Export to JSON</button>
+                                            <button id="csv" class="btn btn-xs btn-secondary">Export to CSV</button> 
+                                            <button id="pdf" class="btn btn-xs btn-secondary">Export to PDF</button>
+                                            <button id="json" class="btn btn-xs btn-secondary">Export to JSON</button>
                                         </div>
                                     </div>
                                 </div>
@@ -44,7 +44,6 @@
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="tag">Tags</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="name">File Name</th>
-                                            <th class="sort align-middle ps-3 text-primary" scope="col">Version(s)</th>
                                         </tr>
                                     </thead>
                                     <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
@@ -58,9 +57,6 @@
                                             <td th:text="${rec.tag}" class="tag align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.narration}" class="comment align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.originalFileName}" class="name align-middle white-space-nowrap start ps-3"></td>
-                                            <td  class="status align-middle white-space-nowrap start ps-3">
-                                                <a th:each="fa : ${#numbers.sequence(1,rec.version)}" th:href="@{${rec.host} + ${rec.documentName} + '-' + ${fa} + '.' + ${rec.documentExt}}" th:text="'v' + ${fa} + ' | '" target="_blank"></a>                                               
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

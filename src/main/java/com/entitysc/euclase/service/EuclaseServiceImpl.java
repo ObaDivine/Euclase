@@ -211,6 +211,8 @@ public class EuclaseServiceImpl implements EuclaseService {
     private String fetchGroupRolesUrl;
     @Value("${pylon.api.appuser.group.update}")
     private String updateGroupRolesUrl;
+    @Value("${pylon.api.appuser.generic.update}")
+    private String updateAppUserGenericUrl;
 
     /**
      * ******** Public Holiday **************
@@ -240,18 +242,70 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Value("${pylon.api.sla.fetch}")
     private String fetchSlaUrl;
 
+    /**
+     * ******** Backup and Restore **************
+     */
+    @Value("${pylon.api.backup.list}")
+    private String backupListUrl;
+    @Value("${pylon.api.backup.create}")
+    private String createBackupUrl;
+    @Value("${pylon.api.backup.update}")
+    private String updateBackupUrl;
+    @Value("${pylon.api.backup.delete}")
+    private String deleteBackupUrl;
+    @Value("${pylon.api.backup.fetch}")
+    private String fetchBackupUrl;
+    @Value("${pylon.api.restore.list}")
+    private String restoreListUrl;
+    @Value("${pylon.api.restore.create}")
+    private String createRestoreUrl;
+
+    /**
+     * ******** Report
+     */
+    @Value("${pylon.api.document.report}")
+    private String reportUrl;
+
+    /**
+     * ******** Notification **************
+     */
+    @Value("${pylon.api.notification.list}")
+    private String notificationListUrl;
+    @Value("${pylon.api.notification.create}")
+    private String createNotificationUrl;
+    @Value("${pylon.api.notification.update}")
+    private String updateNotificationUrl;
+    @Value("${pylon.api.notification.delete}")
+    private String deleteNotificationUrl;
+    @Value("${pylon.api.notification.fetch}")
+    private String fetchNotificationUrl;
+
+    @Value("${pylon.api.pushnotification.list}")
+    private String pushNotificationListUrl;
+    @Value("${pylon.api.pushnotification.create}")
+    private String createPushNotificationUrl;
+    @Value("${pylon.api.pushnotification.update}")
+    private String updatePushNotificationUrl;
+    @Value("${pylon.api.pushnotification.delete}")
+    private String deletePushNotificationUrl;
+    @Value("${pylon.api.pushnotification.fetch}")
+    private String fetchPushNotificationUrl;
+    @Value("${pylon.api.pushnotification.selflist}")
+    private String selfPushNotificationListUrl;
+    @Value("${pylon.api.pushnotification.selfupdate}")
+    private String updateSelfPushNotificationUrl;
+
     @Override
     public PylonResponsePayload processSignin(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("SignIn");
             pylonPayload.setAppType("Euclase");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(signInUrl, gson.toJson(pylonPayload), token, "Login");
+            String response = genericService.callPylonAPI(signInUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Login");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -272,15 +326,14 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload changePassword(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("ChangePassword");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(changePasswordUrl, gson.toJson(pylonPayload), token, "Change Password");
+            String response = genericService.callPylonAPI(changePasswordUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Change Password");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -301,15 +354,14 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload forgotPassword(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("ForgotPassword");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(forgotPasswordUrl, gson.toJson(pylonPayload), token, "Forgot Password");
+            String response = genericService.callPylonAPI(forgotPasswordUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Forgot Password");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -329,18 +381,17 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-//    @Cacheable(value = "userProfile", key = "#username")
+    @Cacheable(value = "userProfile", key = "#username")
     public DataListResponsePayload processFetchProfileDetails(String username) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             pylonPayload.setChannel("WEB");
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("Dashboard");
             //Connect to Pylon API
             String usernameEncode = genericService.urlEncodeString(genericService.encryptString(username.trim()));
             String appTypeEncode = genericService.urlEncodeString(genericService.encryptString("Euclase"));
-            String response = genericService.callPylonAPI(profileDetailsUrl + "?id=" + usernameEncode + "&appType=" + appTypeEncode, "GET", token, "Dashboard");
+            String response = genericService.callPylonAPI(profileDetailsUrl + "?id=" + usernameEncode + "&appType=" + appTypeEncode, "GET", genericService.generatePylonAPIToken(), "Dashboard");
             DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
             if (responsePayload.getPayload().getStatus() != null && responsePayload.getPayload().getError() != null && responsePayload.getPayload().getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -360,54 +411,16 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    @CachePut(value = "userUpdate", key = "#username")
-    public PylonResponsePayload processUpdateUser(EuclasePayload requestPayload, String principal) {
-        String token = genericService.generatePylonAPIToken();
-        try {
-            PylonPayload pylonPayload = new PylonPayload();
-            BeanUtils.copyProperties(requestPayload, pylonPayload);
-            pylonPayload.setDocumentTemplateBody(requestPayload.getDocumentWorkflowBody());
-            pylonPayload.setDocumentTemplateName(requestPayload.getDocumentTemplateName());
-            pylonPayload.setDocumentType(requestPayload.getDocumentType());
-            pylonPayload.setChannel("WEB");
-            pylonPayload.setRequestBy(requestPayload.getUsername());
-            pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
-            pylonPayload.setRequestType("DocumentTemplate");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
-            //Connect to Pylon API
-            String response = genericService.callPylonAPI(updateDocumentWorkflowUrl, gson.toJson(pylonPayload), token, "Document Workflow");
-            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
-            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            }
-            return responsePayload;
-        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
-            PylonResponsePayload responsePayload = new PylonResponsePayload();
-            responsePayload.setResponseCode("500");
-            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            } else {
-                responsePayload.setResponseMessage(ex.getMessage());
-            }
-            return responsePayload;
-        }
-    }
-
-    @Override
     @Cacheable(value = "department")
     public DataListResponsePayload processFetchDepartmentList() {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(departmentListUrl, "GET", token, "Department List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(departmentListUrl, "GET", genericService.generatePylonAPIToken(), "Department List");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -422,22 +435,21 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreateDepartment(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("Department");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createDepartmentUrl, gson.toJson(pylonPayload), token, "Department");
+                response = genericService.callPylonAPI(createDepartmentUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Department");
             } else {
-                response = genericService.callPylonAPI(updateDepartmentUrl, gson.toJson(pylonPayload), token, "Department");
+                response = genericService.callPylonAPI(updateDepartmentUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Department");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -460,10 +472,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "department", key = "#id")
     public PylonResponsePayload processDeleteDepartment(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteDepartmentUrl + "?id=" + encodedParam, "GET", token, "Department Delete");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteDepartmentUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Department Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -485,10 +497,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "department", key = "#id")
     public PylonResponsePayload processFetchDepartment(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchDepartmentUrl + "?id=" + encodedParam, "GET", token, "Department Fetch");
+            String response = genericService.callPylonAPI(fetchDepartmentUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Department Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -509,22 +520,21 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreateDepartmentUnit(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("DepartmentUnit");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createDepartmentUnitUrl, gson.toJson(pylonPayload), token, "Department Unit");
+                response = genericService.callPylonAPI(createDepartmentUnitUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Department Unit");
             } else {
-                response = genericService.callPylonAPI(updateDepartmentUnitUrl, gson.toJson(pylonPayload), token, "Department Unit");
+                response = genericService.callPylonAPI(updateDepartmentUnitUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Department Unit");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -547,10 +557,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "unit", key = "#id")
     public PylonResponsePayload processDeleteDepartmentUnit(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteDepartmentUnitUrl + "?id=" + encodedParam, "GET", token, "Department Unit Delete");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteDepartmentUnitUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Department Unit Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -572,10 +582,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "unit", key = "#id")
     public PylonResponsePayload processFetchDepartmentUnit(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchDepartmentUnitUrl + "?id=" + encodedParam, "GET", token, "Department Unit Fetch");
+            String response = genericService.callPylonAPI(fetchDepartmentUnitUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Department Unit Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -597,16 +606,14 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "unit")
     public DataListResponsePayload processFetchDepartmentUnitList() {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(departmentUnitListUrl, "GET", token, "Department Unit List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(departmentUnitListUrl, "GET", genericService.generatePylonAPIToken(), "Department Unit List");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -622,12 +629,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "unit", key = "#departmentCode")
     public DataListResponsePayload processFetchDepartmentUnitList(String departmentCode) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(departmentCode.trim()));
-            String response = genericService.callPylonAPI(departmentUnitUrl + "?id=" + encodedParam, "GET", token, "Department Unit Fetch");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(departmentUnitUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Department Unit Fetch");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -642,22 +647,21 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreateDesignation(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("Designation");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createDesignationUrl, gson.toJson(pylonPayload), token, "Designation");
+                response = genericService.callPylonAPI(createDesignationUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Designation");
             } else {
-                response = genericService.callPylonAPI(updateDesignationUrl, gson.toJson(pylonPayload), token, "Designation");
+                response = genericService.callPylonAPI(updateDesignationUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Designation");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -680,10 +684,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "designation", key = "#id")
     public PylonResponsePayload processDeleteDesignation(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteDesignationUrl + "?id=" + encodedParam, "GET", token, "Designation Delete");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteDesignationUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Designation Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -705,10 +709,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "designation", key = "#id")
     public PylonResponsePayload processFetchDesignation(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchDesignationUrl + "?id=" + encodedParam, "GET", token, "Designation Fetch");
+            String response = genericService.callPylonAPI(fetchDesignationUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Designation Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -730,16 +733,14 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "designation")
     public DataListResponsePayload processFetchDesignationList() {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(designationListUrl, "GET", token, "Designation List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(designationListUrl, "GET", genericService.generatePylonAPIToken(), "Designation List");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -754,22 +755,21 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreateBranch(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("Branch");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createBranchUrl, gson.toJson(pylonPayload), token, "Branch");
+                response = genericService.callPylonAPI(createBranchUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Branch");
             } else {
-                response = genericService.callPylonAPI(updateBranchUrl, gson.toJson(pylonPayload), token, "Branch");
+                response = genericService.callPylonAPI(updateBranchUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Branch");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -792,10 +792,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "branch", key = "#id")
     public PylonResponsePayload processDeleteBranch(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteBranchUrl + "?id=" + encodedParam, "GET", token, "Branch Delete");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteBranchUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Branch Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -817,10 +817,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "branch", key = "#id")
     public PylonResponsePayload processFetchBranch(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchBranchUrl + "?id=" + encodedParam, "GET", token, "Branch Fetch");
+            String response = genericService.callPylonAPI(fetchBranchUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Branch Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -840,18 +839,16 @@ public class EuclaseServiceImpl implements EuclaseService {
     }
 
     @Override
-    @Cacheable(value = "branch")
+//    @Cacheable(value = "branch")
     public DataListResponsePayload processFetchBranchList() {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(branchListUrl, "GET", token, "Branch List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(branchListUrl, "GET", genericService.generatePylonAPIToken(), "Branch List");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -866,22 +863,21 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreateGradeLevel(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("GradeLevel");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createGradeLevelUrl, gson.toJson(pylonPayload), token, "Grade Level");
+                response = genericService.callPylonAPI(createGradeLevelUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Grade Level");
             } else {
-                response = genericService.callPylonAPI(updateGradeLevelUrl, gson.toJson(pylonPayload), token, "Grade Level");
+                response = genericService.callPylonAPI(updateGradeLevelUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Grade Level");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -904,10 +900,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "gradeLevel", key = "#id")
     public PylonResponsePayload processDeleteGradeLevel(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteGradeLevelUrl + "?id=" + encodedParam, "GET", token, "Grade Level Delete");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteGradeLevelUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Grade Level Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -929,10 +925,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "gradeLevel", key = "#id")
     public PylonResponsePayload processFetchGradeLevel(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchGradeLevelUrl + "?id=" + encodedParam, "GET", token, "Grade Level Fetch");
+            String response = genericService.callPylonAPI(fetchGradeLevelUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Grade Level Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -954,16 +949,14 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "gradeLevel")
     public DataListResponsePayload processFetchGradeLevelList() {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(gradeLevelListUrl, "GET", token, "Grade Level List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(gradeLevelListUrl, "GET", genericService.generatePylonAPIToken(), "Grade Level List");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -981,7 +974,6 @@ public class EuclaseServiceImpl implements EuclaseService {
      */
     @Override
     public PylonResponsePayload processDocument(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
@@ -993,11 +985,11 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setEndDate(requestPayload.getEndDate() == null ? "" : requestPayload.getEndDate());
             pylonPayload.setAmount(requestPayload.getAmount() == null ? "" : requestPayload.getAmount());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("DocumentUpload");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(processDocumentUrl, gson.toJson(pylonPayload), requestPayload.getUploadedFiles(), token, "Document Process");
+            String response = genericService.callPylonAPI(processDocumentUrl, gson.toJson(pylonPayload), requestPayload.getUploadedFiles(), genericService.generatePylonAPIToken(), "Document Process");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1018,7 +1010,6 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreateDocument(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
@@ -1029,11 +1020,11 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setEndDate(requestPayload.getEndDate() == null ? "" : requestPayload.getEndDate());
             pylonPayload.setAmount(requestPayload.getAmount() == null ? "" : requestPayload.getAmount());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("Document");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(createDocumentUrl, gson.toJson(pylonPayload), token, "Document");
+            String response = genericService.callPylonAPI(createDocumentUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Document");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1054,22 +1045,21 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreateDocumentGroup(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("DocumentGroup");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createDocumentGroupUrl, gson.toJson(pylonPayload), token, "Document Group");
+                response = genericService.callPylonAPI(createDocumentGroupUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Document Group");
             } else {
-                response = genericService.callPylonAPI(updateDocumentGroupUrl, gson.toJson(pylonPayload), token, "DOcument Group");
+                response = genericService.callPylonAPI(updateDocumentGroupUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "DOcument Group");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -1092,10 +1082,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "documentGroup", key = "#id")
     public PylonResponsePayload processDeleteDocumentGroup(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteDocumentGroupUrl + "?id=" + encodedParam, "GET", token, "Document Group Delete");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteDocumentGroupUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Document Group Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1117,10 +1107,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "documentGroup", key = "#id")
     public PylonResponsePayload processFetchDocumentGroup(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchDocumentGroupUrl + "?id=" + encodedParam, "GET", token, "Document Group Fetch");
+            String response = genericService.callPylonAPI(fetchDocumentGroupUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Document Group Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1142,11 +1131,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "documentGroup")
     public DataListResponsePayload processFetchDocumentGroupList() {
-        String token = genericService.generatePylonAPIToken();
         try {
-            String response = genericService.callPylonAPI(documentGroupListUrl, "GET", token, "Document Group List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(documentGroupListUrl, "GET", genericService.generatePylonAPIToken(), "Document Group List");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -1161,22 +1148,21 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreateDocumentType(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("DocumentType");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createDocumentTypeUrl, gson.toJson(pylonPayload), token, "Document Type");
+                response = genericService.callPylonAPI(createDocumentTypeUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Document Type");
             } else {
-                response = genericService.callPylonAPI(updateDocumentTypeUrl, gson.toJson(pylonPayload), token, "DOcument Type");
+                response = genericService.callPylonAPI(updateDocumentTypeUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "DOcument Type");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -1199,10 +1185,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "documentType", key = "#id")
     public PylonResponsePayload processDeleteDocumentType(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteDocumentTypeUrl + "?id=" + encodedParam, "GET", token, "Document Type Delete");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteDocumentTypeUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Document Type Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1224,10 +1210,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "documentType", key = "#id")
     public PylonResponsePayload processFetchDocumentType(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchDocumentTypeUrl + "?id=" + encodedParam, "GET", token, "Document Type Fetch");
+            String response = genericService.callPylonAPI(fetchDocumentTypeUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Document Type Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1249,12 +1234,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "documentType")
     public DataListResponsePayload processFetchDocumentTypeList(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(documentTypeListUrl + "?id=" + encodedParam, "GET", token, "Document Type List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(documentTypeListUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Document Type List");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -1289,7 +1272,6 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CachePut(value = "documentTemplate", key = "#requestPayload.id")
     public PylonResponsePayload processUpdateDocumentTemplate(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
@@ -1298,11 +1280,11 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("DocumentTemplate");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(updateDocumentTemplateUrl, gson.toJson(pylonPayload), token, "Document Template");
+            String response = genericService.callPylonAPI(updateDocumentTemplateUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Document Template");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1324,12 +1306,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "myDocument", key = "#principal")
     public DataListResponsePayload processFetchMyDocuments(String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
-            String response = genericService.callPylonAPI(fetchMyDocumentUrl + "?id=" + encodedParam, "GET", token, "My Documents Fetch");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(fetchMyDocumentUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "My Documents Fetch");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -1345,12 +1325,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
 //    @Cacheable(value = "pendingDocument", key = "#principal")
     public DataListResponsePayload processFetchPendingDocuments(String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
-            String response = genericService.callPylonAPI(fetchPendingDocumentUrl + "?id=" + encodedParam, "GET", token, "Pending Documents Fetch");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(fetchPendingDocumentUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Pending Documents Fetch");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -1366,12 +1344,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "draftDocument", key = "#principal")
     public DataListResponsePayload processFetchDraftDocuments(String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
-            String response = genericService.callPylonAPI(fetchDraftDocumentUrl + "?id=" + encodedParam, "GET", token, "Draft Documents Fetch");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(fetchDraftDocumentUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Draft Documents Fetch");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -1387,7 +1363,6 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CachePut(value = "documentWorkflow", key = "#requestPayload.id")
     public PylonResponsePayload processUpdateDocumentWorkflow(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
@@ -1397,11 +1372,11 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("DocumentTemplate");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(updateDocumentWorkflowUrl, gson.toJson(pylonPayload), token, "Document Workflow");
+            String response = genericService.callPylonAPI(updateDocumentWorkflowUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Document Workflow");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1422,13 +1397,12 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     @Cacheable(value = "documentDetail", key = "#id")
-    public DataListResponsePayload processFetchDocumentDetails(String id) {
-        String token = genericService.generatePylonAPIToken();
+    public DataListResponsePayload processFetchDocumentDetails(String id, String principal) {
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchDocumentDetailsUrl + "?id=" + encodedParam, "GET", token, "Documents Details");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(fetchDocumentDetailsUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Documents Details");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -1443,7 +1417,6 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processApproveDocument(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
@@ -1452,11 +1425,11 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("DocumentApprove");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(processApproveDocumentUrl, gson.toJson(pylonPayload), requestPayload.getUploadedFiles(), token, "Document Approve");
+            String response = genericService.callPylonAPI(processApproveDocumentUrl, gson.toJson(pylonPayload), requestPayload.getUploadedFiles(), genericService.generatePylonAPIToken(), "Document Approve");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1478,12 +1451,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "documentWorkflow", key = "#id")
     public DataListResponsePayload processFetchDocumentWorkflow(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchDocumentWorkflowHistoryUrl + "?id=" + encodedParam, "GET", token, "Documents Workflow");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(fetchDocumentWorkflowHistoryUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Documents Workflow");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -1498,11 +1469,11 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     @CacheEvict(value = "draftDocument", key = "#id")
-    public PylonResponsePayload processDeleteDraftDocument(String id) {
-        String token = genericService.generatePylonAPIToken();
+    public PylonResponsePayload processDeleteDraftDocument(String id, String principal) {
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(processDeleteDraftDocumentUrl + "?id=" + encodedParam, "GET", token, "Delete Draft Documents");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(processDeleteDraftDocumentUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Delete Draft Documents");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             return responsePayload;
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
@@ -1520,13 +1491,11 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "searchDocument", key = "#search")
     public DataListResponsePayload processSearchDocument(String search, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(search.trim()));
             String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
-            String response = genericService.callPylonAPI(processSearchDocumentUrl + "?search=" + encodedParam + "&principal=" + encodedPrincipal, "GET", token, "Search Documents");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(processSearchDocumentUrl + "?search=" + encodedParam + "&principal=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Search Documents");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -1541,20 +1510,19 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processDocumentSignature(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("DocumentSignature");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             List<MultipartFile> files = new ArrayList<>();
             files.add(requestPayload.getUploadedFile());
-            String response = genericService.callPylonAPI(processDocumentSignatureUrl, gson.toJson(pylonPayload), files, token, "Document Signature");
+            String response = genericService.callPylonAPI(processDocumentSignatureUrl, gson.toJson(pylonPayload), files, genericService.generatePylonAPIToken(), "Document Signature");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1575,20 +1543,19 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processDocumentArchiving(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("DocumentArchiving");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             List<MultipartFile> files = new ArrayList<>();
             files.add(requestPayload.getUploadedFile());
-            String response = genericService.callPylonAPI(processDocumentArchivingUrl, gson.toJson(pylonPayload), files, token, "Document Archiving");
+            String response = genericService.callPylonAPI(processDocumentArchivingUrl, gson.toJson(pylonPayload), files, genericService.generatePylonAPIToken(), "Document Archiving");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1610,10 +1577,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "user", key = "#id")
     public PylonResponsePayload processFetchAppUser(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchAppUserUrl + "?id=" + encodedParam, "GET", token, "App User Fetch");
+            String response = genericService.callPylonAPI(fetchAppUserUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "App User Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1635,10 +1601,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "user", key = "#id")
     public PylonResponsePayload processDeleteAppUser(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteAppUserUrl + "?id=" + encodedParam, "GET", token, "App User Delete");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteAppUserUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "App User Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1660,16 +1626,14 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "user")
     public DataListResponsePayload processFetchAppUserList() {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(appUserListUrl, "GET", token, "App User List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(appUserListUrl, "GET", genericService.generatePylonAPIToken(), "App User List");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -1684,7 +1648,6 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreateAppUser(String principal, EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
@@ -1694,16 +1657,49 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("SignUp");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createAppUserUrl, gson.toJson(pylonPayload), token, "App User");
+                response = genericService.callPylonAPI(createAppUserUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "App User");
             } else {
-                response = genericService.callPylonAPI(updateAppUserUrl, gson.toJson(pylonPayload), token, "App User");
+                response = genericService.callPylonAPI(updateAppUserUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "App User");
             }
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    @CachePut(value = "userUpdate", key = "#a0.username")
+    public PylonResponsePayload processUpdateUserGenericDetails(EuclasePayload requestPayload, String principal) {
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            BeanUtils.copyProperties(requestPayload, pylonPayload);
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setAppType("Euclase");
+            pylonPayload.setPrincipal(principal);
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
+            pylonPayload.setRequestType("GenericUpdate");
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
+            //Connect to Pylon API
+            String response = genericService.callPylonAPI(updateAppUserGenericUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Document Workflow");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1725,16 +1721,14 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "role")
     public DataListResponsePayload processFetchRoleList() {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(listRoleGroupUrl, "GET", token, "Role List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(listRoleGroupUrl, "GET", genericService.generatePylonAPIToken(), "Role List");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -1750,10 +1744,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "role", key = "#id")
     public PylonResponsePayload processFetchRoleGroup(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchRoleGroupUrl + "?id=" + encodedParam, "GET", token, "Role Group Fetch");
+            String response = genericService.callPylonAPI(fetchRoleGroupUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Role Group Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1774,22 +1767,21 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreateRoleGroup(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("RoleGroup");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createRoleGroupUrl, gson.toJson(pylonPayload), token, "Role Group");
+                response = genericService.callPylonAPI(createRoleGroupUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Role Group");
             } else {
-                response = genericService.callPylonAPI(updateRoleGroupUrl, gson.toJson(pylonPayload), token, "Role Group");
+                response = genericService.callPylonAPI(updateRoleGroupUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Role Group");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -1812,10 +1804,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "role", key = "#id")
     public PylonResponsePayload processDeleteRoleGroup(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteRoleGroupUrl + "?id=" + encodedParam, "GET", token, "Role Group Delete");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteRoleGroupUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Role Group Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1837,12 +1829,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "group", key = "#groupName")
     public DataListResponsePayload processFetchGroupRoles(String groupName) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(groupName.trim()));
-            String response = genericService.callPylonAPI(fetchGroupRolesUrl + "?groupName=" + encodedParam, "GET", token, "Group Roles Fetch");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(fetchGroupRolesUrl + "?groupName=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Group Roles Fetch");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -1858,18 +1848,17 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CachePut(value = "group", key = "#requestPayload.id")
     public PylonResponsePayload processUpdateGroupRoles(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("GroupRoles");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(updateGroupRolesUrl, gson.toJson(pylonPayload), token, "Group Roles");
+            String response = genericService.callPylonAPI(updateGroupRolesUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Group Roles");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1890,7 +1879,6 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processChangeDefaultPassword(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
@@ -1898,11 +1886,11 @@ public class EuclaseServiceImpl implements EuclaseService {
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
             pylonPayload.setTransType("DefaultPassword");
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("ChangePassword");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
-            String response = genericService.callPylonAPI(changeDefaultPasswordUrl, gson.toJson(pylonPayload), token, "Change Password");
+            String response = genericService.callPylonAPI(changeDefaultPasswordUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Change Password");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1923,22 +1911,21 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreatePublicHoliday(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("PublicHoliday");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createPublicHolidayUrl, gson.toJson(pylonPayload), token, "Public Holiday");
+                response = genericService.callPylonAPI(createPublicHolidayUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Public Holiday");
             } else {
-                response = genericService.callPylonAPI(updatePublicHolidayUrl, gson.toJson(pylonPayload), token, "Public Holiday");
+                response = genericService.callPylonAPI(updatePublicHolidayUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Public Holiday");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -1961,10 +1948,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "holiday", key = "#id")
     public PylonResponsePayload processDeletePublicHoliday(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deletePublicHolidayUrl + "?id=" + encodedParam, "GET", token, "Public Holiday Delete");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deletePublicHolidayUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Public Holiday Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -1986,10 +1973,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "holiday", key = "#id")
     public PylonResponsePayload processFetchPublicHoliday(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchPublicHolidayUrl + "?id=" + encodedParam, "GET", token, "Public Holiday Fetch");
+            String response = genericService.callPylonAPI(fetchPublicHolidayUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Public Holiday Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -2011,11 +1997,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "holiday")
     public DataListResponsePayload processFetchPublicHolidayList() {
-        String token = genericService.generatePylonAPIToken();
         try {
-            String response = genericService.callPylonAPI(publicHolidayListUrl, "GET", token, "Public Holiday List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(publicHolidayListUrl, "GET", genericService.generatePylonAPIToken(), "Public Holiday List");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
@@ -2030,22 +2014,21 @@ public class EuclaseServiceImpl implements EuclaseService {
 
     @Override
     public PylonResponsePayload processCreateSLA(EuclasePayload requestPayload) {
-        String token = genericService.generatePylonAPIToken();
         try {
             PylonPayload pylonPayload = new PylonPayload();
             BeanUtils.copyProperties(requestPayload, pylonPayload);
             pylonPayload.setChannel("WEB");
             pylonPayload.setRequestBy(requestPayload.getUsername());
             pylonPayload.setRequestId(genericService.generateRequestId());
-            pylonPayload.setToken(token);
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
             pylonPayload.setRequestType("Sla");
-            pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
             //Connect to Pylon API
             String response;
             if (requestPayload.getId() == 0) {
-                response = genericService.callPylonAPI(createSlaUrl, gson.toJson(pylonPayload), token, "SLA");
+                response = genericService.callPylonAPI(createSlaUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "SLA");
             } else {
-                response = genericService.callPylonAPI(updateSlaUrl, gson.toJson(pylonPayload), token, "SLA");
+                response = genericService.callPylonAPI(updateSlaUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "SLA");
             }
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
@@ -2068,10 +2051,10 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @CacheEvict(value = "sla", key = "#id")
     public PylonResponsePayload processDeleteSLA(String id, String principal) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(deleteSlaUrl + "?id=" + encodedParam, "GET", token, "SLA Delete");
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteSlaUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "SLA Delete");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -2093,10 +2076,9 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "sla", key = "#id")
     public PylonResponsePayload processFetchSLA(String id) {
-        String token = genericService.generatePylonAPIToken();
         try {
             String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
-            String response = genericService.callPylonAPI(fetchSlaUrl + "?id=" + encodedParam, "GET", token, "SLA Fetch");
+            String response = genericService.callPylonAPI(fetchSlaUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "SLA Fetch");
             PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
             if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
                 responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
@@ -2118,13 +2100,431 @@ public class EuclaseServiceImpl implements EuclaseService {
     @Override
     @Cacheable(value = "sla")
     public DataListResponsePayload processFetchSLAList() {
-        String token = genericService.generatePylonAPIToken();
         try {
-            String response = genericService.callPylonAPI(slaListUrl, "GET", token, "SLA List");
-            DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
-            return responsePayload;
+            String response = genericService.callPylonAPI(slaListUrl, "GET", genericService.generatePylonAPIToken(), "SLA List");
+            return gson.fromJson(response, DataListResponsePayload.class);
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
             DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processCreateBackup(EuclasePayload requestPayload) {
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            BeanUtils.copyProperties(requestPayload, pylonPayload);
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
+            pylonPayload.setRequestType("Backup");
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
+            //Connect to Pylon API
+            String response;
+            if (requestPayload.getId() == 0) {
+                response = genericService.callPylonAPI(createBackupUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Backup");
+            } else {
+                response = genericService.callPylonAPI(updateBackupUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Backup");
+            }
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    @Cacheable(value = "backup", key = "#id")
+    public PylonResponsePayload processFetchBackup(String id) {
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(fetchBackupUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Backup Fetch");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+
+    }
+
+    @Override
+    @CacheEvict(value = "backup", key = "#id")
+    public PylonResponsePayload processDeleteBackup(String id, String principal) {
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteBackupUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Backup Delete");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    //    @Cacheable(value = "backup")
+    public DataListResponsePayload processFetchBackupList() {
+        try {
+            String response = genericService.callPylonAPI(backupListUrl, "GET", genericService.generatePylonAPIToken(), "Backup List");
+            return gson.fromJson(response, DataListResponsePayload.class);
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processCreateRestore(String id, String principal) {
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(createRestoreUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Restore");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    @Cacheable(value = "restore")
+    public DataListResponsePayload processFetchRestoreList() {
+        try {
+            String response = genericService.callPylonAPI(restoreListUrl, "GET", genericService.generatePylonAPIToken(), "Restore List");
+            return gson.fromJson(response, DataListResponsePayload.class);
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public DataListResponsePayload processReports(EuclasePayload requestPayload) {
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            BeanUtils.copyProperties(requestPayload, pylonPayload);
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
+            pylonPayload.setRequestType("Report");
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
+            //Connect to Pylon API
+            String response = genericService.callPylonAPI(reportUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Reports");
+            return gson.fromJson(response, DataListResponsePayload.class);
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processCreateNotification(EuclasePayload requestPayload) {
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            BeanUtils.copyProperties(requestPayload, pylonPayload);
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
+            pylonPayload.setRequestType("Notification");
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
+            //Connect to Pylon API
+            String response;
+            if (requestPayload.getId() == 0) {
+                response = genericService.callPylonAPI(createNotificationUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Notification");
+            } else {
+                response = genericService.callPylonAPI(updateNotificationUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Notification");
+            }
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    @CacheEvict(value = "notification", key = "#id")
+    public PylonResponsePayload processDeleteNotification(String id, String principal) {
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(deleteNotificationUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", genericService.generatePylonAPIToken(), "Notification Delete");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    @Cacheable(value = "notification", key = "#id")
+    public PylonResponsePayload processFetchNotification(String id) {
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String response = genericService.callPylonAPI(fetchNotificationUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Notification Fetch");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    @Cacheable(value = "notification", key = "#principal")
+    public DataListResponsePayload processFetchNotificationList(String principal) {
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(notificationListUrl + "?id=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Notification List");
+            return gson.fromJson(response, DataListResponsePayload.class);
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processCreatePushNotification(EuclasePayload requestPayload, String principal) {
+        try {
+            PylonPayload pylonPayload = new PylonPayload();
+            BeanUtils.copyProperties(requestPayload, pylonPayload);
+            pylonPayload.setChannel("WEB");
+            pylonPayload.setRequestBy(requestPayload.getUsername());
+            pylonPayload.setRequestId(genericService.generateRequestId());
+            pylonPayload.setToken(genericService.generatePylonAPIToken());
+            pylonPayload.setRequestType("PushNotification");
+            pylonPayload.setHash(genericService.generateRequestString(genericService.generatePylonAPIToken(), pylonPayload));
+            //Connect to Pylon API
+            String response;
+            if (requestPayload.getId() == 0) {
+                response = genericService.callPylonAPI(createPushNotificationUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Push Notification");
+            } else {
+                response = genericService.callPylonAPI(updatePushNotificationUrl, gson.toJson(pylonPayload), genericService.generatePylonAPIToken(), "Push Notification");
+            }
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processDeletePushNotification(String id, String principal, boolean batch) {
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String encodedBatch = genericService.urlEncodeString(genericService.encryptString(String.valueOf(batch)));
+            String response = genericService.callPylonAPI(deletePushNotificationUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal + "&btch=" + encodedBatch, "GET", genericService.generatePylonAPIToken(), "Notification Delete");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processFetchPushNotification(String id, boolean batch) {
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String encodedBatch = genericService.urlEncodeString(genericService.encryptString(String.valueOf(batch).trim()));
+            String response = genericService.callPylonAPI(fetchPushNotificationUrl + "?id=" + encodedParam + "&btch=" + encodedBatch, "GET", genericService.generatePylonAPIToken(), "Notification Fetch");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public DataListResponsePayload processFetchPushNotificationList() {
+        try {
+            String response = genericService.callPylonAPI(pushNotificationListUrl, "GET", genericService.generatePylonAPIToken(), "Notification List");
+            return gson.fromJson(response, DataListResponsePayload.class);
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public DataListResponsePayload processFetchUserPushNotification(String principal) {
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String response = genericService.callPylonAPI(selfPushNotificationListUrl + "?prcp=" + encodedParam, "GET", genericService.generatePylonAPIToken(), "Notification List");
+            return gson.fromJson(response, DataListResponsePayload.class);
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Override
+    public PylonResponsePayload processUpdateSelfPushNotification(String id, String principal, String readStatus) {
+        try {
+            String encodedParam = genericService.urlEncodeString(genericService.encryptString(id.trim()));
+            String encodedPrincipal = genericService.urlEncodeString(genericService.encryptString(principal.trim()));
+            String encodedReadStatus = genericService.urlEncodeString(genericService.encryptString(readStatus));
+            String response = genericService.callPylonAPI(updateSelfPushNotificationUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal + "&rstat=" + encodedReadStatus, "GET", genericService.generatePylonAPIToken(), "Notification Fetch");
+            PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+            if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            }
+            return responsePayload;
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            PylonResponsePayload responsePayload = new PylonResponsePayload();
             responsePayload.setResponseCode("500");
             if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));

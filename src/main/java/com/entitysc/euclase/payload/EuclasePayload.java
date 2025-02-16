@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class EuclasePayload {
 
     private int id = 0;
+    private int batchId = 0;
     private String username;
     private String password;
     private String confirmPassword;
@@ -131,4 +132,31 @@ public class EuclasePayload {
     private String documentName;
     private String documentExt;
     private String host;
+    private String frequency;
+    private String backupName;
+    private String folder;
+    private String runtime;
+    private String remoteDirectory;
+    private String remoteHost;
+    private String remoteHostUsername;
+    private String remoteHostPassword;
+
+    /*
+        Report
+     */
+    private String refNo;
+    private String auditClass;
+    private String auditCategory;
+    private String auditAction;
+    private String oldValue;
+
+    /*
+        Document  and Push Notification
+     */
+    private String notificationName;
+    private String notificationType;
+    private String notificationTrigger;
+    private String message;
+    private boolean messageRead;
+    private String serializedForm;
 }

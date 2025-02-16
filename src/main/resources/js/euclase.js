@@ -1,6 +1,7 @@
 var options = new List('listTable', {
     valueNames: ['id', 'date', 'createdBy', 'document', 'priority', 'sla', 'comment', 'username', 'name', 'mobile', 'email', 'gender', 'dob',
-	'branch', 'department', 'unit', 'designation', 'grade', 'code', 'location', 'position', 'type', 'tag', 'hod', 'teamLead', 'branchHead'
+        'branch', 'department', 'unit', 'designation', 'grade', 'code', 'location', 'position', 'type', 'tag', 'hod', 'teamLead', 'branchHead',
+        'version', 'link', 'frequency', 'password', 'directory', 'access', 'expiry', 'violated', 'startDate', 'endDate'
     ],
     page: 10,
     pagination: true
@@ -24,7 +25,8 @@ $(document).ready(function () {
 var navbarStyle = window.config.config.phoenixNavbarStyle;
 if (navbarStyle && navbarStyle !== 'transparent') {
     document.querySelector('body').classList.add(`navbar-${navbarStyle}`);
-};
+}
+;
 
 function verifyMobileNumber(mobileNumber) {
     $.ajax({
@@ -283,4 +285,21 @@ function formatAmount(amountToFormat) {
 
     return format.format(amountToFormat);
 }
+;
+
+function filterUnits(deptCode) {
+    if (deptCode !== '') {
+        $('#departmentUnitCode').find('option:contains(' + deptCode + ')').hide();
+    }
+}
+;
+
+$("#finalSubmit").click(function () {
+    var jsonArray = $("#form1, #form2, #form3").serializeArray();
+    const json = {};
+    $.each(jsonArray, function () {
+        json[this.name] = this.value || "";
+    });
+    $('#serializedForm').val(JSON.stringify(json));
+});
 

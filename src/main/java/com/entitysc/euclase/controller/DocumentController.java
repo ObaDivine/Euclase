@@ -56,6 +56,9 @@ public class DocumentController {
         model.addAttribute("documentTypes", euclaseService.processFetchDocumentTypeList("All").getData());
         model.addAttribute("addDate", false);
         model.addAttribute("addAmount", false);
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -63,7 +66,7 @@ public class DocumentController {
     }
 
     @GetMapping("/new")
-    public String newDocument(@RequestParam("seid") String seid, Model model, HttpSession httpSession) {
+    public String newDocument(@RequestParam("seid") String seid, Model model, HttpSession httpSession, Principal principal) {
         PylonResponsePayload response = euclaseService.processFetchDocumentType(seid);
         EuclasePayload requestPayload = new EuclasePayload();
         requestPayload.setDocumentWorkflowBody(response.getData().getDocumentWorkflowBody());
@@ -99,6 +102,9 @@ public class DocumentController {
         model.addAttribute("addAmount", addAmountField(response.getData().getDocumentTypeName()));
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("slaList", euclaseService.processFetchSLAList().getData());
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -125,6 +131,9 @@ public class DocumentController {
         model.addAttribute("slaList", euclaseService.processFetchSLAList().getData());
         model.addAttribute("addDate", addDateField(requestPayload.getDocumentType()));
         model.addAttribute("addAmount", addAmountField(requestPayload.getDocumentType()));
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         return "documentinit";
@@ -141,6 +150,9 @@ public class DocumentController {
         }
 
         model.addAttribute("euclasePayload", requestPayload);
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         resetAlertMessage();
@@ -151,6 +163,9 @@ public class DocumentController {
     public String myDocument(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("dataList", euclaseService.processFetchMyDocuments(principal.getName()).getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -160,7 +175,7 @@ public class DocumentController {
     @GetMapping("/details")
     public String documentDetails(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession, HttpServletRequest httpRequest, RedirectAttributes redirAttr) {
         EuclasePayload requestPayload = new EuclasePayload();
-        DataListResponsePayload response = euclaseService.processFetchDocumentDetails(seid);
+        DataListResponsePayload response = euclaseService.processFetchDocumentDetails(seid, principal.getName());
         if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             String requestUrl = httpRequest.getHeader("Referer");
             redirAttr.addFlashAttribute(alertMessage, response.getResponseMessage());
@@ -174,6 +189,10 @@ public class DocumentController {
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("workflowList", response.getWorkflowData());
         model.addAttribute("documentList", response.getData());
+        model.addAttribute("versionList", response.getVersions());
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -184,6 +203,9 @@ public class DocumentController {
     public String pendingDocument(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("dataList", euclaseService.processFetchPendingDocuments(principal.getName()).getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -194,6 +216,9 @@ public class DocumentController {
     public String draftDocument(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("dataList", euclaseService.processFetchDraftDocuments(principal.getName()).getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -202,7 +227,7 @@ public class DocumentController {
 
     @GetMapping("/draft/details")
     public String draftDocumentDetails(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
-        DataListResponsePayload dataRecord = euclaseService.processFetchDocumentDetails(seid);
+        DataListResponsePayload dataRecord = euclaseService.processFetchDocumentDetails(seid, principal.getName());
         if (dataRecord.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             EuclasePayload requestPayload = new EuclasePayload();
             BeanUtils.copyProperties(dataRecord.getPayload(), requestPayload);
@@ -226,7 +251,7 @@ public class DocumentController {
 
     @GetMapping("/draft/delete")
     public String deleteDraftDocument(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
-        PylonResponsePayload response = euclaseService.processDeleteDraftDocument(seid);
+        PylonResponsePayload response = euclaseService.processDeleteDraftDocument(seid, principal.getName());
         alertMessage = response.getResponseMessage();
         alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
         return "redirect:/document/draft";
@@ -235,7 +260,7 @@ public class DocumentController {
     @GetMapping("/approve/details")
     public String approveDocument(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
-        DataListResponsePayload response = euclaseService.processFetchDocumentDetails(seid);
+        DataListResponsePayload response = euclaseService.processFetchDocumentDetails(seid, principal.getName());
         if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
             alertMessageType = "error";
@@ -257,6 +282,9 @@ public class DocumentController {
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("workflowList", response.getWorkflowData());
         model.addAttribute("documentList", response.getData());
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -284,6 +312,9 @@ public class DocumentController {
 
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("workflowList", response.getWorkflowData());
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -295,6 +326,9 @@ public class DocumentController {
         EuclasePayload requestPayload = new EuclasePayload();
         model.addAttribute("dataList", euclaseService.processSearchDocument(search, principal.getName()).getData());
         model.addAttribute("euclasePayload", requestPayload);
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", "success");
         resetAlertMessage();
@@ -305,6 +339,9 @@ public class DocumentController {
     public String signature(Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
         model.addAttribute("euclasePayload", requestPayload);
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -333,7 +370,7 @@ public class DocumentController {
                     + "  \"save_path\" : \"${TMP}\\\\${TMS}${EXT}\""
                     + "} ]"
                     + "}"))
-                    .setInstruction("Scan <b>test</b>")
+                    .setInstruction("Scan <strong>test</strong>")
                     .showDialog(null, "Dialog Title", true, null);
             String okon = "The main man";
 
@@ -352,6 +389,9 @@ public class DocumentController {
         requestPayload.setDocumentId(documentId);
         requestPayload.setAllowUserDocumentId(String.valueOf(false));
         model.addAttribute("euclasePayload", requestPayload);
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -391,6 +431,86 @@ public class DocumentController {
             }
         }
         return keywordMatch;
+    }
+
+    /**
+     * Document notification
+     *
+     * @param model
+     * @param session
+     * @return
+     */
+    @GetMapping("/notification")
+    public String notification(Model model, HttpSession session, Principal principal) {
+        model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", alertMessageType);
+        model.addAttribute("notificationList", euclaseService.processFetchNotificationList(principal.getName()).getData());
+        model.addAttribute("documentCount", euclaseService.processFetchNotificationList(principal.getName()).getData().size());
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
+        resetAlertMessage();
+        return "documentnotification";
+    }
+
+    @PostMapping("/notification/create")
+    public String notification(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
+        PylonResponsePayload response = euclaseService.processCreateNotification(requestPayload);
+        if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = "success";
+            return "redirect:/document/notification";
+        }
+        model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("documentCount", euclaseService.processFetchNotificationList(principal.getName()).getData().size());
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
+        model.addAttribute("alertMessage", response.getResponseMessage());
+        model.addAttribute("alertMessageType", "error");
+        return "documentnotification";
+    }
+
+    @GetMapping(value = "/notification/list")
+    public String notificationList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
+        model.addAttribute("dataList", euclaseService.processFetchNotificationList(principal.getName()).getData());
+        model.addAttribute("euclasePayload", new EuclasePayload());
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", "success");
+        resetAlertMessage();
+        return "documentnotificationlist";
+    }
+
+    @GetMapping("/notification/edit")
+    public String editNotification(@RequestParam("seid") String seid, Model model, Principal principal, HttpServletRequest httpRequest) {
+        PylonResponsePayload response = euclaseService.processFetchNotification(seid);
+        if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            alertMessage = response.getResponseMessage();
+            alertMessageType = "success";
+            return "redirect:/setup/sla/list";
+        }
+        model.addAttribute("euclasePayload", response.getData());
+        model.addAttribute("documentCount", euclaseService.processFetchNotificationList(principal.getName()).getData().size());
+        DataListResponsePayload pushNotifications = euclaseService.processFetchUserPushNotification(principal.getName());
+        model.addAttribute("notification", pushNotifications.getData());
+        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
+        model.addAttribute("alertMessage", response.getResponseMessage());
+        model.addAttribute("alertMessageType", "success");
+        resetAlertMessage();
+        return "documentnotification";
+    }
+
+    @GetMapping("/notification/delete")
+    public String deleteNotification(@RequestParam("seid") String seid, Model model, Principal principal) {
+        PylonResponsePayload response = euclaseService.processDeleteNotification(seid, principal.getName());
+        alertMessage = response.getResponseMessage();
+        alertMessageType = "success";
+        return "redirect:/document/notification/list";
     }
 
     private void resetAlertMessage() {

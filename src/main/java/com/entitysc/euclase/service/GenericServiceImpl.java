@@ -297,6 +297,54 @@ public class GenericServiceImpl implements GenericService {
                 rawString.add(requestPayload.getPublicHolidayName().trim());
                 rawString.add(requestPayload.getPublicHolidayDate().trim());
             }
+            case "Backup" -> {
+                rawString.add(requestPayload.getUsername().trim());
+                if (requestPayload.getId() != 0) {
+                    rawString.add(String.valueOf(requestPayload.getId()));
+                }
+                rawString.add(requestPayload.getBackupName().trim());
+                rawString.add(requestPayload.getFolder().trim());
+                rawString.add(requestPayload.getStartDate().trim());
+                rawString.add(requestPayload.getFrequency().trim());
+                rawString.add(requestPayload.getRuntime().trim());
+                rawString.add(requestPayload.getRemoteHost().trim());
+                rawString.add(requestPayload.getRemoteHostUsername().trim());
+                rawString.add(requestPayload.getRemoteHostPassword().trim());
+                rawString.add(requestPayload.getRemoteDirectory().trim());
+            }
+            case "Report" -> {
+                rawString.add(requestPayload.getStartDate().trim());
+                rawString.add(requestPayload.getEndDate().trim());
+                rawString.add(requestPayload.getTransType().trim());
+                rawString.add(requestPayload.getNewValue().trim());
+            }
+            case "GenericUpdate" -> {
+                rawString.add(requestPayload.getUsername().trim());
+                rawString.add(requestPayload.getAppType().trim());
+                rawString.add(requestPayload.getTransType().trim());
+                rawString.add(requestPayload.getPrincipal().trim());
+                rawString.add(requestPayload.getRequestId().trim());
+            }
+            case "Notification" -> {
+                rawString.add(requestPayload.getUsername().trim());
+                if (requestPayload.getId() != 0) {
+                    rawString.add(String.valueOf(requestPayload.getId()));
+                }
+                rawString.add(requestPayload.getNotificationName().trim());
+                rawString.add(requestPayload.getNotificationType().trim());
+                rawString.add(requestPayload.getNotificationTrigger().trim());
+                rawString.add(requestPayload.getDocumentId().trim());
+                rawString.add(requestPayload.getStatus().trim());
+            }
+            case "PushNotification" -> {
+                rawString.add(requestPayload.getUsername().trim());
+                if (requestPayload.getId() != 0) {
+                    rawString.add(String.valueOf(requestPayload.getId()));
+                }
+                rawString.add(String.valueOf(requestPayload.getBatchId()));
+                rawString.add(requestPayload.getSentTo().trim());
+                rawString.add(requestPayload.getMessage().trim());
+            }
         }
 
         return encryptString(rawString.toString());
