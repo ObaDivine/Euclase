@@ -476,7 +476,6 @@ public class HomeController implements ErrorController {
 
     @PostMapping("/user/update/")
     public String updateUser(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
-        requestPayload.setUsername(principal.getName());
         PylonResponsePayload response = euclaseService.processUpdateUserGenericDetails(requestPayload, principal.getName());
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("userList", euclaseService.processFetchAppUserList().getData());

@@ -59,9 +59,23 @@
                                             <td th:text="${rec.slaExpiry}" class="sla align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.narration}" class="comment align-middle white-space-nowrap start ps-3"></td>
                                             <td  class="status align-middle white-space-nowrap start ps-3">
-                                                <a class="text-success"  href="#!" th:href="@{'/document/approve/details?seid=' + ${rec.documentId}}">
+                                                <a th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal" class="text-success">
                                                     <span class="fas fa-thumbs-up action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="Approve Document"></span>
                                                 </a>
+                                                <div class="modal fade" th:id="'a' + ${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h6 class="modal-title text-primary">Euclase</h6>                                                                   
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h6>Confirm you want to approve this document</h6><br/>
+                                                                <a class="btn btn-sm btn-primary" href="#!" th:href="@{'/document/approve/details?seid=' + ${rec.documentId}}">Approve</a>
+                                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <a class="text-secondary" href="#!" th:href="@{'/document/workflow?seid=' + ${rec.documentId}}">
                                                     <span class="fas fa-history action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="View Workflow History"></span>
                                                 </a>

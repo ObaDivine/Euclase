@@ -73,7 +73,8 @@ public class DocumentController {
         requestPayload.setDocumentTypeName(response.getData().getDocumentTypeName());
         requestPayload.setDocumentType(String.valueOf(response.getData().getId())); //Pass document type id for lookup
         //Check if the signature is set. Index 11 holds the signature
-        if (httpSession.getAttribute("signatureLink").toString() == null || httpSession.getAttribute("signatureLink").toString().equalsIgnoreCase("NA")) {
+        Object signature = httpSession.getAttribute("signatureLink");
+        if (signature == null || (signature instanceof String && signature.toString().equalsIgnoreCase("NA"))) {
             alertMessage = messageSource.getMessage("appMessages.signature.notset", new Object[0], Locale.ENGLISH);
             alertMessageType = "error";
             return "redirect:/document/";
@@ -268,7 +269,8 @@ public class DocumentController {
         }
 
         //Check if the signature is set. Index 11 holds the signature
-        if (httpSession.getAttribute("signatureLink").toString() == null || httpSession.getAttribute("signatureLink").toString().equalsIgnoreCase("NA")) {
+        Object signature = httpSession.getAttribute("signatureLink");
+        if (signature == null || (signature instanceof String && signature.toString().equalsIgnoreCase("NA"))) {
             alertMessage = messageSource.getMessage("appMessages.signature.notset", new Object[0], Locale.ENGLISH);
             alertMessageType = "error";
             return "redirect:/document/pending";

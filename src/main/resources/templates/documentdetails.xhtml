@@ -21,6 +21,7 @@
                             <h4 class="mb-2 text-secondary">Document Details</h4>
                             <h6 class="text-700 fw-semi-bold">Document details, supporting documents and workflow history</h6>
                         </div>
+                        <br/><hr/>
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="scrollbar">
@@ -50,35 +51,31 @@
                                 <div class="tab-content" id="documentTabContent">
                                     <div class="tab-pane fade show active" id="tab-details" role="tabpanel" aria-labelledby="details-tab">
                                         <div class="row g-3 mb-2">
-                                            <div class="col-lg-12 col-sm-12 col-md-12">
-                                                <div class="row">
-                                                    <div class="col-lg-4 col-md-12 col-sm-12">
-                                                        <span class="fs--1 text-800 fw-semi-bold mb-0">Document Id: </span>
-                                                        <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary bold" th:text="${euclasePayload.documentId}"></span>
-                                                    </div>
-                                                    <div class="col-lg-4 col-md-12 col-sm-12">
-                                                        <span class="fs--1 text-800 fw-semi-bold mb-0">Document Group: </span>
-                                                        <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentGroupName}"></span>
-                                                    </div>
-                                                    <div class="col-lg-4 col-md-12 col-sm-12">
-                                                        <span class="fs--1 text-800 fw-semi-bold mb-0">Document Type: </span>
-                                                        <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentTypeName}"></span>
-                                                    </div>
-                                                </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document Id: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentId}"></span>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document Group: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentGroupName}"></span>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document Type: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentTypeName}"></span>
                                             </div>
                                         </div>
                                         <div class="row g-3 mb-2">
                                             <div class="col-lg-4 col-md-12 col-sm-12">
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0">Document Name: </span>
+                                                <a href="" th:href="@{${euclasePayload.documentLink}}" th:text="${euclasePayload.documentName}" target="_blank"></a>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">File Name: </span>
                                                 <a href="" th:href="@{${euclasePayload.documentLink}}" th:text="${euclasePayload.originalFileName}" target="_blank"></a>
                                             </div>
                                             <div class="col-lg-4 col-md-12 col-sm-12">
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0">Tag: </span>
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.tag}"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Access Level: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.accessLevel}"></span>
                                             </div>
                                         </div>
                                         <div class="row g-3 mb-2">
@@ -100,13 +97,13 @@
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0">Carbon Copy: </span>
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.carbonCopy}"></span>
                                             </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Approvals: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.approvalRoute}"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                           <div class="col-lg-4 col-md-12 col-sm-12">
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0">Priority: </span>
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.priority}"></span>
+                                            </div>
+                                           <div class="col-lg-4 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Access Level: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.accessLevel}"></span>
                                             </div>
                                         </div>
                                         <div class="row g-3 mb-2">
@@ -133,6 +130,12 @@
                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0">Narration: </span>
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.narration}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-2">
+                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Approvals: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.approvalRoute}"></span>
                                             </div>
                                         </div>
                                     </div>  

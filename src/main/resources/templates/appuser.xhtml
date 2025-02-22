@@ -125,12 +125,16 @@
                                     <div class="tab-pane" role="tabpanel" aria-labelledby="tab2" id="tab2">
                                         <form class="needs-validation" id="form2" novalidate="novalidate" data-wizard-form="2">
                                             <div class="form-check form-check-inline mt-2">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="5"/>
+                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="6"/>
                                                 <label class="form-check-label">Executive Management</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="4"/>
+                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="5"/>
                                                 <label class="form-check-label">Management</label> 
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="4"/>
+                                                <label class="form-check-label">Branch Head</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="3"/>
@@ -250,7 +254,7 @@
                             </div>
                             <div class="card-footer border-top-0" data-wizard-footer="data-wizard-footer">
                                 <div class="d-flex pager wizard list-inline mb-0">
-                                    <button class="d-none btn btn-link ps-0" type="button" data-wizard-prev-btn="data-wizard-prev-btn">
+                                    <button class="btn btn-secondary ps-0" type="button" data-wizard-prev-btn="data-wizard-prev-btn">
                                         <span class="fas fa-chevron-left me-1" data-fa-transform="shrink-3"></span>Previous
                                     </button>
                                     <div class="flex-1 text-end">

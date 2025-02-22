@@ -235,4 +235,5 @@ public class PylonPayload {
     private String notificationName;
     private String notificationType;
     private String notificationTrigger;
+    private String serializedForm;
 }

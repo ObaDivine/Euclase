@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
-    <script src="https://cdn.tiny.cloud/1/l6x0x029codgczussxzl6kr49suvrl95ckbjoup3ry6u42kt/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script th:src="@{/js/tinymce.min.js}"></script>
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
@@ -26,7 +26,7 @@
                             <input type="hidden" th:field="*{documentId}" />
                             <input type="hidden" th:field="*{documentTemplateName}" />
                             <div id="toolbar-container"></div>
-                            <textarea th:field="*{editor}"></textarea>
+                            <textarea class="tinymce"  th:field="*{editor}"></textarea>
                             <input type="hidden" th:field="*{editorData}" />
                             <h6 class="text-700 fw-semi-bold text-secondary mt-3">Attach Files</h6>
                             <div class="form-icon-container mt-2" id="uploadFiles">
