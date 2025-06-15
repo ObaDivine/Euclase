@@ -1,24 +1,35 @@
 package com.entitysc.euclase.payload;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
  * @author briano
  */
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class EuclasePayload {
 
     private int id = 0;
     private int batchId = 0;
+    private String company;
+    private String companyName;
+    private String companyCode;
+    private String companyAddress;
+    private String companyHead;
+    private String rcNumber;
+    private String dateOfIncorporation;
+    private String contactAddress;
+    private String contactNumber;
+    private String contactEmail;
+    private String channelUsername;
+    private String channelPassword;
+    private String webhookUrl;
+    private String ipAddressId;
+    private String apiBandId;
+    private String roleId;
     private String username;
     private String password;
     private String confirmPassword;
@@ -30,6 +41,7 @@ public class EuclasePayload {
     private String middleName;
     private String dob;
     private String gender;
+    @SerializedName(value = "CustomerName", alternate = {"customerName"})
     private String customerName;
     private String salutation;
     private String mobileNumber;
@@ -44,18 +56,25 @@ public class EuclasePayload {
     private int[] daysToDate;
     private String profileImage;
     private String status;
+    private boolean userOnline;
     private String departmentCode;
     private String departmentName;
+    private String department;
     private String designationCode;
     private String designationName;
+    private String designation;
     private String departmentUnitCode;
     private String departmentUnitName;
+    private String departmentUnit;
+    private String branch;
     private String branchCode;
     private String branchName;
     private String location;
     private String gradeLevelCode;
     private String gradeLevelName;
+    private String gradeLevel;
     private String ordinalValue;
+    private String documentGroup;
     private String documentGroupCode;
     private String documentGroupName;
     private String documentTypeCode;
@@ -65,16 +84,19 @@ public class EuclasePayload {
     private String leaveDays;
     private String purpose;
     private String transactionDate;
-    private String hod;
-    private String teamLead;
+    private String departmentHead;
     private String branchHead;
+    private String teamLead;
     private String uniqueId;
     private String documentType;
     private String documentId;
+    private String documentIdOperator;
     private String documentLink;
-    private String paymentMethod;
+    private String paymentHod;
     private String amount;
+    private String amountOperator;
     private String narration;
+    private String narrationOperator;
     private String startDate;
     private String endDate;
     private String requestDate;
@@ -97,6 +119,7 @@ public class EuclasePayload {
     private String originalFileName;
     private String createdAt;
     private String createdBy;
+    private String approvedBy;
     private String search;
     private String signatureLink;
     private String title;
@@ -140,6 +163,98 @@ public class EuclasePayload {
     private String remoteHost;
     private String remoteHostUsername;
     private String remoteHostPassword;
+    private String appType;
+    private String requestId;
+    private String hash;
+    private String token;
+    private String requestType;
+    private String input;
+    private String userType;
+    private String pin;
+    private String confirmPin;
+    private String currentPin;
+    private String newPin;
+    private String confirmNewPin;
+    private String channel;
+    private String activationId;
+    private String otp1;
+    private String otp2;
+    private String otp3;
+    private String otp4;
+    private String otp5;
+    private String otp6;
+    private String requestBy;
+    private String issuer;
+    private String qRCodeImageUrl;
+    private String recipient;
+    private String authorizationUrl;
+    private String transRef;
+    private String responseCode;
+    private String responseMessage;
+    private String vat;
+    private String feeAmount;
+    private String callbackUrl;
+    private String url;
+    private String sourceAccount;
+    private String sourceAccountName;
+    private String sourceBank;
+    private String destinationAccount;
+    private String destinationAccountName;
+    private String destinationBank;
+    private String recipientCode;
+    private String customerNumber;
+    private String customerType;
+    private String bouquet;
+    private String dueDate;
+    private String businessUnit;
+    private String customerArrears;
+    private String currentAddress;
+    private String units;
+    private String mainTokenTax;
+    private String mainsTokenAmount;
+    private String bonusToken;
+    private String bonusTokenDescription;
+    private String bonusTokenUnits;
+    private String path;
+    private String error;
+    private String mnemonic;
+    private String accountNumber;
+    private String accountName;
+    private String executeTime;
+    private String nextExecutionDate;
+    private String updateId;
+    private String deleteId;
+    private String beneficiary;
+    private String balanceBf;
+    private String closingBalance;
+    private String loanRequestBy;
+    private String unitCost;
+    private String dailyLimit;
+    private String weeklyLimit;
+    private String monthlyLimit;
+    private String ipAddress;
+    private String organizationName;
+    private String organizationPhone;
+    private String organizationEmail;
+    private String organizationContactPerson;
+    private String organizationAddress;
+    private String bandName;
+    private String releaseVersion;
+    private String releaseDate;
+    private String releaseNote;
+    private int majorVersion;
+    private int minorVersion;
+    private String changeType;
+    private String changeDescription;
+    private String encryptionKey;
+    private String apiBalance;
+    private String apiTestKey;
+    private String apiProdKey;
+    private boolean checkIp;
+    private String locked;
+    private String billApi;
+    private String recordType;
+    private String recordId;
 
     /*
         Report
@@ -159,4 +274,5 @@ public class EuclasePayload {
     private String message;
     private boolean messageRead;
     private String serializedForm;
+
 }

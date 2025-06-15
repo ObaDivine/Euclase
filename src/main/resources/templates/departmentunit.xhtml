@@ -34,20 +34,26 @@
                                 <span class="fas fa-stream text-900 fs--1 form-icon text-primary"></span>
                             </div>
                             <div class="form-icon-container">
-                                <select class="form-select form-icon-input" data-choices="data-choices" th:field="*{departmentCode}" required="required">
-                                    <option value="">---Select department---</option>
-                                    <option th:each="fa : ${departmentList}" th:value="${fa.departmentCode}" th:text="${fa.departmentName}"></option>
+                                <select class="form-select form-icon-input" th:field="*{company}" th:onchange="|fetchCompanyBranches()|" th:onfocusout="|fetchCompanyBranches()|">
+                                    <option value="">---Select company---</option>
+                                    <option th:each="fa : ${companyList}" th:value="${fa.id}" th:text="${fa.companyName}"></option>
                                 </select>
                                 <span class="text-primary asterisk">*</span>
-                                <span class="fas fa-list-ol text-900 fs--1 form-icon text-primary"></span>
+                                <span class="fas fa-building text-900 fs--1 form-icon text-primary"></span>
                             </div>
                             <div class="form-icon-container">
-                                <select class="form-select form-icon-input" data-choices="data-choices" th:field="*{teamLead}">
-                                    <option value="">---Select team lead---</option>
-                                    <option th:each="fa : ${userList}" th:value="${fa.username}" th:text="${fa.firstName + ', ' + fa.lastName}"></option>
+                                <select class="form-select form-icon-input" th:field="*{branch}" th:onchange="|fetchBranchDepartment()|" th:onfocusout="|fetchBranchDepartment()|">
+                                    <option value="">---Select branch---</option>
                                 </select>
                                 <span class="text-primary asterisk">*</span>
-                                <span class="fas fa-user-tag text-900 fs--1 form-icon text-primary"></span>
+                                <span class="fas fa-code-branch text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
+                                <select class="form-select form-icon-input" th:field="*{department}" required="required">
+                                    <option value="">---Select department---</option>
+                                </select>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="far fa-building text-900 fs--1 form-icon text-primary"></span>
                             </div>
                             <div class="form-icon-container">
                                 <select class="form-select form-control-sm form-icon-input" aria-label="status" th:field="*{status}" required="required">

@@ -1,7 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
-    <script src="https://cdn.tiny.cloud/1/l6x0x029codgczussxzl6kr49suvrl95ckbjoup3ry6u42kt/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <body onload="preloaderFunction()" style="margin: 0;">
         <div id="loader"></div>
         <main class="main animate-bottom" id="top" style="display:none;">
@@ -9,32 +9,78 @@
             <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
             <div class="content">
                 <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12">                            
-                        <div class="col-auto mb-3">
-                            <nav class="mb-3" aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Document Template</li>
-                                </ol>
-                            </nav>
-                            <h4 class="mb-2 text-secondary">Document Templates</h4>
-                            <h6 class="text-700 fw-semi-bold">Create and Manage different document templates</h6>
-                        </div>
-                        <div class="card">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4 col-sm-12">
-                                    <img id="img-doc-types" class="img-fluid h-100 rounded-start mt-50" src="" th:src="@{/images/edocs.jpg}" alt="..." />
-                                </div>
-                                <div class="col-lg-8 col-md-8 col-sm-12">
-                                    <div class="card-body">
-                                        <h4 class="card-title text-primary">Document Template</h4><hr/>
-                                        <div class="row">
-                                            <div th:each="rec : ${documentTypes}" class="col-lg-6 col-sm-12 mb-2">
-                                                <i class="fas fa-snowflake"></i><a class="fs--1 ms-2" href="#!" th:href="@{'/setup/template/edit?seid=' + ${rec.id}}" th:text="${rec.documentTypeName} + ' Document'">Document Name</a>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="listTable" data-list='{"valueNames":[],"page":10,"pagination":true}'> 
+                            <div class="col-auto mb-3">
+                                <nav class="mb-3" aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/setup/document/type}">Document Type</a></li>
+                                        <li class="breadcrumb-item active">Template &amp; Workflow</li>
+                                    </ol>
+                                </nav>
+                                <h4 class="mb-2 text-secondary">Document Template &AMP; Workflow</h4>
+                                <h6 class="text-700 fw-semi-bold">Update document template and workflow</h6>
+                            </div>
+                            <div class="offset-lg-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                <div class="input-group mb-3">
+                                    <input class="form-control form-control-sm search-input search" type="search" placeholder="Search table record" aria-label="Search" maxlength="150" />
+                                    <a class="btn btn-sm btn-primary" th:href="@{/setup/document/type}">Add Document Type</a>    
+                                    <div class="input-group-append ml-10">
+                                        <div class="dropdown d-inline-block">
+                                            <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download Options</button>
+                                            <span class="caret"> </span>
+                                            <div class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="dropdownMenuButton">
+                                                <a id="csv" class="dropdown-item" href="#">Export to CSV</a>
+                                                <a id="pdf" class="dropdown-item" href="#">Export to PDF</a>
+                                                <a id="json" class="dropdown-item" href="#">Export to JSON</a>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive ms-n1 ps-1 scrollbar">
+                                <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="code">Document Type Code</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="name">Document Type Name</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="document">Document Group</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="company">Company</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list" id="deal-tables-body" th:if="${documentTypes != null}">
+                                        <tr th:each="rec : ${documentTypes}" class="position-static">
+                                            <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.documentTypeCode}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.documentTypeName}" class="name align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.documentGroup}" class="document align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.companyName}" class="company align-middle white-space-nowrap start ps-3"></td>
+                                            <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
+                                                <a class="text-success" href="#!" th:href="@{'/setup/template/edit?seid=' + ${rec.id}}">
+                                                    <span class="fas fa-file-code action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="Update Document Template"></span>
+                                                </a>
+                                                <a class="text-success" href="#!" th:href="@{'/setup/workflow/edit?seid=' + ${rec.id}}">
+                                                    <span class="fas fa-cog action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="Update Document Workflow"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row align-items-center justify-content-between py-2 pe-0 fs--1">
+                                <div class="col-auto d-flex">
+                                    <p class="mb-0 d-none d-sm-block me-3 fw-semi-bold text-900" data-list-info="data-list-info"></p>
+                                    <a class="fw-semi-bold" href="#!" data-list-view="*">View all<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+                                    <a class="fw-semi-bold d-none" href="#!" data-list-view="less">View Less<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+                                </div>
+                                <div class="col-auto d-flex">
+                                    <button class="page-link" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+                                    <ul class="mb-0 pagination"></ul>
+                                    <button class="page-link pe-0" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
                                 </div>
                             </div>
                         </div>
@@ -44,25 +90,18 @@
             </div>
         </main>
         <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+        <script th:src="@{/js/jspdf.min.js}"></script>
+        <script th:src="@{/js/jspdf.plugin.autotable.min.js}"></script>
+        <script th:src="@{/js/tableHTMLExport.js}"></script>
         <script>
-            tinymce.init({
-                selector: '#editor',
-                plugins: [
-                    'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
-                    'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code', 'fullscreen', 'insertdatetime',
-                    'media', 'table', 'emoticons', 'template', 'help'
-                ],
-                menu: {
-                    file: {title: 'File', items: 'newdocument restoredraft | preview | export print | deleteallconversations'},
-                    edit: {title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace'},
-                    view: {title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments'},
-                    insert: {title: 'Insert', items: 'image link media addcomment pageembed template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime'},
-                    format: {title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat'},
-                    tools: {title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount'},
-                    table: {title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable'},
-                    help: {title: 'Help', items: 'help'}
-                },
-                menubar: 'favs file edit view insert format tools table help'
+            $('#json').on('click', function () {
+                $("#euclaseTable").tableHTMLExport({type: 'json', filename: 'Euclase_Document_Type.json'});
+            });
+            $('#csv').on('click', function () {
+                $("#euclaseTable").tableHTMLExport({type: 'csv', filename: 'Euclase_Document_Type.csv'});
+            });
+            $('#pdf').on('click', function () {
+                $("#euclaseTable").tableHTMLExport({type: 'pdf', filename: 'Euclase_Document_Type.pdf'});
             });
         </script>
     </body>

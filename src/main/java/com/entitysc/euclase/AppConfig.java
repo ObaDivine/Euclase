@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
@@ -144,13 +143,12 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    @Primary
     public CacheManager cacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder()
-                .initialCapacity(200)
+                .initialCapacity(20000)
                 .expireAfterAccess(1, TimeUnit.MINUTES)
-                .maximumSize(500)
+                .maximumSize(50000)
                 .weakKeys()
                 .recordStats());
         return cacheManager;

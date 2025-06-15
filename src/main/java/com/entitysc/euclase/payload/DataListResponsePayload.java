@@ -16,10 +16,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DataListResponsePayload {
 
-    private String responseCode;
-    private String responseMessage;
-    private PylonPayload payload;
-    private List<PylonPayload> data;
-    private List<PylonPayload> versions;
-    private List<PylonPayload> workflowData;
+    String responseCode;
+    String responseMessage;
+    EuclasePayload payload;
+    List<EuclasePayload> data;
+    List<EuclasePayload> versions;
+    List<EuclasePayload> workflowData;
 }

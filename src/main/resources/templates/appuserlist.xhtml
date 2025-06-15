@@ -16,25 +16,31 @@
                                     <ol class="breadcrumb mb-0">
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/user}">User</a></li>
-                                        <li class="breadcrumb-item active">User List</li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/user}">Application User</a></li>
+                                        <li class="breadcrumb-item active">Application User List</li>
                                     </ol>
                                 </nav>
                                 <h4 class="mb-2 text-secondary">Application User List</h4>
                                 <h6 class="text-700 fw-semi-bold">List of all users within the organization</h6>
                             </div>
-                            <div class="table-responsive ms-n1 ps-1 scrollbar">
-                                <div class="offset-lg-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                                    <div class="input-group mb-3">
-                                        <input class="form-control form-control-sm search-input search" type="search" placeholder="Search table record" aria-label="Search" />
-                                        <div class="input-group-append">
-                                            <a class="btn btn-xs btn-primary" th:href="@{/user}">Add Application User</a>
-                                            <button id="csv" class="btn btn-xs btn-secondary">Export to CSV</button> 
-                                            <button id="pdf" class="btn btn-xs btn-secondary">Export to PDF</button>
-                                            <button id="json" class="btn btn-xs btn-secondary">Export to JSON</button>
+                            <div class="offset-lg-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                <div class="input-group mb-3">
+                                    <input class="form-control form-control-sm search-input search" type="search" placeholder="Search table record" aria-label="Search" maxlength="150" />
+                                    <a class="btn btn-sm btn-primary" th:href="@{/user}">Add Application User</a>
+                                    <div class="input-group-append ml-10">
+                                        <div class="dropdown d-inline-block">
+                                            <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download Options</button>
+                                            <span class="caret"> </span>
+                                            <div class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="dropdownMenuButton">
+                                                <a id="csv" class="dropdown-item" href="#">Export to CSV</a>
+                                                <a id="pdf" class="dropdown-item" href="#">Export to PDF</a>
+                                                <a id="json" class="dropdown-item" href="#">Export to JSON</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="table-responsive ms-n1 ps-1 scrollbar">
                                 <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
                                     <thead>
                                         <tr>
@@ -43,13 +49,16 @@
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="name">Names</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="mobile">Mobile Number</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="email">Email</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="company">Company</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="branch">Branch</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="department">Department</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="unit">Unit</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="companyHead">Company Head</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="branchHead">Branch Head</th>
-                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="hod">HoD</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="hod">Department Head</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="teamLead">Team Lead</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="status">Status</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="online">Online</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
                                         </tr>
                                     </thead>
@@ -60,16 +69,20 @@
                                             <td th:text="${rec.firstName + ' ' + rec.lastName}" class="name align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.mobileNumber}" class="mobile align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.email}" class="email align-middle white-space-nowrap start ps-3"></td>
-                                            <td th:text="${rec.branchCode}" class="branch align-middle white-space-nowrap start ps-3"></td>
-                                            <td th:text="${rec.departmentCode}" class="department align-middle white-space-nowrap start ps-3"></td>
-                                            <td th:text="${rec.departmentUnitCode}" class="unit align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.company}" class="company align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.branch}" class="branch align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.department}" class="department align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.departmentUnit}" class="unit align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.companyHead}" class="companyHead align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.branchHead}" class="branchHead align-middle white-space-nowrap start ps-3"></td>
-                                            <td th:text="${rec.hod}" class="hod align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.departmentHead}" class="hod align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.teamLead}" class="teamLead align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.status}" class="status align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:if="${rec.userOnline == true}" class="online align-middle white-space-nowrap start ps-3 bg-success text-white">Online</td>
+                                            <td th:if="${rec.userOnline == false}" class="online align-middle white-space-nowrap start ps-3 bg-danger text-white">Offline</td>
                                             <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
                                                 <a class="text-info" href="#!" th:href="@{'/user/details?seid=' + ${rec.id}}">
-                                                    <span class="fas fa-info-circle action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="View User Details"></span>
+                                                    <span class="fas fa-eye action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="View User Details"></span>
                                                 </a>
                                                 <a class="text-success" href="#!" th:href="@{'/user/edit?seid=' + ${rec.id}}">
                                                     <span class="fas fa-edit action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="Update User Details"></span>

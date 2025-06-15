@@ -9,7 +9,7 @@
             <div class="content">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12">
-                        <div class="col-auto mb-3">
+                        <div class="col-auto mb-5">
                             <nav class="mb-3" aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-0">
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
@@ -25,42 +25,53 @@
                         <div class="card">
                             <div class="card-body" th:obect="${euclasePayload}">
                                 <div class="row mb-2">
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Date Created :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdAt}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Created By : </span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdBy}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Status :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.status}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Username :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.username}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Date Created:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdAt}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Created By:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdBy}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Status:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.status}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Username:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.username}"></span></div>
                                 </div>
                                 <div class="row mb-2">
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Title : </span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.title}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Last Name :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.lastName}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">First Name :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.firstName}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Middle Name :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.middleName}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Title:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.title}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Last Name:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.lastName}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">First Name:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.firstName}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Middle Name:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.middleName}"></span></div>
                                 </div>
                                 <div class="row mb-2">
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Gender : </span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.gender}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Date of Birth :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.dob}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Email :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.email}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Mobile Number : </span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.mobileNumber}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Gender:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.gender}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Date of Birth:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.dob}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Email:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.email}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Mobile Number:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.mobileNumber}"></span></div>
                                 </div>
                                 <div class="row mb-2">
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Department : </span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.departmentName}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Unit :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.departmentUnitName}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Designation : </span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.designationName}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Grade Level :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.gradeLevelName}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Company:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.companyName}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Company Head:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.companyHead}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Branch:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.branchName}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Branch Head:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.branchHead}"></span></div>
                                 </div>
                                 <div class="row mb-2">
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Branch :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.branchName}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Role : </span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.role}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">H.O.D :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.hod}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Team Lead : </span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.teamLead}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Department:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.departmentName}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Department Head:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.departmentHead}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Unit:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.departmentUnitName}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Team Lead:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.teamLead}"></span></div>
+
                                 </div>
                                 <div class="row mb-2">
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Start Time :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.startTime}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">End Time : </span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.endTime}"></span></div>
-                                    <div class="col-lg-6"><span class="fs--1 text-800 fw-semi-bold mb-0">Login Days : </span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.loginDays}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Designation:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.designationName}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Grade Level:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.gradeLevelName}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Access Level:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.accessLevel}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Channel:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.channel}"></span></div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-lg-12"><span class="fs--1 text-800 fw-semi-bold mb-0">Login Days:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.loginDays}"></span></div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Start Time:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.startTime}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">End Time:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.endTime}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Password Change:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.passwordChangeDate}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Role:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.role}"></span></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Password Change :</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.passwordChangeDate}"></span></div>
+
                                 </div>
                             </div>
                         </div>

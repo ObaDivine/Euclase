@@ -8,7 +8,7 @@
 
 html, body{
     font-family: "Montserrat" !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     color: #36454F;
 }
 
@@ -158,7 +158,7 @@ h1,h2,h3,h4,h5,h6{
 
 .approval-signature{
     max-height: 40px !important;
-    max-width: 200px !important;
+    max-width: 250px !important;
 }
 
 #inputter-signature{

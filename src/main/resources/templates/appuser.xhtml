@@ -125,61 +125,57 @@
                                     <div class="tab-pane" role="tabpanel" aria-labelledby="tab2" id="tab2">
                                         <form class="needs-validation" id="form2" novalidate="novalidate" data-wizard-form="2">
                                             <div class="form-check form-check-inline mt-2">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="6"/>
-                                                <label class="form-check-label">Executive Management</label> 
+                                                <input class="form-check-input form-check-inline" type="checkbox" value="True" th:field="*{companyHead}" th:attr="checked=${companyHead == 'True'}"/>
+                                                <label class="form-check-label">Company Head</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="5"/>
-                                                <label class="form-check-label">Management</label> 
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="4"/>
+                                                <input class="form-check-input form-check-inline" type="checkbox" value="True" th:field="*{branchHead}" th:attr="checked=${branchHead == 'True'}"/>
                                                 <label class="form-check-label">Branch Head</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="3"/>
-                                                <label class="form-check-label">Head of Department</label> 
+                                                <input class="form-check-input form-check-inline" type="checkbox" value="True" th:field="*{departmentHead}" th:attr="checked=${departmentHead == 'True'}" />
+                                                <label class="form-check-label">Department Head</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="2"/>
-                                                <label class="form-check-label">Team Lead</label> 
+                                                <input class="form-check-input form-check-inline" type="checkbox" value="True" th:field="*{teamLead}" th:attr="checked=${teamLead == 'True'}"/>
+                                                <label class="form-check-label">Unit Team Lead</label> 
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="1" checked="checked"/>
-                                                <label class="form-check-label">Staff</label> 
-                                            </div>
-                                            <div class="form-icon-container">
-                                                <select class="form-select form-control-sm form-icon-input" aria-label="branchCode" th:field="*{branchCode}" required="required">
-                                                    <option value="">---Select branch---</option>
-                                                    <option th:each="fa : ${branchList}" th:value="${fa.branchCode}" th:text="${fa.branchName}"></option>
-                                                </select>
-                                                <span class="fas fa-code-branch text-900 fs--1 form-icon text-primary"></span>
-                                            </div>
-                                            <div class="form-icon-container">
-                                                <select class="form-select form-control-sm form-icon-input" aria-label="departmentCode" th:field="*{departmentCode}" required="required" th:onchange="|filterUnits(this.value)|">
-                                                    <option value="">---Select department---</option>
-                                                    <option th:each="fa : ${departmentList}" th:value="${fa.departmentCode}" th:text="${fa.departmentName}"></option>
+                                            <div class="form-icon-container mt-2">
+                                                <select class="form-select form-control-sm form-icon-input" aria-label="company" th:field="*{company}" required="required" th:onchange="|fetchCompanyBranches()|" th:onfocusout="|fetchCompanyBranches()|">
+                                                    <option value="">---Select company---</option>
+                                                    <option th:each="fa : ${companyList}" th:value="${fa.id}" th:text="${fa.companyName}"></option>
                                                 </select>
                                                 <span class="fas fa-building text-900 fs--1 form-icon text-primary"></span>
                                             </div>
                                             <div class="form-icon-container">
-                                                <select class="form-select form-control-sm form-icon-input" aria-label="departmentUnitCode" th:field="*{departmentUnitCode}" required="required">
+                                                <select class="form-select form-control-sm form-icon-input" aria-label="branch" th:field="*{branch}" required="required" th:onchange="|fetchBranchDepartment()|" th:onfocusout="|fetchBranchDepartment()|">
+                                                    <option value="">---Select branch---</option>                                                
+                                                </select>
+                                                <span class="fas fa-code-branch text-900 fs--1 form-icon text-primary"></span>
+                                            </div>
+                                            <div class="form-icon-container">
+                                                <select class="form-select form-control-sm form-icon-input" aria-label="department" th:field="*{department}" required="required" th:onchange="|fetchDepartmentUnits()|" th:onfocusout="|fetchDepartmentUnits()|">
+                                                    <option value="">---Select department---</option>
+                                                </select>
+                                                <span class="far fa-building text-900 fs--1 form-icon text-primary"></span>
+                                            </div>
+                                            <div class="form-icon-container">
+                                                <select class="form-select form-control-sm form-icon-input" aria-label="departmentUnit" th:field="*{departmentUnit}" required="required">
                                                     <option value="">---Select unit---</option>
-                                                    <option th:each="fa : ${departmentUnitList}" th:value="${fa.departmentUnitCode}" th:text="${fa.departmentUnitName}" th:attr="data-id=${fa.departmentCode}"></option>
                                                 </select>
                                                 <span class="fab fa-uniregistry text-900 fs--1 form-icon text-primary"></span>
                                             </div>
                                             <div class="form-icon-container">
-                                                <select class="form-select form-control-sm form-icon-input" aria-label="gradeLevelCode" th:field="*{gradeLevelCode}" required="required">
+                                                <select class="form-select form-control-sm form-icon-input" aria-label="gradeLevel" th:field="*{gradeLevel}" required="required">
                                                     <option value="">---Select grade level---</option>
-                                                    <option th:each="fa : ${gradeLevelList}" th:value="${fa.gradeLevelCode}" th:text="${fa.gradeLevelName}"></option>
+                                                    <option th:each="fa : ${gradeLevelList}" th:value="${fa.id}" th:text="${fa.gradeLevelName}"></option>
                                                 </select>
                                                 <span class="fas fa-layer-group text-900 fs--1 form-icon text-primary"></span>
                                             </div>
                                             <div class="form-icon-container">
-                                                <select class="form-select form-control-sm form-icon-input" aria-label="designationCode" th:field="*{designationCode}" required="required">
+                                                <select class="form-select form-control-sm form-icon-input" aria-label="designation" th:field="*{designation}" required="required">
                                                     <option value="">---Select designation---</option>
-                                                    <option th:each="fa : ${designationList}" th:value="${fa.designationCode}" th:text="${fa.designationName}"></option>
+                                                    <option th:each="fa : ${designationList}" th:value="${fa.id}" th:text="${fa.designationName}"></option>
                                                 </select>
                                                 <span class="fab fa-hive text-900 fs--1 form-icon text-primary"></span>
                                             </div>
@@ -187,6 +183,30 @@
                                     </div>
                                     <div class="tab-pane" role="tabpanel" aria-labelledby="tab3" id="tab3">
                                         <form class="mb-2 needs-validation" id="form3" novalidate="novalidate" data-wizard-form="3">
+                                            <div class="form-check form-check-inline mt-2">
+                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="6" th:attr="checked=${accessLevel == '6'}"/>
+                                                <label class="form-check-label">Executive Management</label> 
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="5" th:attr="checked=${accessLevel == '5'}"/>
+                                                <label class="form-check-label">Management</label> 
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="4" th:attr="checked=${accessLevel == '4'}"/>
+                                                <label class="form-check-label">Branch Head</label> 
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="3" th:attr="checked=${accessLevel == '3'}"/>
+                                                <label class="form-check-label">Head of Department</label> 
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="2" th:attr="checked=${accessLevel == '2'}"/>
+                                                <label class="form-check-label">Team Lead</label> 
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="1" th:attr="checked=${accessLevel == '1'}"/>
+                                                <label class="form-check-label">Staff</label> 
+                                            </div>
                                             <div class="form-icon-container">
                                                 <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{username}" placeholder="Enter username" required="required" pattern="[a-zA-Z0-9]{1,}" title="Username should match alphabets and numbers only"/>
                                                 <span class="text-primary asterisk">*</span>
@@ -238,7 +258,7 @@
                                                                         <h6 class="modal-title text-primary">Euclase</h6>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <h6 class="text-secondary mb-2">Create or update user profile?</h6>
+                                                                        <p class="mb-2">Create or update user profile?</p>
                                                                         <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                                                                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                                     </div>

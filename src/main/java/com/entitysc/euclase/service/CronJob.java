@@ -1,14 +1,12 @@
 package com.entitysc.euclase.service;
 
 import com.entitysc.euclase.constant.ResponseCodes;
-import com.entitysc.euclase.payload.PylonPayload;
-import com.entitysc.euclase.payload.PylonResponsePayload;
-import com.google.gson.Gson;
+import com.entitysc.euclase.payload.EuclasePayload;
+import com.entitysc.euclase.payload.EuclaseResponsePayload;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,20 +18,16 @@ import org.springframework.web.multipart.MultipartFile;
  * @author bokon
  */
 @Service
-public class CronJob {
+public class CronJob extends EuclaseService{
 
-    @Autowired
-    GenericService genericService;
-    @Autowired
-    Gson gson;
     @Value("${euclase.document.archivedir}")
     private String archiveDirectory;
-    @Value("${pylon.api.document.archive}")
+    @Value("${euclasews.api.document.archive}")
     private String processDocumentArchivingUrl;
 
-//    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 10000)
     public void archiveDocuments() {
-        String token = genericService.generatePylonAPIToken();
+        String token = generateEuclaseWSAPIToken();
         try {
             //Fetch all the files in the archive directory
             File[] files = new File(archiveDirectory).listFiles();
@@ -42,21 +36,21 @@ public class CronJob {
                 for (File f : files) {
                     //Check if it is a file
                     if (f.isFile()) {
-                        //Push the file to Pylon to archive
-                        PylonPayload pylonPayload = new PylonPayload();
-                        pylonPayload.setChannel("WEB");
-                        pylonPayload.setRequestBy("System");
-                        pylonPayload.setRequestId(genericService.generateRequestId());
-                        pylonPayload.setToken(token);
-                        pylonPayload.setRequestType("DocumentArchive");
-                        pylonPayload.setHash(genericService.generateRequestString(token, pylonPayload));
-                        //Connect to Pylon API
+                        //Push the file to EuclaseWS to archive
+                        EuclasePayload EuclasePayload = new EuclasePayload();
+                        EuclasePayload.setChannel("WEB");
+                        EuclasePayload.setRequestBy("System");
+                        EuclasePayload.setRequestId(generateRequestId());
+                        EuclasePayload.setToken(token);
+                        EuclasePayload.setRequestType("DocumentArchive");
+                        EuclasePayload.setHash(generateRequestString(token, EuclasePayload));
+                        //Connect to EuclaseWS API
                         List<MultipartFile> filesToArchive = new ArrayList<>();
                         //Conver the file to multipart file
                         MultipartFile fileMultipart = new MockMultipartFile(f.getName(), f.getName(), "text/plain", new FileInputStream(f));
                         filesToArchive.add(fileMultipart);
-                        String response = genericService.callPylonAPI(processDocumentArchivingUrl, gson.toJson(pylonPayload), filesToArchive, token, "Document Archiving");
-                        PylonResponsePayload responsePayload = gson.fromJson(response, PylonResponsePayload.class);
+                        String response = callEuclaseWSAPI(processDocumentArchivingUrl, gson.toJson(EuclasePayload), filesToArchive, token, "Document Archiving");
+                        EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
                         if (responsePayload.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
                             //Operation is successful. Delete the file from the directory
                             f.delete();

@@ -43,14 +43,14 @@ public class PushNotificationController {
         return sseEmitter;
     }
 
-    public void pushNotification(EuclasePayload pylonPayload) {
+    public void pushNotification(EuclasePayload euclasePayload) {
         Optional<SseEmitter> emitter = getSSEvent(memberId);
         emitter.ifPresent(sseEmitter -> {
             try {
                 sseEmitter.send(SseEmitter.event()
                         .name("callback")
                         .comment("Push Notification")
-                        .data(gson.toJson(pylonPayload)));
+                        .data(gson.toJson(euclasePayload)));
             } catch (IOException | IllegalStateException e) {
                 removeSSEvent(memberId);
             }

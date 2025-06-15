@@ -36,7 +36,7 @@
             <meta name="theme-color" content="#ffffff" />
             <script th:src="@{/js/simplebar.min.js}"></script>
             <script th:src="@{/js/config.js}"></script>
-            <link rel="preconnect" href="https://fonts.googleapis.com"></link>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat"></link>
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""></link>
             <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css"></link>
             <link th:href="@{/css/theme-rtl.min.css}" type="text/css" rel="stylesheet" id="style-rtl"></link>
@@ -102,10 +102,10 @@
                         </div>
                     </a>
                 </div>
-                <div class="search-box navbar-top-search-box d-none d-lg-block" data-list='{"valueNames":["title"]}' style="width:25rem;">
+                <div sec:authorize="hasRole('SEARCH_DOCUMENT')" class="search-box navbar-top-search-box d-none d-lg-block" data-list='{"valueNames":["title"]}' style="width:25rem;">
                     <form class="position-relative" data-bs-toggle="search" data-bs-display="static" th:action="@{/document/search}">
                         <input class="form-control search-input search form-control-sm rounded-5" type="search" placeholder="Search" aria-label="Search" id="search" name="search" />
-                        <span class="fas fa-search search-box-icon"></span>
+                        <a href="#" data-bs-target="#advanceSearch" data-bs-toggle="modal"><span class="fas fa-search search-box-icon"></span></a>
                     </form>
                 </div>
                 <ul class="navbar-nav navbar-nav-icons flex-row">
@@ -259,11 +259,6 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/twofa/}">
-                                                <div class="d-flex align-items-center"><span class="nav-link-text">Two Factor Authentication</span>
-                                                </div>
-                                            </a>
-                                        </li>
                                         <li class="nav-item"><a class="nav-link" th:href="@{/about}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">About Euclase</span>
                                                 </div>
@@ -291,34 +286,34 @@
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="documents">
                                         <li class="collapsed-nav-item-title d-none text-primary">Document &AMP; Files</li>
-                                        <li class="nav-item">
+                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item">
                                             <a class="nav-link" th:href="@{/document/}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">New Document</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/pending}">
+                                        <li sec:authorize="hasRole('APPROVE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/pending}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Pending Documents</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/draft}">
+                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/draft}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Draft Documents</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/my}">
+                                        <li sec:authorize="hasRole('VIEW_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/my}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">My Documents</span>
                                                 </div>
                                             </a>
                                             <!-- more inner pages-->
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/signature}">
+                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/signature}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Manage Signature</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/notification}">
+                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/notification}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Document Notification</span>
                                                 </div>
                                             </a>
@@ -340,23 +335,18 @@
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="workflow">
                                         <li class="collapsed-nav-item-title d-none text-primary">Workflow &AMP; Template</li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/setup/document/group}">
+                                        <li sec:authorize="hasRole('MANAGE_DOCUMENT_GROUP')" class="nav-item"><a class="nav-link" th:href="@{/setup/document/group}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Manage Document Group</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/setup/document/type}">
+                                        <li sec:authorize="hasRole('MANAGE_DOCUMENT_GROUP')" class="nav-item"><a class="nav-link" th:href="@{/setup/document/type}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Manage Document Type</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/setup/template}">
-                                                <div class="d-flex align-items-center"><span class="nav-link-text">Manage Document Template</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/setup/workflow}">
-                                                <div class="d-flex align-items-center"><span class="nav-link-text">Manage Document Workflow</span>
+                                        <li sec:authorize="hasRole('MANAGE_DOCUMENT_TEMPLATE')" class="nav-item"><a class="nav-link" th:href="@{/setup/template}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Manage Template &AMP; Workflow</span>
                                                 </div>
                                             </a>
                                         </li>
@@ -376,12 +366,12 @@
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="digitization">
                                         <li class="collapsed-nav-item-title d-none text-primary">Document Digitization</li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/scan}">
+                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/scan}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Scan Document</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/document/archive}">
+                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/archive}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Upload Document</span>
                                                 </div>
                                             </a>
@@ -395,6 +385,46 @@
                             <p class="navbar-vertical-label">Setup &AMP; System Users</p>
                             <hr class="navbar-vertical-line" />
                             <div class="nav-item-wrapper">
+                                <a class="nav-link dropdown-indicator label-1" href="#channel" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="channel">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown-indicator-icon-wrapper">
+                                            <span class="fas fa-caret-right dropdown-indicator-icon"></span>
+                                        </div>
+                                        <span class="nav-link-icon"><span class="fa fa-server text-primary"></span></span>
+                                        <span class="nav-link-text">Channel</span>
+                                    </div>
+                                </a>
+                                <div class="parent-wrapper label-1">
+                                    <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="channel">
+                                        <li class="collapsed-nav-item-title d-none text-primary">Channel</li>
+                                        <li sec:authorize="hasRole('MANAGE_BILLING')" class="nav-item">
+                                            <a class="nav-link" th:href="@{/channel/api/band}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">API Billing Band</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li sec:authorize="hasRole('MANAGE_IP_ADDRESS')" class="nav-item">
+                                            <a class="nav-link" th:href="@{/channel/ip}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">IP Address Listing</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li sec:authorize="hasRole('MANAGE_CHANNEL')" class="nav-item">
+                                            <a class="nav-link" th:href="@{/channel/}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Channels</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li sec:authorize="hasRole('MANAGE_BILLING')" class="nav-item">
+                                            <a class="nav-link" th:href="@{/channel/top-up}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Channel Top Up</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="nav-item-wrapper">
                                 <a class="nav-link dropdown-indicator label-1" href="#setup" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="setup">
                                     <div class="d-flex align-items-center">
                                         <div class="dropdown-indicator-icon-wrapper">
@@ -407,50 +437,56 @@
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="setup">
                                         <li class="collapsed-nav-item-title d-none text-primary">Setup</li>
-                                        <li class="nav-item">
+                                        <li sec:authorize="hasRole('MANAGE_COMPANY')" class="nav-item">
+                                            <a class="nav-link" th:href="@{/setup/company}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Company</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li sec:authorize="hasRole('MANAGE_BRANCH')"  class="nav-item">
                                             <a class="nav-link" th:href="@{/setup/branch}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Branch</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li sec:authorize="hasRole('MANAGE_DEPARTMENT')"  class="nav-item">
                                             <a class="nav-link" th:href="@{/setup/department}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Department</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li sec:authorize="hasRole('MANAGE_DEPARTMENT_UNIT')" class="nav-item">
                                             <a class="nav-link" th:href="@{/setup/department/unit}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Department Units</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li sec:authorize="hasRole('MANAGE_DESIGNATION')" class="nav-item">
                                             <a class="nav-link" th:href="@{/setup/designation}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Designation</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li sec:authorize="hasRole('MANAGE_GRADE_LEVEL')" class="nav-item">
                                             <a class="nav-link" th:href="@{/setup/grade-level}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Grade Level</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li sec:authorize="hasRole('MANAGE_PUBLIC_HOLIDAY')" class="nav-item">
                                             <a class="nav-link" th:href="@{/setup/holidays}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Public Holidays</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li sec:authorize="hasRole('MANAGE_SLA')" class="nav-item">
                                             <a class="nav-link" th:href="@{/setup/sla}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Service Level Agreement</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" th:href="@{/push/notification}">
+                                        <li sec:authorize="hasRole('MANAGE_NOTIFICATION')" class="nav-item">
+                                            <a class="nav-link" th:href="@{/push/notification/}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Push Notification</span>
                                                 </div>
                                             </a>
@@ -471,23 +507,23 @@
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="users">
                                         <li class="collapsed-nav-item-title d-none text-primary">System Users</li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" th:href="@{/user}">
+                                        <li sec:authorize="hasRole('CREATE_APP_USER')" class="nav-item">
+                                            <a class="nav-link" th:href="@{/user/}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">New User</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/user/list}">
+                                        <li sec:authorize="hasRole('CREATE_APP_USER')" class="nav-item"><a class="nav-link" th:href="@{/user/list}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">User Listing</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/user/update}">
+                                        <li sec:authorize="hasRole('MANAGE_APP_USER')" class="nav-item"><a class="nav-link" th:href="@{/user/update}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">User Update</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/user/role}">
+                                        <li sec:authorize="hasRole('MANAGE_ROLES')" class="nav-item"><a class="nav-link" th:href="@{/user/role}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Roles &AMP; Permission</span>
                                                 </div>
                                             </a>
@@ -507,13 +543,13 @@
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="users">
                                         <li class="collapsed-nav-item-title d-none text-primary">Backup & Restore</li>
-                                        <li class="nav-item">
+                                        <li sec:authorize="hasRole('BACKUP_RESTORE')" class="nav-item">
                                             <a class="nav-link" th:href="@{/setup/backup}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Backup</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="nav-item"><a class="nav-link" th:href="@{/setup/restore}">
+                                        <li sec:authorize="hasRole('BACKUP_RESTORE')" class="nav-item"><a class="nav-link" th:href="@{/setup/restore}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Restore</span>
                                                 </div>
                                             </a>
@@ -549,52 +585,52 @@
                                             </a>
                                             <div class="parent-wrapper">
                                                 <ul class="nav collapse parent" data-bs-parent="#authentication" id="nv-simple">
-                                                    <li class="nav-item">
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Document Listing</span></div>
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document/pending}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Pending Document</span></div>
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document/digitized}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Digitized Document</span></div>
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document/branch}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Document By Branch</span></div>
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document/department}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Document By Department</span></div>
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document/unit}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Document By Unit</span></div>
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document/group}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Document By Group</span></div>
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document/type}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Document By Type</span></div>
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document/sla}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Document By SLA</span></div>
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document/access-level}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Document By Access Level</span></div>
                                                         </a>
@@ -603,13 +639,19 @@
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" th:href="@{/report/audit-log}">
+                                            <a sec:authorize="hasRole('REPORTS')" class="nav-link" th:href="@{/report/api/billing}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">API Billing</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a sec:authorize="hasRole('AUDIT_LOG')" class="nav-link" th:href="@{/report/audit-log}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Audit Log</span>
                                                 </div>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" th:href="@{/report/backup}">
+                                            <a sec:authorize="hasRole('REPORTS')" class="nav-link" th:href="@{/report/backup}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Backup</span>
                                                 </div>
                                             </a>
@@ -636,11 +678,13 @@
                     <p class="mb-0 mt-2 mt-sm-0 text-500 text-secondary">Electronic Document Manager
                         <span class="d-none d-sm-inline-block"></span>
                         <span class="d-none d-sm-inline-block mx-1">|</span>
-                        <br class="d-sm-none" /><span th:text="'2024 - ' + ${#dates.year(#dates.createNow())}"></span> &copy;<a class="mx-1" href="https://entitysc.com">Entity Software Company</a>
+                        <br class="d-sm-none" />
+                        <span th:text="'2024 - ' + ${#dates.year(#dates.createNow())}"></span> &copy;
+                        <a class="mx-1" href="https://entitysc.com">Entity Software Company</a>
                     </p>
                 </div>
                 <div class="col-12 col-sm-auto text-center">
-                    <p class="mb-0 text-600">v1.0.0</p>
+                    <p th:text="'v' + ${session.releaseVersion == null ? '' : session.releaseVersion}" class="mb-0 text-600">v1.0.0</p>
                 </div>
             </div>
         </footer>
@@ -662,6 +706,70 @@
             <script th:src="@{/js/sweetalert2.min.js}"></script>
             <script th:src="@{/js/euclase.js}"></script>
             <script th:src="@{/js/select2.js}"></script>
+            <form id="advanceSearchModal" th:object="${euclasePayload}" th:action="@{/document/advanced/search}" method="POST">
+                <div class="modal fade" id="advanceSearch" tabindex="-1" role="dialog" aria-labelledby="advanceSearch" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title text-primary">Euclase</h6>
+                            </div>
+                            <div class="modal-body">
+                                <h6 class="text-primary mb-2">Advance Document Search</h6>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text filter-label" id="startDate">Start Date</span>
+                                    <input class="form-control" type="date" aria-label="startDate" aria-describedby="startDate" th:field="*{startDate}" required="required" />
+                                    <span class="input-group-text filter-label" id="endDate">End Date</span>
+                                    <input class="form-control" type="date" aria-label="endDate" aria-describedby="endDate" th:field="*{endDate}" required="required"/>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text filter-label">Document Id</span>
+                                    <select class="form-select form-control-sm form-icon-input" aria-label="documentIdOperator" th:field="*{documentIdOperator}">
+                                        <option value="">--select--</option>
+                                        <option value="LK">Like</option>
+                                        <option value="EQ">Equal</option>
+                                    </select>
+                                    <input type="text" class="form-control form-control-sm" th:field="*{documentId}" placeholder="Enter document id"/>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text filter-label">Document Tag</span>
+                                    <input type="text" class="form-control form-control-sm" th:field="*{tag}" placeholder="Enter document tag"/>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text filter-label">Created By</span>
+                                    <input type="text" class="form-control form-control-sm" th:field="*{createdBy}" placeholder="Enter created by"/>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text filter-label">Approved By</span>
+                                    <input type="text" class="form-control form-control-sm" th:field="*{approvedBy}" placeholder="Enter approved by"/>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text filter-label">Narration</span>
+                                    <select class="form-select form-control-sm form-icon-input" aria-label="narrationOperator" th:field="*{narrationOperator}">
+                                        <option value="">--select--</option>
+                                        <option value="LK">Like</option>
+                                        <option value="EQ">Equal</option>
+                                    </select>
+                                    <input type="text" class="form-control form-control-sm" th:field="*{narration}" placeholder="Enter narration"/>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text filter-label">Amount</span>
+                                    <select class="form-select form-control-sm form-icon-input" aria-label="amountOperator" th:field="*{amountOperator}">
+                                        <option value="">--select--</option>
+                                        <option value="GT">></option>
+                                        <option value="GE">>=</option>
+                                        <option value="LT"><</option>
+                                        <option value="LE"><=</option>
+                                        <option value="EQ">=</option>
+                                    </select>
+                                    <input type="number" class="form-control form-control-sm" th:field="*{amount}" placeholder="Enter amount" step="0.1"/>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm mt-3">Submit</button>
+                                <button type="button" class="btn btn-secondary btn-sm mt-3" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
             <form id="logoutForm" th:action="@{/logout}" method="POST">
                 <div class="modal fade" id="confirmLogout" tabindex="-1" role="dialog" aria-labelledby="confirmLogout" aria-hidden="true">
                     <div class="modal-dialog">
@@ -670,7 +778,7 @@
                                 <h6 class="modal-title text-primary">Euclase</h6>
                             </div>
                             <div class="modal-body">
-                                <h6>Confirm you want to logout</h6><br/>
+                                <p class="mb-2">Confirm you want to logout</p>
                                 <button type="submit" class="btn btn-primary btn-sm">Logout</button>
                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                             </div>

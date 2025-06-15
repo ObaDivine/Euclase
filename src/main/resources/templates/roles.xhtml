@@ -54,7 +54,7 @@
                                                             <h6 class="modal-title text-primary">Euclase</h6>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <h6 class="text-secondary mb-2">Create or update roles. Proceed?</h6>
+                                                            <p class="mb-2">Create or update roles. Proceed?</p>
                                                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                                                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                         </div>
@@ -91,7 +91,7 @@
                                                                                     <h6 class="modal-title text-primary">Euclase</h6>                                                                   
                                                                                 </div>
                                                                                 <div class="modal-body">
-                                                                                    <h6 class="text-secondary mb-2">Confirm you want to delete this role</h6>
+                                                                                    <p class="mb-2">Confirm you want to delete this role</p>
                                                                                     <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/user/role/delete?seid=' + ${rec.id}}">Delete</a>
                                                                                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                                                 </div>
@@ -123,7 +123,7 @@
                                             <form th:object="${euclasePayload}" th:action="@{/user/group/roles/update}" method="POST">
                                                 <input type="hidden" th:field="*{roleName}" />
                                                 <div class="row">
-                                                    <div class="col-lg-12 col-sm-12 col-md-12" th:each="rec : ${groupRolesPayload}">
+                                                    <div class="col-lg-6 col-sm-12 col-md-12" th:each="rec : ${groupRolesPayload}">
                                                         <div th:switch="${rec.roleExist}">
                                                             <span th:case="${'false'}">
                                                                 <input class="form-check-input" type="checkbox"  name="role" th:value="${rec.roleName}" />
@@ -144,7 +144,7 @@
                                                                 <h6 class="modal-title text-primary">Euclase</h6>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <h6 class="text-secondary mb-2">Confirm you want to update this permission</h6>
+                                                                <p class="mb-2">Confirm you want to update this permission</p>
                                                                 <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                                                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                             </div>

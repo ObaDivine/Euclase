@@ -1,11 +1,40 @@
-var options = new List('listTable', {
+var list = new List('listTable', {
     valueNames: ['id', 'date', 'createdBy', 'document', 'priority', 'sla', 'comment', 'username', 'name', 'mobile', 'email', 'gender', 'dob',
         'branch', 'department', 'unit', 'designation', 'grade', 'code', 'location', 'position', 'type', 'tag', 'hod', 'teamLead', 'branchHead',
-        'version', 'link', 'frequency', 'password', 'directory', 'access', 'expiry', 'violated', 'startDate', 'endDate'
+        'version', 'link', 'frequency', 'password', 'directory', 'access', 'expiry', 'violated', 'startDate', 'endDate', 'online', 'address',
+        'daily', 'weekly', 'monthly', 'cost', 'band', 'url', 'channel', 'balanceBf', 'closingBalance', 'company'
     ],
     page: 10,
     pagination: true
 });
+
+const viewAll = document.querySelector('[data-list-view="*"]');
+const viewLess = document.querySelector('[data-list-view="less"]');
+let totalItem = list.items.length;
+let pageQuantity = Math.ceil(list.size() / list.page);
+let pageCount = 1;
+const itemsPerPage = list.page;
+
+const toggleViewBtn = () => {
+    viewLess.classList.toggle('d-none');
+    viewAll.classList.toggle('d-none');
+};
+
+if (viewAll) {
+    viewAll.addEventListener('click', () => {
+        list.show(1, totalItem);
+        pageCount = 1;
+        toggleViewBtn();
+    });
+}
+
+if (viewLess) {
+    viewLess.addEventListener('click', () => {
+        list.show(1, itemsPerPage);
+        pageCount = 1;
+        toggleViewBtn();
+    });
+}
 
 $(document).ready(function () {
     var navbarTopStyle = window.config.config.phoenixNavbarTopStyle;
@@ -164,16 +193,10 @@ function showPage() {
 }
 ;
 
-function deleteTransferBeneficiary(id) {
-    $('#deleteTransferBeneficiary').attr("href", "/onex/funds-transfer/beneficiary/delete/" + id);
-    $('#id').val(id);
-    $('#transferBeneficiaryDeleteModal').modal('show');
-}
-;
-
 function updateTwoFactorAuth() {
     $('#confirmTwoFactorAuth').modal('show');
 }
+
 var policyList = new List('dealsTable', {
     valueNames: ["telco", "mobileNumber", "amount", "reference", "status", "subscriptionName", "bouquet", "smartcard", "viewingMonth", "biller", "disco", "billType", "meterNumber", "token", "sourceAccount", "sourceAccountName", "sourceBank", "beneficiaryAccount", "beneficiaryAccountName", "beneficiaryBank",
         "date", "walletId", "transType", "openingBalance", "closingBalance", "narration", "dataPlan", "accountNumber", "accountName", "bankName", "mnemonic"
@@ -181,66 +204,6 @@ var policyList = new List('dealsTable', {
     page: 10,
     pagination: true
 });
-
-function deleteScheduleAirtime(id) {
-    $('#deleteId').val(id);
-    $('#deleteScheduleAirtimeModal').modal('show');
-}
-;
-
-function updateScheduleAirtimeStatus(id) {
-    $('#updateId').val(id);
-    $('#updateScheduleAirtimeStatusModal').modal('show');
-}
-;
-
-function deleteScheduleData(id) {
-    $('#deleteId').val(id);
-    $('#deleteScheduleDataModal').modal('show');
-}
-;
-
-function updateScheduleDataStatus(id) {
-    $('#updateId').val(id);
-    $('#updateScheduleDataStatusModal').modal('show');
-}
-;
-
-function deleteScheduleCableTv(id) {
-    $('#deleteId').val(id);
-    $('#deleteScheduleCableTvModal').modal('show');
-}
-;
-
-function updateScheduleCableTvStatus(id) {
-    $('#updateId').val(id);
-    $('#updateScheduleCableTvStatusModal').modal('show');
-}
-;
-
-function deleteScheduleElectricity(id) {
-    $('#deleteId').val(id);
-    $('#deleteScheduleElectricityModal').modal('show');
-}
-;
-
-function updateScheduleElectricityStatus(id) {
-    $('#updateId').val(id);
-    $('#updateScheduleElectricityStatusModal').modal('show');
-}
-;
-
-function deleteScheduleFundsTransfer(id) {
-    $('#deleteId').val(id);
-    $('#deleteScheduleFundsTransferModal').modal('show');
-}
-;
-
-function updateScheduleFundsTransferStatus(id) {
-    $('#updateId').val(id);
-    $('#updateScheduleFundsTransferStatusModal').modal('show');
-}
-;
 
 function password_show_hide() {
     var x = document.getElementById("password");
@@ -303,3 +266,98 @@ $("#finalSubmit").click(function () {
     $('#serializedForm').val(JSON.stringify(json));
 });
 
+function fetchCompanyBranches() {
+    let company = document.getElementById("company").value;
+    if (company !== "") {
+        $.ajax({
+            url: "/euclase/setup/company/branch/" + company,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var html = '<option value="">---Select branch---</option>';
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    html += '<option value="' + data[i].id + '">' + data[i].branchName + '</option>';
+                }
+                html += '</option>';
+                $('#branch').html(html);
+            },
+            error: function (xhr, status) {
+                alert(xhr);
+            }
+        });
+    }
+}
+;
+
+function fetchBranchDepartment() {
+    let department = document.getElementById("branch").value;
+    if (department !== "") {
+        $.ajax({
+            url: "/euclase/setup/branch/department/" + department,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var html = '<option value="">---Select department---</option>';
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    html += '<option value="' + data[i].id + '">' + data[i].departmentName + '</option>';
+                }
+                html += '</option>';
+                $('#department').html(html);
+            },
+            error: function (xhr, status) {
+                alert(xhr);
+            }
+        });
+    }
+}
+;
+
+function fetchDepartmentUnits() {
+    let unit = document.getElementById("department").value;
+    if (unit !== "") {
+        $.ajax({
+            url: "/euclase/setup/department/unit/" + unit,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var html = '<option value="">---Select department unit---</option>';
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    html += '<option value="' + data[i].id + '">' + data[i].departmentUnitName + '</option>';
+                }
+                html += '</option>';
+                $('#departmentUnit').html(html);
+            },
+            error: function (xhr, status) {
+                alert(xhr);
+            }
+        });
+    }
+}
+;
+
+function fetchCompanyDocumentGroup() {
+    let company = document.getElementById("company").value;
+    if (company !== "") {
+        $.ajax({
+            url: "/euclase/setup/company/document/group/" + company,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var html = '<option value="">---Select document group---</option>';
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    html += '<option value="' + data[i].id + '">' + data[i].documentGroupName + '</option>';
+                }
+                html += '</option>';
+                $('#documentGroup').html(html);
+            },
+            error: function (xhr, status) {
+                alert(xhr);
+            }
+        });
+    }
+}
+;

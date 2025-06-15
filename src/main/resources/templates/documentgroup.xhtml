@@ -34,6 +34,14 @@
                                 <span class="fas fa-stream text-900 fs--1 form-icon text-primary"></span>
                             </div>
                             <div class="form-icon-container">
+                                <select class="form-select form-icon-input" th:field="*{company}">
+                                    <option value="">---Select company---</option>
+                                    <option th:each="fa : ${companyList}" th:value="${fa.id}" th:text="${fa.companyName}"></option>
+                                </select>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-building text-900 fs--1 form-icon text-primary"></span>
+                            </div>
+                            <div class="form-icon-container">
                                 <select class="form-select form-control-sm form-icon-input" aria-label="status" th:field="*{status}" required="required">
                                     <option value="Enabled">Enabled</option>
                                     <option value="Disabled">Disabled</option>

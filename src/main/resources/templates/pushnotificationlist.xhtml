@@ -22,18 +22,24 @@
                                 <h4 class="mb-2 text-secondary">Push Notification List</h4>
                                 <h6 class="text-700 fw-semi-bold">List of all push notification</h6>
                             </div>
-                            <div class="table-responsive ms-n1 ps-1 scrollbar">
-                                <div class="offset-lg-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                                    <div class="input-group mb-3">
-                                        <input class="form-control form-control-sm search-input search" type="search" placeholder="Search table record" aria-label="Search" />
-                                        <div class="input-group-append">
-                                            <a class="btn btn-xs btn-primary" th:href="@{/push/notification}">Add Push Notification</a>
-                                            <button id="csv" class="btn btn-xs btn-secondary">Export to CSV</button> 
-                                            <button id="pdf" class="btn btn-xs btn-secondary">Export to PDF</button>
-                                            <button id="json" class="btn btn-xs btn-secondary">Export to JSON</button>
+                            <div class="offset-lg-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                <div class="input-group mb-3">
+                                    <input class="form-control form-control-sm search-input search" type="search" placeholder="Search table record" aria-label="Search" maxlength="150" />
+                                    <a class="btn btn-sm btn-primary" th:href="@{/push/notification}">Add Push Notification</a>
+                                    <div class="input-group-append ml-10">
+                                        <div class="dropdown d-inline-block">
+                                            <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download Options</button>
+                                            <span class="caret"> </span>
+                                            <div class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="dropdownMenuButton">
+                                                <a id="csv" class="dropdown-item" href="#">Export to CSV</a>
+                                                <a id="pdf" class="dropdown-item" href="#">Export to PDF</a>
+                                                <a id="json" class="dropdown-item" href="#">Export to JSON</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="table-responsive ms-n1 ps-1 scrollbar">
                                 <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
                                     <thead>
                                         <tr>
@@ -60,7 +66,7 @@
                                                                 <h6 class="modal-title text-primary">Euclase</h6>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <p>Confirm push notification delete</p>
+                                                                <p class="mb-2">Confirm push notification delete</p>
                                                                 <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/push/notification/delete?seid=' + ${rec.id}}">Delete</a>
                                                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                             </div>
@@ -76,7 +82,7 @@
                                                                 <h6 class="modal-title text-primary">Euclase</h6>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <p>Confirm batch push notification delete</p>
+                                                                <p class="mb-2">Confirm batch push notification delete</p>
                                                                 <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/push/notification/batch/delete?seid=' + ${rec.id}}">Batch Delete</a>
                                                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                             </div>

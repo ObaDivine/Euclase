@@ -35,7 +35,7 @@
                                         <div class="form-icon-container">
                                             <select class="form-select form-control-sm form-icon-input" aria-label="newValue" th:field="*{newValue}" required="required">
                                                 <option value="">---Select unit---</option>
-                                                <option th:each="fa : ${unitList}" th:value="${fa.departmentUnitCode}" th:text="${fa.departmentUnitName}"></option>
+                                                <option th:each="fa : ${unitList}" th:value="${fa.id}" th:text="${fa.departmentUnitName}"></option>
                                             </select>
                                             <span class="fas fa-filter text-900 fs--1 form-icon text-primary"></span>
                                         </div>
@@ -44,17 +44,23 @@
                                 </div>     
                             </div> 
                             <div th:if="${dataList != null}">
-                                <div class="table-responsive ms-n1 ps-1 scrollbar">
-                                    <div class="offset-lg-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                                        <div class="input-group mb-3">
-                                            <input class="form-control form-control-sm search-input search" type="search" placeholder="Search table record" aria-label="Search" />
-                                            <div class="input-group-append">
-                                                <button id="csv" class="btn btn-xs btn-secondary">Export to CSV</button> 
-                                                <button id="pdf" class="btn btn-xs btn-secondary">Export to PDF</button>
-                                                <button id="json" class="btn btn-xs btn-secondary">Export to JSON</button>
+                                <div class="offset-lg-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                    <div class="input-group mb-3">
+                                        <input class="form-control form-control-sm search-input search" type="search" placeholder="Search table record" aria-label="Search" maxlength="150" />
+                                        <div class="input-group-append ml-10">
+                                            <div class="dropdown d-inline-block">
+                                                <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download Options</button>
+                                                <span class="caret"> </span>
+                                                <div class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="dropdownMenuButton">
+                                                    <a id="csv" class="dropdown-item" href="#">Export to CSV</a>
+                                                    <a id="pdf" class="dropdown-item" href="#">Export to PDF</a>
+                                                    <a id="json" class="dropdown-item" href="#">Export to JSON</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="table-responsive ms-n1 ps-1 scrollbar">
                                     <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable" description="Document">
                                         <thead>
                                             <tr>
@@ -108,15 +114,18 @@
             </div>
         </main>
         <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+        <script th:src="@{/js/jspdf.min.js}"></script>
+        <script th:src="@{/js/jspdf.plugin.autotable.min.js}"></script>
+        <script th:src="@{/js/tableHTMLExport.js}"></script>
         <script>
             $('#json').on('click', function () {
-                $("#euclaseTable").tableHTMLExport({type: 'json', filename: 'Euclase_Public_Holiday.json'});
+                $("#euclaseTable").tableHTMLExport({type: 'json', filename: 'Euclase_Document_Unit.json'});
             });
             $('#csv').on('click', function () {
-                $("#euclaseTable").tableHTMLExport({type: 'csv', filename: 'Euclase_Public_Holiday.csv'});
+                $("#euclaseTable").tableHTMLExport({type: 'csv', filename: 'Euclase_Document_Unit.csv'});
             });
             $('#pdf').on('click', function () {
-                $("#euclaseTable").tableHTMLExport({type: 'pdf', filename: 'Euclase_Public_Holiday.pdf'});
+                $("#euclaseTable").tableHTMLExport({type: 'pdf', filename: 'Euclase_Document_Unit.pdf'});
             });
         </script>
     </body>

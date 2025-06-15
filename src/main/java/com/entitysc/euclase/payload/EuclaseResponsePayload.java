@@ -20,4 +20,5 @@ public class EuclaseResponsePayload {
     private String path;
     private String error;
     private String status;
+    private EuclasePayload data;
 }
