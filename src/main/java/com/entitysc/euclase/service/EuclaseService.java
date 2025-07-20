@@ -39,6 +39,8 @@ public abstract class EuclaseService {
 
     @Value("${euclase.encryption.key.web}")
     private String encryptionKey;
+    @Value("${euclasews.api.key}")
+    private String apiKey;
     @Value("${euclase.image.dir}")
     private String imageDirectory;
     @Value("${euclase.temp.dir}")
@@ -48,7 +50,7 @@ public abstract class EuclaseService {
     Logger logger = LoggerFactory.getLogger(EuclaseService.class);
 
     public String generateEuclaseWSAPIToken() {
-        return "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJXRUIiLCJhdWQiOiJbTUFOQUdFX1JPTEVTLCBNQU5BR0VfR1JBREVfTEVWRUwsIE1BTkFHRV9TTEEsIEFVRElUX0xPRywgTUFOQUdFX0RPQ1VNRU5UX1dPUktGTE9XLCBNQU5BR0VfQlJBTkNILCBNQU5BR0VfQklMTElORywgQkFDS1VQX1JFU1RPUkUsIE1BTkFHRV9QVUJMSUNfSE9MSURBWSwgQ1JFQVRFX0FQUF9VU0VSLCBTRUFSQ0hfRE9DVU1FTlQsIERPQ1VNRU5UX05PVElGSUNBVElPTiwgQVBQUk9WRV9ET0NVTUVOVCwgUkVQT1JUUywgTUFOQUdFX0FQUF9VU0VSLCBNQU5BR0VfRE9DVU1FTlRfR1JPVVAsIENSRUFURV9ET0NVTUVOVCwgTUFOQUdFX0RPQ1VNRU5UX1RFTVBMQVRFLCBNQU5BR0VfREVQQVJUTUVOVF9VTklULCBWSUVXX1BST1RFQ1RFRF9ET0NVTUVOVCwgTUFOQUdFX05PVElGSUNBVElPTiwgTUFOQUdFX0NIQU5ORUwsIE1BTkFHRV9ERVBBUlRNRU5ULCBNQU5BR0VfREVTSUdOQVRJT04sIE1BTkFHRV9DT01QQU5ZLCBNQU5BR0VfSVBfQUREUkVTU10iLCJlbmNrZXkiOiJ0WllKMXdpK0hCU1FsT3ZvMG5ELzIzL1lBY25tbE91bGlXSG41WW45TTZKUDZ3NHhXRWtsZHB1NExOeHAyb3Z0cDZpUGtWNDF0WHRTTkZnaCIsImNoYW5uZWwiOiJXRUIiLCJpcCI6IjA6MDowOjA6MDowOjA6MSIsImFwaWtleSI6IlJvTUxhQ1FEYzhwQ2E0QTFBays5STRMeldKalVOeGdtUkc2dVVweHNhY2xpcXBTUExJbTBuYkZzemxmaHU3TDZVZmxuQ1F4RXIvOWZBUG9pWXZTM2EwL09pakxzUFJPWiIsImlzcyI6IkVudGl0eSBTb2Z0d2FyZSBDb21wYW55IiwiaWF0IjoxNzQ4NzA5NzM3LCJleHAiOjI1NTM1MjU3Mzd9.g0V_1MiVOE_D6UOZmI2beckKZx0v4N2UaY8f11dPcwU";
+        return apiKey;
     }
 
     public String generateRequestString(String token, EuclasePayload requestPayload) {
@@ -113,7 +115,7 @@ public abstract class EuclaseService {
                 rawString.add(requestPayload.getConfirmNewPin().trim());
                 rawString.add(requestPayload.getRequestId().trim());
             }
-            case "ChangeSecurityQuestion" -> {
+            case "SecurityQuestion" -> {
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getSecurityQuestion().trim());
                 rawString.add(requestPayload.getSecurityAnswer().trim());
@@ -239,6 +241,7 @@ public abstract class EuclaseService {
                 if (!requestPayload.getAmount().equalsIgnoreCase("")) {
                     rawString.add(requestPayload.getAmount().trim());
                 }
+                rawString.add(requestPayload.getChannel().trim());
                 rawString.add(requestPayload.getRequestId().trim());
             }
             case "DocumentUpload" -> {
@@ -320,14 +323,9 @@ public abstract class EuclaseService {
                 rawString.add(requestPayload.getOtp().trim());
                 rawString.add(requestPayload.getRequestId().trim());
             }
-            case "Totp" -> {
-                rawString.add(requestPayload.getEmail().trim());
-                rawString.add(requestPayload.getOtp1().trim());
-                rawString.add(requestPayload.getOtp2().trim());
-                rawString.add(requestPayload.getOtp3().trim());
-                rawString.add(requestPayload.getOtp4().trim());
-                rawString.add(requestPayload.getOtp5().trim());
-                rawString.add(requestPayload.getOtp6().trim());
+            case "TOTP" -> {
+                rawString.add(requestPayload.getUsername().trim());
+                rawString.add(requestPayload.getPin().trim());
                 rawString.add(requestPayload.getRequestId().trim());
             }
             case "DateRange" -> {
@@ -382,14 +380,15 @@ public abstract class EuclaseService {
                 }
                 rawString.add(requestPayload.getUsername().trim());
                 rawString.add(requestPayload.getBackupName().trim());
-                rawString.add(requestPayload.getFolder().trim());
+                rawString.add(requestPayload.getBackupType().trim());
                 rawString.add(requestPayload.getStartDate().trim());
                 rawString.add(requestPayload.getFrequency().trim());
                 rawString.add(requestPayload.getRuntime().trim());
                 rawString.add(requestPayload.getRemoteHost().trim());
                 rawString.add(requestPayload.getRemoteHostUsername().trim());
                 rawString.add(requestPayload.getRemoteHostPassword().trim());
-                rawString.add(requestPayload.getRemoteDirectory().trim());
+                rawString.add(requestPayload.getSource().trim());
+                rawString.add(requestPayload.getDestination().trim());
                 rawString.add(requestPayload.getRequestId().trim());
             }
             case "Report" -> {
@@ -768,4 +767,5 @@ public abstract class EuclaseService {
             return ex.getMessage();
         }
     }
+
 }

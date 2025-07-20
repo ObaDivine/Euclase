@@ -16,17 +16,17 @@
                                     <ol class="breadcrumb mb-0">
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                        <li class="breadcrumb-item active">Audit Log</li>
+                                        <li class="breadcrumb-item active">Email Notification</li>
                                     </ol>
                                 </nav>
-                                <h4 class="mb-2 text-secondary">Audit Report</h4>
-                                <h6 class="text-700 fw-semi-bold">Report of audit log</h6>
+                                <h4 class="mb-2 text-secondary">Email Report</h4>
+                                <h6 class="text-700 fw-semi-bold">Report of email notifications</h6>
                             </div>                              
                             <div class="row g-3 mb-6">
                                 <div class="offset-lg-2 col-lg-8 col-sm-12 col-md-12">
-                                    <form th:object="${euclasePayload}" th:action="@{/report/audit-log/}" method="POST">
-                                        <input type="hidden" id="transType" name="transType" value="Audit" />
-                                        <input type="hidden" id="newValue" name="newValue"  value="Audit"/>
+                                    <form th:object="${euclasePayload}" th:action="@{/report/email/}" method="POST">
+                                        <input type="hidden" id="transType" name="transType" value="Email" />
+                                        <input type="hidden" id="newValue" name="newValue"  value="Email"/>
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-text filter-label" id="startDate">Start Date</span>
                                             <input class="form-control" type="date" aria-label="StartDate" aria-describedby="startDate" th:field="*{startDate}" required="required" />
@@ -34,44 +34,12 @@
                                             <input class="form-control" type="date" aria-label="endDate" aria-describedby="endDate" th:field="*{endDate}" required="required"/>
                                         </div>
                                         <div class="input-group input-group-sm">
-                                            <span class="input-group-text filter-label" id="auditCategory">Audit Category</span>
-                                            <select class="form-select form-control-sm form-icon-input" aria-label="auditCategory" th:field="*{auditCategory}">
-                                                <option value="">---Select audit category---</option>
-                                                <option value="User">Application Users</option>
-                                                <option value="Branch">Branch</option>
-                                                <option value="Company">Company</option>
-                                                <option value="Department">Department</option>
-                                                <option value="Designation">Designation</option>
-                                                <option value="Backup">Document Backup</option>
-                                                <option value="Document">Document Transaction</option>
-                                                <option value="Document Archiving">Document Archiving</option>
-                                                <option value="Document Notification">Document Notification</option>
-                                                <option value="Document Template">Document Template</option>
-                                                <option value="Document Workflow">Document Workflow</option>
-                                                <option value="Document Signature">Document Signature</option>
-                                                <option value="Grade Level">Grade Level</option>
-                                                <option value="Login">Login</option>
-                                                <option value="Public Holiday">Public Holiday</option>
-                                                <option value="Role">Role</option>
-                                                <option value="SLA">Service Level Agreement</option>
+                                            <span class="input-group-text filter-label" id="recordType">Report Category</span>
+                                            <select class="form-select form-control-sm form-icon-input" aria-label="recordType" th:field="*{recordType}" required="required">
+                                                <option value="">---Select report type---</option>
+                                                <option value="Successful">Successful</option>
+                                                <option value="Pending">Pending</option>
                                             </select>
-                                            <span class="input-group-text filter-label" id="auditClass">Audit Class</span>
-                                            <select class="form-select form-control-sm form-icon-input" aria-label="auditClass" th:field="*{auditClass}">
-                                                <option value="">---Select audit class---</option>
-                                                <option value="Update">Approval</option>
-                                                <option value="Create">Create</option>
-                                                <option value="Delete">Delete</option>
-                                                <option value="Failed">Failed</option>
-                                                <option value="Login">Login</option>
-                                                <option value="Success">Success</option>
-                                                <option value="Update">Update</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text filter-label" id="refNo">Ref No</span>
-                                            <input class="form-control form-control-sm form-icon-input" type="text" aria-label="refNo" aria-describedby="refNo" th:field="*{refNo}" placeholder="Reference number" />
-                                            <span class="input-group-text filter-label" id="username">Username</span>
-                                            <input class="form-control form-control-sm form-icon-input" type="text" aria-label="username" aria-describedby="username" th:field="*{username}" placeholder="Username" />
                                         </div>
                                         <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="submit">Submit</button>
                                     </form>
@@ -98,60 +66,75 @@
                                     <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
                                         <thead>
                                             <tr>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Audit Date</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Ref No</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="username">Action By</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="band">Audit Category</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="type">Audit Class</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Audit Action</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="old">Old Value</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="new">New Value</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="email">Recipient</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="copy">Carbon Copy</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="subject">Subject</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Message</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="error">Error</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="count">Try Count</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
                                             <tr th:each="rec : ${dataList}" class="position-static">
                                                 <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.refNo}" class="requestBy align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.username}" class="username align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.auditCategory}" class="band align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.auditClass}" class="type align-middle white-space-nowrap start ps-3"></td>
-                                                <td th:text="${rec.auditAction}" class="comment align-middle white-space-nowrap start ps-3"></td>
-                                                <td class="old align-middle white-space-nowrap start ps-3">
-                                                    <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${#strings.abbreviate(rec.oldValue,30)}"></span> &nbsp;
+                                                <td th:text="${rec.recipient}" class="email align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.carbonCopy}" class="copy align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.subject}" class="subject align-middle white-space-nowrap start ps-3"></td>
+                                                <td class="comment align-middle white-space-nowrap start ps-3">
+                                                    <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${#strings.abbreviate(rec.message,50)}"></span> &nbsp;
                                                     <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary">
-                                                        <a th:if="${rec.oldValue != ''}" href="#" th:data-bs-target="'#a' + ${rec.id} + confirmModal" data-bs-toggle="modal">
-                                                            <span class="fa-solid fa-up-right-from-square"></span>
+                                                        <a href="#" data-bs-target="#confirmModal" data-bs-toggle="modal">
+                                                            <i class="fa-solid fa-up-right-from-square"></i>
                                                         </a>
                                                     </span>
-                                                    <div class="modal fade" th:id="'a' + ${rec.id} + 'confirmModal'" tabindex="-1" role="dialog" aria-labelledby="confirmModal" aria-hidden="true">
+                                                    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModal" aria-hidden="true">
                                                         <div class="modal-dialog modal-lg">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                     <h6 class="modal-title text-primary">Euclase</h6>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <pre class="mb-2" th:text="${rec.oldValue}"></pre>
-                                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                                    <pre class="mb-4" th:text="${rec.message}"></pre>
+                                                                    <button type="button" class="btn btn-secondary btn-sm mt-3" data-bs-dismiss="modal">Close</button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="new align-middle white-space-nowrap start ps-3">
-                                                    <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${#strings.abbreviate(rec.newValue,30)}"></span> &nbsp;
-                                                    <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary">
-                                                        <a th:if="${rec.newValue != ''}" href="#" th:data-bs-target="'#b' + ${rec.id} + confirmModal" data-bs-toggle="modal">
-                                                            <span class="fa-solid fa-up-right-from-square"></span>
-                                                        </a>
-                                                    </span>
-                                                    <div class="modal fade" th:id="'b' + ${rec.id}+ 'confirmModal'" tabindex="-1" role="dialog" aria-labelledby="confirmModal" aria-hidden="true">
-                                                        <div class="modal-dialog modal-lg">
+                                                <td th:text="${rec.error}" class="error align-middle white-space-nowrap start ps-3"></td>
+                                                <td th:text="${rec.tryCount}" class="count align-middle white-space-nowrap start ps-3"></td>
+                                                <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
+                                                    <a th:if="${rec.error != null}" class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">
+                                                        <span class="fa-solid fa-paper-plane action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="Retry Notification"></span>
+                                                    </a>
+                                                    <div class="modal fade" th:id="'a' + ${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
+                                                        <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h6 class="modal-title text-primary">Euclase</h6>
+                                                                    <h6 class="modal-title text-primary">Euclase</h6>                                                                   
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <pre class="mb-2" th:text="${rec.newValue}"></pre>
+                                                                    <p class="mb-2">Retry sending email notification?</p>
+                                                                    <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/report/email/retry?seid=' + ${rec.id}}">Retry Send</a>
+                                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <a th:if="${rec.error != null}" class="text-danger" th:data-bs-target="'#b' + ${rec.id}" data-bs-toggle="modal">
+                                                        <span class="fas fa-trash action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Email Notification"></span>
+                                                    </a>
+                                                    <div class="modal fade" th:id="'b' + ${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h6 class="modal-title text-primary">Euclase</h6>                                                                   
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p class="mb-2">Confirm you want to delete this notification</p>
+                                                                    <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/report/email/delete?seid=' + ${rec.id}}">Delete</a>
                                                                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                                 </div>
                                                             </div>

@@ -4,12 +4,12 @@ import com.entitysc.euclase.constant.ResponseCodes;
 import com.entitysc.euclase.payload.DataListResponsePayload;
 import com.entitysc.euclase.payload.EuclasePayload;
 import com.entitysc.euclase.payload.EuclaseResponsePayload;
-import com.entitysc.euclase.service.PushNotificationService;
 import com.entitysc.euclase.service.RolesService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,10 +29,18 @@ public class RolesController {
 
     @Autowired
     RolesService roleService;
-    @Autowired
-    PushNotificationService notificationService;
+    @Value("${euclase.client.name}")
+    private String companyName;
+    @Value("${euclase.client.url}")
+    private String companyUrl;
     private String alertMessage = "";
     private String alertMessageType = "";
+
+    @ModelAttribute
+    public void addAttributes(Model model, Principal principal) {
+        model.addAttribute("companyName", companyName);
+        model.addAttribute("companyUrl", companyUrl);
+    }
 
     @GetMapping("/role")
     @Secured("ROLE_MANAGE_ROLES")
@@ -40,9 +48,6 @@ public class RolesController {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", roleService.fetchRoleList().getData());
         model.addAttribute("groupRolesPayload", null);
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         model.addAttribute("transType", "role");
@@ -62,9 +67,6 @@ public class RolesController {
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("dataList", roleService.fetchRoleList().getData());
         model.addAttribute("groupRolesPayload", response.getData());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
         model.addAttribute("transType", "role");
@@ -82,9 +84,6 @@ public class RolesController {
         }
         model.addAttribute("euclasePayload", response.getData());
         model.addAttribute("dataList", roleService.fetchRoleList().getData());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", alertMessageType);
         model.addAttribute("transType", "role");
@@ -108,9 +107,6 @@ public class RolesController {
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("dataList", roleService.fetchRoleList().getData());
         model.addAttribute("groupRolesPayload", response.getData());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
         model.addAttribute("transType", "group");
@@ -124,9 +120,6 @@ public class RolesController {
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("dataList", roleService.fetchRoleList().getData());
         model.addAttribute("groupRolesPayload", null);
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
         model.addAttribute("transType", "group");

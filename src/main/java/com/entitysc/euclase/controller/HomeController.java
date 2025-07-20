@@ -4,6 +4,7 @@ import com.entitysc.euclase.constant.ResponseCodes;
 import com.entitysc.euclase.payload.DataListResponsePayload;
 import com.entitysc.euclase.payload.EuclasePayload;
 import com.entitysc.euclase.payload.EuclaseResponsePayload;
+import com.entitysc.euclase.service.PushNotificationService;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +24,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import com.entitysc.euclase.service.PushNotificationService;
 import com.entitysc.euclase.service.UserService;
 import jakarta.servlet.RequestDispatcher;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,14 +33,18 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 /**
  *
  * @author briano
  */
 @Controller
+@ControllerAdvice
 public class HomeController implements ErrorController {
 
     @Autowired
@@ -51,8 +55,20 @@ public class HomeController implements ErrorController {
     private String alertMessageType = "";
     @Value("${euclase.encryption.key.web}")
     private String encryptionKey;
+    @Value("${euclase.client.name}")
+    private String companyName;
+    @Value("${euclase.client.url}")
+    private String companyUrl;
+    @Value("${spring.servlet.multipart.max-file-size}")
+    private String fileUploadLimit;
     private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
+
+    @ModelAttribute
+    public void addAttributes(Model model, Principal principal) {
+        model.addAttribute("companyName", companyName);
+        model.addAttribute("companyUrl", companyUrl);
+    }
 
     @GetMapping("/")
     public String home(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
@@ -85,20 +101,21 @@ public class HomeController implements ErrorController {
                 if (response.getData().getEnableTwoFactorAuth().equalsIgnoreCase("true")) {
                     EuclasePayload euclasePayload = new EuclasePayload();
                     euclasePayload.setEnableTwoFactorAuth(response.getData().getEnableTwoFactorAuth());
-                    euclasePayload.setUsername(response.getData().getUsername());
+                    euclasePayload.setUsername(requestPayload.getUsername());
+                    euclasePayload.setPassword(requestPayload.getPassword());
                     model.addAttribute("euclasePayload", euclasePayload);
                     model.addAttribute("alertMessage", alertMessage);
                     model.addAttribute("alertMessageType", alertMessageType);
                     resetAlertMessage();
-                    return "signintwofa";
+                    return "otp";
                 }
 
                 //Two factor authentication is not disabled
                 return "redirect:/dashboard";
             }
             default -> {
-                //Check if password has expired
-                if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.ID_EXPIRED.getResponseCode())) {
+                //Check if password has expired or using the default password
+                if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.PASSWORD_EXPIRED.getResponseCode())) {
                     model.addAttribute("euclasePayload", requestPayload);
                     model.addAttribute("alertMessage", response.getResponseMessage());
                     model.addAttribute("alertMessageType", "error");
@@ -112,6 +129,19 @@ public class HomeController implements ErrorController {
                 return "signin";
             }
         }
+    }
+
+    @PostMapping("/otp")
+    public String getOtp(@ModelAttribute("euclasePayload") @Valid EuclasePayload requestPayload, HttpSession httpSession, HttpServletRequest httpRequest, HttpServletResponse httpResponse, Model model) throws Exception {
+        EuclaseResponsePayload response = userService.processOtp(requestPayload);
+        if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            return "redirect:/dashboard";
+        }
+        model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("alertMessage", response.getResponseMessage());
+        model.addAttribute("alertMessageType", "error");
+        resetAlertMessage();
+        return "otp";
     }
 
     @PostMapping("/logout")
@@ -128,9 +158,6 @@ public class HomeController implements ErrorController {
     @GetMapping("/about")
     public String about(Model model, HttpServletRequest request, HttpSession httpSession, Principal principal) {
         model.addAttribute("euclasePayload", new EuclasePayload());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -244,41 +271,63 @@ public class HomeController implements ErrorController {
 
     @GetMapping("/dashboard")
     public String dashboard(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal, Model model) {
-        EuclaseResponsePayload response = userService.fetchProfileDetails(principal.getName());
+        DataListResponsePayload response = userService.fetchProfileDetails(principal.getName());
         //Check if security question has been set
-        if (response.getData().getSecurityQuestion().equalsIgnoreCase("NA")) {
+        if (response.getPayload().getSecurityQuestion().equalsIgnoreCase("NA")) {
             return "redirect:/security-question";
         }
-        httpSession.setAttribute("profileImage", response.getData().getUsername() + ".png");
-        httpSession.setAttribute("firstName", response.getData().getFirstName());
-        httpSession.setAttribute("lastName", response.getData().getLastName());
-        httpSession.setAttribute("title", response.getData().getSalutation());
-        httpSession.setAttribute("mobileNumber", response.getData().getMobileNumber());
-        httpSession.setAttribute("mobileNumberVerified", response.getData().getMobileNumberVerified());
-        httpSession.setAttribute("username", response.getData().getUsername());
-        httpSession.setAttribute("enableMFA", response.getData().getEnableTwoFactorAuth());
-        httpSession.setAttribute("itemCounts", String.valueOf(response.getData().getItemCounts()));
-        httpSession.setAttribute("signatureLink", response.getData().getSignatureLink());
-        httpSession.setAttribute("documentCount", response.getData().getDocumentCount());
-        httpSession.setAttribute("documentViolatedSLACount", response.getData().getDocumentViolatedSLACount());
-        httpSession.setAttribute("daysToDate", response.getData().getDaysToDate());
+        //Set session variables
+        httpSession.setAttribute("profileImage", response.getPayload().getUsername() + ".png");
+        httpSession.setAttribute("firstName", response.getPayload().getFirstName());
+        httpSession.setAttribute("lastName", response.getPayload().getLastName());
+        httpSession.setAttribute("title", response.getPayload().getSalutation());
+        httpSession.setAttribute("mobileNumber", response.getPayload().getMobileNumber());
+        httpSession.setAttribute("mobileNumberVerified", response.getPayload().getMobileNumberVerified());
+        httpSession.setAttribute("username", response.getPayload().getUsername());
+        httpSession.setAttribute("enableMFA", response.getPayload().getEnableTwoFactorAuth());
+        httpSession.setAttribute("itemCounts", String.valueOf(response.getPayload().getItemCounts()));
+        httpSession.setAttribute("signatureLink", response.getPayload().getSignatureLink());
+        httpSession.setAttribute("documentCount", response.getPayload().getDocumentCount());
+        httpSession.setAttribute("documentViolatedSLACount", response.getPayload().getDocumentViolatedSLACount());
+        httpSession.setAttribute("daysToDate", response.getPayload().getDaysToDate());
+        httpSession.setAttribute("documentArchiveGroupCode", response.getPayload().getDocumentGroupCode());
+        httpSession.setAttribute("documentArchiveTypeCode", response.getPayload().getDocumentTypeCode());
+        httpSession.setAttribute("releaseDate", response.getPayload().getReleaseDate());
+        httpSession.setAttribute("releaseVersion", response.getPayload().getReleaseVersion());
+        httpSession.setAttribute("companyName", response.getPayload().getCompanyName());
+        httpSession.setAttribute("companyCode", response.getPayload().getCompanyCode());
+        httpSession.setAttribute("branchName", response.getPayload().getBranchName());
+        httpSession.setAttribute("branchCode", response.getPayload().getBranchCode());
+        httpSession.setAttribute("departmentName", response.getPayload().getDepartmentName());
+        httpSession.setAttribute("unitName", response.getPayload().getDepartmentUnitName());
+        httpSession.setAttribute("companyId", response.getPayload().getCompany());
+        //Set the pending documents on the dashboard
         httpSession.setAttribute("dataList", response.getData());
-        httpSession.setAttribute("documentArchiveGroupCode", response.getData().getDocumentGroupCode());
-        httpSession.setAttribute("releaseDate", response.getData().getReleaseDate());
-        httpSession.setAttribute("releaseVersion", response.getData().getReleaseVersion());
-        httpSession.setAttribute("companyName", response.getData().getCompanyName());
-        httpSession.setAttribute("branchName", response.getData().getBranchName());
-        httpSession.setAttribute("departmentName", response.getData().getDepartmentName());
-        httpSession.setAttribute("unitName", response.getData().getDepartmentUnitName());
-        httpSession.setAttribute("companyId", response.getData().getCompany());
-        model.addAttribute("euclasePayload", new EuclasePayload());
+        //Set the push notification for the user
         DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
+        httpSession.setAttribute("notification", pushNotifications.getData());
+        httpSession.setAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
+
+        model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
         return "dashboard";
+    }
+
+    @PostMapping("/qrcode")
+    public String qrCode(@ModelAttribute("euclasePayload") @Valid EuclasePayload requestPayload, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Model model, Principal principal) {
+        EuclaseResponsePayload response = userService.processQRCode(requestPayload);
+        if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            requestPayload.setQRCodeImageUrl(response.getData().getQRCodeImageUrl());
+            model.addAttribute("euclasePayload", requestPayload);
+            resetAlertMessage();
+            return "authenticator";
+        }
+        model.addAttribute("euclasePayload", requestPayload);
+        alertMessage = response.getResponseMessage();
+        alertMessageType = "error";
+        return "redirect:/";
     }
 
     @RequestMapping("/error")
@@ -296,6 +345,12 @@ public class HomeController implements ErrorController {
             }
         }
         return "error";
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public String handleMaxSizeException(Model model) {
+        model.addAttribute("fileUploadLimit", fileUploadLimit);
+        return "413";
     }
 
     private void resetAlertMessage() {

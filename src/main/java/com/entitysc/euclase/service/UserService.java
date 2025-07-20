@@ -7,7 +7,6 @@ import com.entitysc.euclase.payload.EuclaseResponsePayload;
 import com.entitysc.euclase.payload.ExceptionPayload;
 import com.google.gson.JsonSyntaxException;
 import java.util.Locale;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +28,8 @@ public class UserService extends EuclaseService {
     MessageSource messageSource;
     @Value("${euclasews.api.signin}")
     private String signInUrl;
+    @Value("${euclasews.api.otp.validation}")
+    private String otpUrl;
     @Value("${euclasews.api.changedefaultpassword}")
     private String changeDefaultPasswordUrl;
     @Value("${euclasews.api.changepassword}")
@@ -51,6 +52,12 @@ public class UserService extends EuclaseService {
     private String fetchAppUserUrl;
     @Value("${euclasews.api.appuser.generic.update}")
     private String updateAppUserGenericUrl;
+    @Value("${euclasews.api.appuser.online}")
+    private String appUserOnlineUrl;
+    @Value("${euclasews.api.qrcode.generate}")
+    private String qrCodeUrl;
+    @Value("${euclasews.qrcode.issuer}")
+    private String issuer;
 
     public EuclaseResponsePayload processSignin(EuclasePayload requestPayload) {
         try {
@@ -61,6 +68,43 @@ public class UserService extends EuclaseService {
             requestPayload.setHash(generateRequestString(generateEuclaseWSAPIToken(), requestPayload));
             //Connect to EuclaseWS API
             String response = callEuclaseWSAPI(signInUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "Login");
+            //Check for error
+            if (response.contains("error")) {
+                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
+                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
+                exceptionResponse.setResponseCode(responsePayload.getStatus());
+                exceptionResponse.setResponseMessage(responsePayload.getMessage());
+                return exceptionResponse;
+            } else {
+                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
+                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+                }
+                return responsePayload;
+            }
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    public EuclaseResponsePayload processOtp(EuclasePayload requestPayload) {
+        try {
+            requestPayload.setToken(generateEuclaseWSAPIToken());
+            requestPayload.setRequestType("TOTP");
+            requestPayload.setAppType("Euclase");
+            requestPayload.setRequestId(generateRequestId());
+            requestPayload.setPin(requestPayload.getOtp()); //Unify PIN used by the API
+            requestPayload.setHash(generateRequestString(generateEuclaseWSAPIToken(), requestPayload));
+            //Connect to EuclaseWS API
+            String response = callEuclaseWSAPI(otpUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "OTP");
             //Check for error
             if (response.contains("error")) {
                 ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
@@ -194,7 +238,7 @@ public class UserService extends EuclaseService {
     }
 
     @Cacheable(value = "userProfile", key = "#username")
-    public EuclaseResponsePayload fetchProfileDetails(String username) {
+    public DataListResponsePayload fetchProfileDetails(String username) {
         try {
             EuclasePayload requestPayload = new EuclasePayload();
             requestPayload.setChannel("WEB");
@@ -208,20 +252,20 @@ public class UserService extends EuclaseService {
             //Check for error
             if (response.contains("error")) {
                 ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
-                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
+                DataListResponsePayload exceptionResponse = new DataListResponsePayload();
                 exceptionResponse.setResponseCode(responsePayload.getStatus());
                 exceptionResponse.setResponseMessage(responsePayload.getMessage());
                 return exceptionResponse;
             } else {
-                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
-                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                DataListResponsePayload responsePayload = gson.fromJson(response, DataListResponsePayload.class);
+                if (responsePayload.getPayload().getStatus() != null && responsePayload.getPayload().getError() != null && responsePayload.getPayload().getPath() != null) {
                     responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
                     responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
                 }
                 return responsePayload;
             }
         } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
-            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
             responsePayload.setResponseCode("500");
             if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
                 responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
@@ -388,7 +432,7 @@ public class UserService extends EuclaseService {
         }
     }
 
-    @CachePut(value = "userUpdate", key = "#a0.username")
+    @CachePut(value = "userUpdate", key = "{#a0.username}")
     public EuclaseResponsePayload processUpdateUserGenericDetails(EuclasePayload requestPayload, String principal) {
         try {
             requestPayload.setChannel("WEB");
@@ -438,6 +482,61 @@ public class UserService extends EuclaseService {
             requestPayload.setHash(generateRequestString(generateEuclaseWSAPIToken(), requestPayload));
             //Connect to EuclaseWS API
             String response = callEuclaseWSAPI(changeDefaultPasswordUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "Change Password");
+            //Check for error
+            if (response.contains("error")) {
+                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
+                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
+                exceptionResponse.setResponseCode(responsePayload.getStatus());
+                exceptionResponse.setResponseMessage(responsePayload.getMessage());
+                return exceptionResponse;
+            } else {
+                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
+                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+                }
+                return responsePayload;
+            }
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    public DataListResponsePayload fetchAppUserOnline(String id) {
+        try {
+            String encodedParam = urlEncodeString(encryptString(id.trim()));
+            //Connect to EuclaseWS API
+            String response = callEuclaseWSAPI(appUserOnlineUrl + "?id=" + encodedParam, "GET", generateEuclaseWSAPIToken(), "App User List");
+            return gson.fromJson(response, DataListResponsePayload.class);
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    public EuclaseResponsePayload processQRCode(EuclasePayload requestPayload) {
+        try {
+            requestPayload.setToken(generateEuclaseWSAPIToken());
+            requestPayload.setRequestType("QRCode");
+            requestPayload.setAppType("Euclase");
+            requestPayload.setRequestId(generateRequestId());
+            requestPayload.setIssuer(issuer);
+            requestPayload.setHash(generateRequestString(generateEuclaseWSAPIToken(), requestPayload));
+            //Connect to EuclaseWS API
+            String response = callEuclaseWSAPI(qrCodeUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "QR Code");
             //Check for error
             if (response.contains("error")) {
                 ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);

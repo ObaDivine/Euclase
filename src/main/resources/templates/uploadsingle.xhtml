@@ -15,17 +15,17 @@
                                 <ol class="breadcrumb mb-0">
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/document/new}">Document</a></li>
-                                    <li class="breadcrumb-item active">Archive</li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/document/}">New Document</a></li>
+                                    <li class="breadcrumb-item active">Single Upload</li>
                                 </ol>
                             </nav>
-                            <h4 class="mb-2 text-secondary">Document Archiving</h4>
-                            <h6 class="text-700 fw-semi-bold">Upload document for archiving</h6>
+                            <h4 class="mb-2 text-secondary">Single Document Upload</h4>
+                            <h6 class="text-700 fw-semi-bold">Upload single document for archiving</h6>
                         </div>
                         <p class="text-700 fw-semi-bold text-secondary mt-2">
-                            Euclase supports archiving any kind of documents including JPEG, PNG, TIFF, DOC, PPT, XLS, PDF & ZIP
+                            Euclase supports document upload any type including JPEG, PNG, TIFF, DOC, PPT, XLS, PDF & ZIP
                         </p>
-                        <form th:object="${euclasePayload}" th:action="@{/document/archive/process}" method="POST" enctype="multipart/form-data">
+                        <form th:object="${euclasePayload}" th:action="@{/document/upload/single/process}" method="POST" enctype="multipart/form-data">
                             <div class="form-icon-container">
                                 <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{documentId}"  required="required" th:readonly="${allowUserDocumentId == 'true' ? ' ' : 'readonly'}"/>
                                 <span class="text-primary asterisk">*</span>
@@ -45,18 +45,19 @@
                             <div class="form-icon-container">
                                 <select class="form-select form-control-sm form-icon-input" aria-label="accessLevel" th:field="*{accessLevel}" required="required">
                                     <option value="">---Select access level---</option>
-                                    <option value="5">Executive Management Only</option>
-                                    <option value="4">Management Staff Only</option>
-                                    <option value="3">Department Members Only</option>
+                                    <option value="6">Executive Management Only</option>
+                                    <option value="5">Management Staff Only</option>
+                                    <option value="4">Branch Staff Only</option>
+                                    <option value="3">Department Staff Only</option>
                                     <option value="2">Unit Staff Only</option>
                                     <option value="1">All Staff</option>
                                 </select>
                                 <span class="text-primary asterisk">*</span>
                                 <span class="fas fa-level-down-alt text-900 fs--1 form-icon text-primary"></span>
                             </div>
-                            <h6 class="text-700 fw-semi-bold text-secondary mt-3">Upload Files</h6>
+                            <h6 class="text-700 fw-semi-bold text-secondary mt-3">Upload Single File</h6>
                             <div class="form-icon-container">
-                                <input type="file" class="form-control form-control-sm form-icon-input" th:field="*{uploadedFile}" required="required"/>
+                                <input type="file" class="form-control form-control-sm form-icon-input" th:field="*{uploadedFiles}" required="required"/>
                                 <span class="text-primary asterisk">*</span>
                                 <span class="fas fa-signature text-900 fs--1 form-icon text-primary"></span>
                             </div>                               

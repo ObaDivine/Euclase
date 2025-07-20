@@ -2,7 +2,8 @@ var list = new List('listTable', {
     valueNames: ['id', 'date', 'createdBy', 'document', 'priority', 'sla', 'comment', 'username', 'name', 'mobile', 'email', 'gender', 'dob',
         'branch', 'department', 'unit', 'designation', 'grade', 'code', 'location', 'position', 'type', 'tag', 'hod', 'teamLead', 'branchHead',
         'version', 'link', 'frequency', 'password', 'directory', 'access', 'expiry', 'violated', 'startDate', 'endDate', 'online', 'address',
-        'daily', 'weekly', 'monthly', 'cost', 'band', 'url', 'channel', 'balanceBf', 'closingBalance', 'company'
+        'daily', 'weekly', 'monthly', 'cost', 'band', 'url', 'channel', 'balanceBf', 'closingBalance', 'company', 'session', 'copy', 'subject', 'error', 'count',
+        'old', 'new', 'source', 'destination', 'time'
     ],
     page: 10,
     pagination: true
@@ -361,3 +362,46 @@ function fetchCompanyDocumentGroup() {
     }
 }
 ;
+
+function fetchDocumentGroupType() {
+    let documentGroup = document.getElementById("documentGroup").value;
+    if (documentGroup !== "") {
+        $.ajax({
+            url: "/euclase/setup/document/group/type/" + documentGroup,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                var html = '<option value="">---Select document type---</option>';
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    html += '<option value="' + data[i].id + '">' + data[i].documentTypeName + '</option>';
+                }
+                html += '</option>';
+                $('#documentType').html(html);
+            },
+            error: function (xhr, status) {
+                alert(xhr);
+            }
+        });
+    }
+}
+;
+
+function documentAccess(documentId) {
+    $.ajax({
+        url: "/euclase/document/access/" + documentId,
+        type: "GET",
+        dataType: "text",
+        error: function (xhr, status) {
+
+        }
+    });
+}
+;
+
+function prettyJson(){
+    var ugly = document.getElementById('documentWorkflowBody').value;
+    var obj = JSON.parse(ugly);
+    var pretty = JSON.stringify(obj, undefined, 4);
+    document.getElementById('documentWorkflowBody').value = pretty;
+};

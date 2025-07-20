@@ -37,6 +37,29 @@
                                 <div class="text-center">
                                     <span><a href="" th:href="@{/forgot-password}">Forgot your password?</a></span>
                                 </div>
+                                <div class="text-center">
+                                    <span><a href="" data-bs-target="#confirmQRCode" data-bs-toggle="modal">Scan QR Code</a></span>
+                                </div>
+                            </form>
+                            <form th:object="${euclasePayload}" th:action="@{/qrcode}" method="POST">
+                                <div class="modal fade" id="confirmQRCode" tabindex="-1" role="dialog" aria-labelledby="confirmQRCode" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h6 class="modal-title text-primary">Euclase</h6>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-icon-container mb-3">
+                                                    <input class="form-control form-icon-input" th:field="*{username}" type="text" placeholder="Enter username" required="required" />
+                                                    <span class="text-primary asterisk">*</span>
+                                                    <span class="fas fa-user text-900 fs--1 form-icon text-primary"></span>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>

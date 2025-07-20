@@ -28,11 +28,11 @@
                                 </div>
                                 <div class="col-lg-8 col-md-8 col-sm-12">
                                     <div class="card-body">
-                                        <h4 class="card-title text-primary">New Documents</h4><hr/>
+                                        <h4 class="card-title text-primary">Create New Document</h4><hr/>
                                         <div class="row">
                                             <div th:each="rec : ${documentTypes}" class="col-lg-6 col-sm-12 mb-2">
                                                 <i class="fa fa-file-alt text-primary"></i>
-                                                <a class="fs--1 ms-2 text-secondary" href="#!" th:href="@{'/document/new?seid=' + ${rec.id}}" th:text="'Create ' + ${rec.documentTypeName}">Document Name</a>
+                                                <a class="fs--1 ms-2 text-secondary" href="#!" th:href="@{'/document/new?seid=' + ${rec.id}}" th:text="${rec.documentTypeName}">Document Name</a>
                                             </div>
                                         </div>
                                     </div>

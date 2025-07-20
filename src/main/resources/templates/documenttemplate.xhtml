@@ -20,7 +20,7 @@
                                 </ol>
                             </nav>
                             <h4 class="mb-2 text-secondary" th:text="${euclasePayload.documentTypeName}">Document Template</h4>
-                            <h6 class="text-700 fw-semi-bold" th:text="'Template for Managing ' + ${euclasePayload.documentTypeName} + ' Document'">Template description</h6>
+                            <h6 class="text-700 fw-semi-bold" th:text="'Template Designer for ' + ${euclasePayload.documentTypeName}">Template description</h6>
                         </div>
                         <form th:action="@{/setup/template/create}" method="POST" th:onsubmit="|fetchEditorData()|">
                             <input type="hidden" th:field="*{id}" />
@@ -49,6 +49,10 @@
                                                     <td class="align-middle email">Requester Branch</td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="align-middle ps-3 name">{{COMPANY}}</td>
+                                                    <td class="align-middle email">Requester company</td>                                                      
+                                                </tr>
+                                                <tr>
                                                     <td class="align-middle ps-3 name">{{COMPANY_NAME}}</td>
                                                     <td class="align-middle email">Name of company</td>                                                      
                                                 </tr>
@@ -71,7 +75,7 @@
                                                     <td class="align-middle ps-3 name">{{COMPANY_RC}}</td>
                                                     <td class="align-middle email">Company RC number</td>
                                                 </tr>
-                                                 <tr>
+                                                <tr>
                                                     <td class="align-middle ps-3 name">{{COMMENT}}</td>
                                                     <td class="align-middle email">Comment to approving officer</td>
                                                 </tr>
@@ -99,7 +103,7 @@
                                                     <td class="align-middle ps-3 name">{{DURATION}}</td>
                                                     <td class="align-middle email">Time elapse between dates</td>
                                                 </tr>
-                                                 <tr>
+                                                <tr>
                                                     <td class="align-middle ps-3 name">{{END_DATE}}</td>
                                                     <td class="align-middle email">End date</td>
                                                 </tr>
@@ -137,7 +141,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="align-middle ps-3 name">{{SIGNATURE}}</td>
-                                                    <td class="align-middle email">Link to inputter signature</td>
+                                                    <td class="align-middle email">Link to requester signature</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="align-middle ps-3 name">{{START_DATE}}</td>

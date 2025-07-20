@@ -19,12 +19,13 @@
                                     <li class="breadcrumb-item active">Document Initialization</li>
                                 </ol>
                             </nav>
-                            <h4 class="mb-2 text-secondary" th:text="'New ' + ${euclasePayload.documentTypeName} + ' Document'">New Document</h4>
+                            <h4 class="mb-2 text-secondary" th:text="${euclasePayload.documentTypeName}">New Document</h4>
                             <h6 class="text-700 fw-semi-bold" th:text="'Create New ' + ${euclasePayload.documentTypeName} + ' Document'">Document description</h6>
                         </div>
                         <form  th:action="@{/document/init}" method="POST">
                             <input type="hidden" th:field="*{id}" />
                             <input type="hidden" th:field="*{documentType}" />
+                            <input type="hidden" th:field="*{documentTypeName}" />
                             <div class="form-icon-container">
                                 <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{documentId}"  required="required" th:readonly="${allowUserDocumentId == 'true' ? ' ' : 'readonly'}"/>
                                 <span class="text-primary asterisk">*</span>
@@ -74,15 +75,16 @@
                             <h6 class="text-700 fw-semi-bold text-secondary mt-3">Reference Document(s)</h6>
                             <div class="form-icon-container mt-1">
                                 <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{referenceDocument}" placeholder="Enter reference documents ID separated by comma"/>
-                                <span class="fas fa-comments text-900 fs--1 form-icon text-primary"></span>
+                                <span class="fa-solid fa-file text-900 fs--1 form-icon text-primary"></span>
                             </div>
                             <h6 class="text-700 fw-semi-bold text-secondary mt-3">Access Level Required</h6>
                             <div class="form-icon-container">
                                 <select class="form-select form-control-sm form-icon-input" aria-label="accessLevel" th:field="*{accessLevel}" required="required">
                                     <option value="">---Select access level---</option>
-                                    <option value="5">Executive Management Only</option>
-                                    <option value="4">Management Staff Only</option>
-                                    <option value="3">Department Members Only</option>
+                                    <option value="6">Executive Management Only</option>
+                                    <option value="5">Management Staff Only</option>
+                                    <option value="4">Branch Staff Only</option>
+                                    <option value="3">Department Staff Only</option>
                                     <option value="2">Unit Staff Only</option>
                                     <option value="1">All Staff</option>
                                 </select>

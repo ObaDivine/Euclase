@@ -14,7 +14,7 @@
                                 <ol class="breadcrumb mb-0">
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/document/my}">My Document</a></li>
+                                    <li class="breadcrumb-item"><a href="#" onclick="history.back()">Go Back</a></li>
                                     <li class="breadcrumb-item active">Document Details</li>
                                 </ol>
                             </nav>
@@ -51,91 +51,134 @@
                                 <div class="tab-content" id="documentTabContent">
                                     <div class="tab-pane fade show active" id="tab-details" role="tabpanel" aria-labelledby="details-tab">
                                         <div class="row g-3 mb-2">
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0">Document Id: </span>
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentId}"></span>
                                             </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document Owner: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdBy}"></span>
+                                            </div>              
+                                        </div>
+                                        <div class="row g-3 mb-2">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0">Document Group: </span>
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentGroupName}"></span>
                                             </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0">Document Type: </span>
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.documentTypeName}"></span>
                                             </div>
                                         </div>
                                         <div class="row g-3 mb-2">
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document Name: </span>
-                                                <a href="" th:href="@{${euclasePayload.documentLink}}" th:text="${euclasePayload.documentName}" target="_blank"></a>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">File Name: </span>
-                                                <a href="" th:href="@{${euclasePayload.documentLink}}" th:text="${euclasePayload.originalFileName}" target="_blank"></a>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Tag: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.tag}"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row g-3 mb-2">
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Created At: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdAt}"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Create By: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdBy}"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Reference Document: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.referenceDocument}"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row g-3 mb-2">
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Carbon Copy: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.carbonCopy}"></span>
-                                            </div>
-                                           <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Priority: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.priority}"></span>
-                                            </div>
-                                           <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Access Level: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.accessLevel}"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row g-3 mb-2">
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">SLA Expiry: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.slaExpiry}"></span>
-                                            </div> 
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">SLA Violated: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.slaViolated}"></span>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0">SLA Violated By: </span>
-                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.slaViolatedBy}"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row g-3 mb-2">
-                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0">Purpose: </span>
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.purpose}"></span>
                                             </div>
-                                        </div>
-                                        <div class="row g-3 mb-2">
-                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0">Narration: </span>
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.narration}"></span>
                                             </div>
                                         </div>
                                         <div class="row g-3 mb-2">
-                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Document Name: </span>
+                                                <span th:if="${!euclasePayload.allowAccess}" th:text="${euclasePayload.documentName}"></span>
+                                                <a th:if="${euclasePayload.allowAccess}" href="" th:href="@{${euclasePayload.documentLink}}" th:text="${euclasePayload.documentName}" target="_blank" th:onclick="|documentAccess(${euclasePayload.id})|"></a>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Original File Name: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.originalFileName}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-2">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Company: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.companyName}"></span>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Branch: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.branchName}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-2">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Department: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.departmentName}"></span>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Unit: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.departmentUnitName}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-2">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Tag: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.tag}"></span>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Reference Document: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.referenceDocument}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-2">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Created At: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.createdAt}"></span>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Status: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.status}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-2">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Channel: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.channel}"></span>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Access Level: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.accessLevel}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-2">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Carbon Copy: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.carbonCopy}"></span>
+                                            </div>
+<!--                                            <div class="col-lg-6 col-md-12 col-sm-12">
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0">Approvals: </span>
                                                 <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.approvalRoute}"></span>
+                                            </div>-->
+                                        </div>
+                                        <div class="row g-3 mb-2">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Required Approvals: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.approvalRoute}"></span>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Current Approving Officer: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.approvingOfficer}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-2">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">Priority: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.priority}"></span>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">SLA Expiry: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.slaExpiry}"></span>
+                                            </div> 
+                                        </div>
+                                        <div class="row g-3 mb-2">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">SLA Violated: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.slaViolated}"></span>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0">SLA Violated By: </span>
+                                                <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.slaViolatedBy}"></span>
                                             </div>
                                         </div>
                                     </div>  
@@ -220,7 +263,8 @@
                                                             <td th:text="${rec.createdBy}" class="code align-middle white-space-nowrap start ps-3"></td>
                                                             <td th:text="${rec.version}" class="date align-middle white-space-nowrap start ps-3"></td>
                                                             <td class="code align-middle white-space-nowrap start ps-3">
-                                                                <a href="" th:href="@{${rec.host} + ${rec.documentName} + '-' + ${rec.version} + '.' + ${rec.documentExt}}" th:text="'v' + ${rec.version}" target="_blank"></a>
+                                                                <span th:if="${!rec.allowAccess}" th:text="'v' + ${rec.version}"></span>
+                                                                <a th:if="${rec.allowAccess}" href="" th:href="@{${rec.host} + ${rec.documentName} + '-' + ${rec.version} + '.' + ${rec.documentExt}}" th:text="'v' + ${rec.version}" target="_blank" th:onclick="|documentAccess(${rec.id})|"></a>
                                                             </td>
                                                         </tr>
                                                     </tbody>

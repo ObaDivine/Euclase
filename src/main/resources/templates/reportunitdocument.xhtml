@@ -33,11 +33,33 @@
                                             <input class="form-control" type="date" aria-label="endDate" aria-describedby="endDate" th:field="*{endDate}" required="required"/>
                                         </div>
                                         <div class="form-icon-container">
-                                            <select class="form-select form-control-sm form-icon-input" aria-label="newValue" th:field="*{newValue}" required="required">
-                                                <option value="">---Select unit---</option>
-                                                <option th:each="fa : ${unitList}" th:value="${fa.id}" th:text="${fa.departmentUnitName}"></option>
+                                            <select class="form-select form-icon-input" th:field="*{company}" th:onchange="|fetchCompanyBranches()|" th:onfocusout="|fetchCompanyBranches()|">
+                                                <option value="">---Select company---</option>
+                                                <option th:each="fa : ${companyList}" th:value="${fa.id}" th:text="${fa.companyName}"></option>
                                             </select>
-                                            <span class="fas fa-filter text-900 fs--1 form-icon text-primary"></span>
+                                            <span class="text-primary asterisk">*</span>
+                                            <span class="fas fa-building text-900 fs--1 form-icon text-primary"></span>
+                                        </div>
+                                        <div class="form-icon-container">
+                                            <select class="form-select form-icon-input" th:field="*{branch}" th:onchange="|fetchBranchDepartment()|" th:onfocusout="|fetchBranchDepartment()|">
+                                                <option value="">---Select branch---</option>
+                                            </select>
+                                            <span class="text-primary asterisk">*</span>
+                                            <span class="fas fa-code-branch text-900 fs--1 form-icon text-primary"></span>
+                                        </div>
+                                        <div class="form-icon-container">
+                                            <select class="form-select form-icon-input" th:field="*{department}" th:onchange="|fetchDepartmentUnits()|" th:onfocusout="|fetchDepartmentUnits()|">
+                                                <option value="">---Select department---</option>
+                                            </select>
+                                            <span class="text-primary asterisk">*</span>
+                                            <span class="far fa-building text-900 fs--1 form-icon text-primary"></span>
+                                        </div>
+                                        <div class="form-icon-container">
+                                            <select class="form-select form-icon-input" th:field="*{departmentUnit}" required="required">
+                                                <option value="">---Select department unit---</option>
+                                            </select>
+                                            <span class="text-primary asterisk">*</span>
+                                            <span class="far fa-building text-900 fs--1 form-icon text-primary"></span>
                                         </div>
                                         <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="submit">Submit</button>
                                     </form>
@@ -70,6 +92,7 @@
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="type">Document Type</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="tag">Tags</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="company">Company</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="branch">Branch</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="department">Department</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="unit">Unit</th>
@@ -86,6 +109,7 @@
                                                 <td th:text="${rec.documentType}" class="type align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.tag}" class="tag align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.narration}" class="comment align-middle white-space-nowrap ps-3"></td>
+                                                <td th:text="${rec.companyName}" class="company align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.branchName}" class="branch align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.departmentName}" class="department align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.departmentUnitName}" class="unit align-middle white-space-nowrap ps-3"></td>

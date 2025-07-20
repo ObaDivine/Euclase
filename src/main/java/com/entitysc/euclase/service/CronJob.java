@@ -1,65 +1,42 @@
 package com.entitysc.euclase.service;
 
-import com.entitysc.euclase.constant.ResponseCodes;
-import com.entitysc.euclase.payload.EuclasePayload;
-import com.entitysc.euclase.payload.EuclaseResponsePayload;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mock.web.MockMultipartFile;
+import com.entitysc.euclase.payload.DataListResponsePayload;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  *
  * @author bokon
  */
 @Service
-public class CronJob extends EuclaseService{
+public class CronJob extends EuclaseService {
 
-    @Value("${euclase.document.archivedir}")
-    private String archiveDirectory;
-    @Value("${euclasews.api.document.archive}")
-    private String processDocumentArchivingUrl;
+    @Autowired
+    PushNotificationService pushNotificationService;
 
-    @Scheduled(fixedDelay = 10000)
-    public void archiveDocuments() {
-        String token = generateEuclaseWSAPIToken();
+    @Scheduled(fixedDelay = 30000) //This is every 30 seconds
+    public void fetchUserNotifications() {
         try {
-            //Fetch all the files in the archive directory
-            File[] files = new File(archiveDirectory).listFiles();
-            if (files.length > 0) {
-                //Loop through the files in the directory
-                for (File f : files) {
-                    //Check if it is a file
-                    if (f.isFile()) {
-                        //Push the file to EuclaseWS to archive
-                        EuclasePayload EuclasePayload = new EuclasePayload();
-                        EuclasePayload.setChannel("WEB");
-                        EuclasePayload.setRequestBy("System");
-                        EuclasePayload.setRequestId(generateRequestId());
-                        EuclasePayload.setToken(token);
-                        EuclasePayload.setRequestType("DocumentArchive");
-                        EuclasePayload.setHash(generateRequestString(token, EuclasePayload));
-                        //Connect to EuclaseWS API
-                        List<MultipartFile> filesToArchive = new ArrayList<>();
-                        //Conver the file to multipart file
-                        MultipartFile fileMultipart = new MockMultipartFile(f.getName(), f.getName(), "text/plain", new FileInputStream(f));
-                        filesToArchive.add(fileMultipart);
-                        String response = callEuclaseWSAPI(processDocumentArchivingUrl, gson.toJson(EuclasePayload), filesToArchive, token, "Document Archiving");
-                        EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
-                        if (responsePayload.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
-                            //Operation is successful. Delete the file from the directory
-                            f.delete();
-                        }
-                    }
+            ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if (sra != null) {
+                HttpServletRequest request = sra.getRequest();
+                HttpSession httpSession = request.getSession(false);
+                if (httpSession != null) {
+                    String username = (String) httpSession.getAttribute("username");
+                    //Fetch the user's notification
+                    DataListResponsePayload responsePayload = pushNotificationService.fetchUserPushNotification(username);
+                    httpSession.setAttribute("notification", responsePayload.getData());
+                    httpSession.setAttribute("unreadMessageCount", responsePayload.getData() == null ? 0
+                            : responsePayload.getData().stream().filter(t -> !t.isMessageRead()).count());
                 }
             }
         } catch (Exception ex) {
-
+            logger.info("Error retrieving user notification - " + ex.getMessage());
         }
     }
 }

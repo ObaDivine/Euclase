@@ -59,7 +59,7 @@
                                 </a>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-md-6">
-                                <a th:href="@{/document/archive}">
+                                <a th:href="@{/document/upload/single}">
                                     <div class="d-flex align-items-center"><img src="" th:src="@{/images/icons/illustrations/14.png}" alt="" height="46" width="46" />
                                         <div class="ms-3">
                                             <p class="text-secondary">Archive Document</p>
@@ -100,6 +100,7 @@
                                     <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="requestBy">Created By</th>
                                     <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="documentId">Document Id</th>
                                     <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="document">Document Type</th>
+                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="company">Company</th>
                                     <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="priority">Priority</th>
                                     <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="sla">SLA</th>
                                     <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="rating">Action</th>
@@ -109,13 +110,16 @@
                                 <tr th:each="rec : ${session.dataList}" class="position-static">
                                     <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
                                     <td th:text="${rec.createdBy}" class="requestBy align-middle white-space-nowrap start ps-3"></td>
-                                    <td th:text="${rec.documentId}" class="ticketId align-middle white-space-nowrap start ps-3"></td>
-                                    <td th:text="${rec.documentTypeName}" class="serviceUnit align-middle white-space-nowrap start ps-3"></td>
+                                    <td class="ticketId align-middle white-space-nowrap start ps-3">
+                                        <a th:href="@{'/document/details?seid=' + ${rec.documentId}}" th:text="${rec.documentId}"></a>
+                                    </td>
+                                    <td th:text="${rec.documentType}" class="serviceUnit align-middle white-space-nowrap start ps-3"></td>
+                                    <td th:text="${rec.companyName}" class="priority align-middle white-space-nowrap start ps-3"></td>
                                     <td th:text="${rec.priority}" class="priority align-middle white-space-nowrap start ps-3"></td>
                                     <td th:text="${rec.slaExpiry}" class="sla align-middle white-space-nowrap start ps-3"></td>
                                     <td class="ticketId align-middle white-space-nowrap start ps-3">
                                         <a class="text-success"  href="#!" th:href="@{'/document/approve/details?seid=' + ${rec.documentId}}">
-                                            <span class="fas fa-eye action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="View Document Details"></span>
+                                            <span th:if="${session.dataList != null}" class="fas fa-eye action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="View Document Details"></span>
                                         </a>
                                     </td>
                                 </tr>

@@ -159,10 +159,13 @@ public class EuclasePayload {
     private String backupName;
     private String folder;
     private String runtime;
-    private String remoteDirectory;
+    private String backupType;
+    private String source;
+    private String destination;
     private String remoteHost;
     private String remoteHostUsername;
     private String remoteHostPassword;
+    private String remoteAddress;
     private String appType;
     private String requestId;
     private String hash;
@@ -255,6 +258,18 @@ public class EuclasePayload {
     private String billApi;
     private String recordType;
     private String recordId;
+    private String lastAccess;
+    private String sessionId;
+    private String approvingOfficer;
+    private String tryCount;
+    private String resetTime;
+    private String failedLoginCount;
+    private String activated;
+    private boolean useAdAuth;
+    private boolean useMfa;
+    private int accessCount;
+    private String accessedBy;
+    private boolean allowAccess;
 
     /*
         Report
@@ -274,5 +289,5 @@ public class EuclasePayload {
     private String message;
     private boolean messageRead;
     private String serializedForm;
-
+    private String subject;
 }

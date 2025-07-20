@@ -20,7 +20,7 @@
                                 </ol>
                             </nav>
                             <h4 class="mb-2 text-secondary" th:text="${euclasePayload.documentTypeName}">Document</h4>
-                            <h6 class="text-700 fw-semi-bold" th:text="'Process ' + ${euclasePayload.documentTypeName} + ' Document'">Document description</h6>
+                            <h6 class="text-700 fw-semi-bold" th:text="'Process ' + ${euclasePayload.documentTypeName}">Document description</h6>
                         </div>
                         <form th:action="@{/document/process}" method="POST"  enctype="multipart/form-data">
                             <input type="hidden" th:field="*{documentId}" />

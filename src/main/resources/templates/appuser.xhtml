@@ -125,19 +125,19 @@
                                     <div class="tab-pane" role="tabpanel" aria-labelledby="tab2" id="tab2">
                                         <form class="needs-validation" id="form2" novalidate="novalidate" data-wizard-form="2">
                                             <div class="form-check form-check-inline mt-2">
-                                                <input class="form-check-input form-check-inline" type="checkbox" value="True" th:field="*{companyHead}" th:attr="checked=${companyHead == 'True'}"/>
+                                                <input class="form-check-input form-check-inline" type="checkbox" value="" id="companyHead" name="companyHead" th:checked="${euclasePayload.companyHead == 'true'}"/>
                                                 <label class="form-check-label">Company Head</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="checkbox" value="True" th:field="*{branchHead}" th:attr="checked=${branchHead == 'True'}"/>
+                                                <input class="form-check-input form-check-inline" type="checkbox" value="" id="branchHead" name="branchHead" th:checked="${euclasePayload.branchHead == 'true'}"/>
                                                 <label class="form-check-label">Branch Head</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="checkbox" value="True" th:field="*{departmentHead}" th:attr="checked=${departmentHead == 'True'}" />
+                                                <input class="form-check-input form-check-inline" type="checkbox" value="" id="departmentHead" name="departmentHead" th:checked="${euclasePayload.departmentHead == 'true'}" />
                                                 <label class="form-check-label">Department Head</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="checkbox" value="True" th:field="*{teamLead}" th:attr="checked=${teamLead == 'True'}"/>
+                                                <input class="form-check-input form-check-inline" type="checkbox" value="" id="teamLead" name="teamLead" th:checked="${euclasePayload.teamLead == 'true'}"/>
                                                 <label class="form-check-label">Unit Team Lead</label> 
                                             </div>
                                             <div class="form-icon-container mt-2">
@@ -184,31 +184,31 @@
                                     <div class="tab-pane" role="tabpanel" aria-labelledby="tab3" id="tab3">
                                         <form class="mb-2 needs-validation" id="form3" novalidate="novalidate" data-wizard-form="3">
                                             <div class="form-check form-check-inline mt-2">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="6" th:attr="checked=${accessLevel == '6'}"/>
+                                                <input class="form-check-input form-check-inline" type="radio"  id="accessLevel" name="accessLevel" value="6" th:checked="${euclasePayload.accessLevel == 'Executive Management (6)'}" required="required"/>
                                                 <label class="form-check-label">Executive Management</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="5" th:attr="checked=${accessLevel == '5'}"/>
+                                                <input class="form-check-input form-check-inline" type="radio"   id="accessLevel" name="accessLevel" value="5" th:checked="${euclasePayload.accessLevel == 'Management (5)'}"/>
                                                 <label class="form-check-label">Management</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="4" th:attr="checked=${accessLevel == '4'}"/>
+                                                <input class="form-check-input form-check-inline" type="radio"   id="accessLevel" name="accessLevel" value="4" th:checked="${euclasePayload.accessLevel == 'Branch Head (4)'}"/>
                                                 <label class="form-check-label">Branch Head</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="3" th:attr="checked=${accessLevel == '3'}"/>
+                                                <input class="form-check-input form-check-inline" type="radio"   id="accessLevel" name="accessLevel" value="3" th:checked="${euclasePayload.accessLevel == 'Department Head (3)'}"/>
                                                 <label class="form-check-label">Head of Department</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="2" th:attr="checked=${accessLevel == '2'}"/>
+                                                <input class="form-check-input form-check-inline" type="radio"   id="accessLevel" name="accessLevel" value="2" th:checked="${euclasePayload.accessLevel == 'Team Lead (2)'}"/>
                                                 <label class="form-check-label">Team Lead</label> 
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input form-check-inline" type="radio"  th:field="*{accessLevel}" value="1" th:attr="checked=${accessLevel == '1'}"/>
+                                                <input class="form-check-input form-check-inline" type="radio"   id="accessLevel" name="accessLevel" value="1" th:checked="${euclasePayload.accessLevel == 'Staff (1)'}"/>
                                                 <label class="form-check-label">Staff</label> 
                                             </div>
                                             <div class="form-icon-container">
-                                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{username}" placeholder="Enter username" required="required" pattern="[a-zA-Z0-9]{1,}" title="Username should match alphabets and numbers only"/>
+                                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{username}" placeholder="Enter username" required="required" th:readonly="${euclasePayload.id != 0}" pattern="[a-zA-Z0-9]{1,}" title="Username should match alphabets and numbers only"/>
                                                 <span class="text-primary asterisk">*</span>
                                                 <span class="fas fa-user text-900 fs--1 form-icon text-primary"></span>
                                             </div>

@@ -8,21 +8,26 @@
             <div class="container-fluid px-0">
                 <div class="container-fluid">
                     <div class="row flex-center min-vh-100 py-2">
-                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+                        <div class="col-sm-12 col-md-12 col-lg-4">
                             <a class="d-flex flex-center text-decoration-none mb-4" th:href="@{/}">
                                 <div class="d-flex align-items-center fw-bolder fs-5 d-inline-block">
                                     <img th:src="@{/images/logo_nobg.png}" alt="entitysc" width="96" />
                                 </div>
                             </a>
                             <div class="text-center mb-7">
-                                <h3 class="text-1000 text-primary">Euclase :: Multi-factor Authentication</h3>
-                                <p class="text-700">Scan QR Code with your preferred Authenticator</p>
-                                <p class="mt-3">Scan QR Code to generate OTP</p>                                                    
-                                <img id="qrcode-image" class="img-fluid auth-title-box-img d-dark-none" th:src="@{${euclasePayload.qRCodeImageUrl}}" alt="" src=""/>
-                                <div class="text-center">
-                                    <span><a href="" class="btn btn-primary w-50 mb-3 mt-2" th:href="@{/}">Sign In</a></span>
-                                </div>
+                                <h3 class="text-1000 text-primary">Euclase :: Login</h3>
+                                <p class="text-700">Get access to your account</p>
                             </div>
+                            <form th:object="${euclasePayload}" th:action="@{/otp}" method="POST" class="text-center">
+                                <input type="hidden" th:field="*{username}" />
+                                <input type="hidden" th:field="*{password}" />
+                                <div class="form-icon-container">
+                                    <input class="form-control form-icon-input" th:field="*{otp}" type="text" placeholder="OTP" required="required" />
+                                    <span class="text-primary asterisk">*</span>
+                                    <span class="fas fa-comment-sms text-900 fs--1 form-icon text-primary"></span>
+                                </div>
+                                <button class="btn btn-primary w-100 mb-3 mt-2" type="submit">Sign In</button>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -5,24 +5,6 @@
         <title>Entity Software</title>
     </head>
     <body>
-        <div th:fragment="homeheaderfiles">
-            <meta charset="utf-8" />
-            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"/>
-            <meta name="description" content="Entity Software Euclase" />
-            <meta name="keywords" content="Entity, Entity Software, Document, Electronic Document, Document Manager, EDMS, DMS" />
-            <link href="assets/img/favicon.png" rel="icon"></link>
-            <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"></link>
-            <link href="https://fonts.googleapis.com/css2?family=Montserrat" rel="stylesheet"></link>
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet"></link>
-            <link th:href="@{/css/aos.css}" rel="stylesheet"></link>
-            <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"></link>
-            <link th:href="@{/css/glightbox.min.css}" rel="stylesheet"></link>
-            <link th:href="@{/css/swiper-bundle.min.css}" rel="stylesheet"></link>
-            <link th:href="@{/css/onex.css}" rel="stylesheet"></link>
-            <link th:href="@{/css/select2.css}" rel="stylesheet"></link>
-        </div>
-
         <head th:fragment="headerfiles">
             <title>Entity Software - Euclase</title>
             <meta charset="utf-8"/>
@@ -44,6 +26,8 @@
             <link th:href="@{/css/choices.min.css}" type="text/css" rel="stylesheet"></link>
             <link th:href="@{/css/sweetalert2.min.css}" type="text/css" rel="stylesheet"></link>
             <link th:href="@{/css/euclase.css}" type="text/css" rel="stylesheet"></link>
+            <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+            <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
             <script th:inline="javascript">
                 document.addEventListener("DOMContentLoaded", () => {
                     var message = [[${alertMessage}]];
@@ -122,12 +106,12 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a th:if="${unreadMessageCount == 0}" class="nav-link" href="#" style="min-width: 2.25rem" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="outside">
+                        <a th:if="${session.unreadMessageCount == 0}" class="nav-link" href="#" style="min-width: 2.25rem" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="outside">
                             <span class="d-block" style="height:20px;width:20px;">
                                 <span data-feather="bell" style="height:20px;width:20px;"></span>
                             </span>
                         </a>
-                        <a th:if="${unreadMessageCount > 0}" class="nav-link icon-indicator icon-indicator-sm icon-indicator-danger" href="#" style="min-width: 2.25rem" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="outside">
+                        <a th:if="${session.unreadMessageCount > 0}" class="nav-link icon-indicator icon-indicator-sm icon-indicator-danger" href="#" style="min-width: 2.25rem" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="outside">
                             <span class="d-block" style="height:20px;width:20px;">
                                 <span data-feather="bell" style="height:20px;width:20px;"></span>
                             </span>
@@ -143,7 +127,7 @@
                                 </div>
                                 <div class="card-body p-0">
                                     <div class="scrollbar-overlay" style="height: 27rem;">
-                                        <div class="px-2 px-sm-3 py-3 notification-card position-relative read border-bottom" th:each="rec : ${notification}">
+                                        <div class="px-2 px-sm-3 py-3 notification-card position-relative read border-bottom" th:each="rec : ${session.notification}">
                                             <div class="d-flex align-items-center justify-content-between position-relative">
                                                 <div class="d-flex">
                                                     <div class="me-3 flex-1">
@@ -365,14 +349,14 @@
                                 </a>
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="digitization">
-                                        <li class="collapsed-nav-item-title d-none text-primary">Document Digitization</li>
-                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/scan}">
-                                                <div class="d-flex align-items-center"><span class="nav-link-text">Scan Document</span>
+                                        <li class="collapsed-nav-item-title d-none text-primary">Document Upload</li>
+                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/upload/single}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Single Upload</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/archive}">
-                                                <div class="d-flex align-items-center"><span class="nav-link-text">Upload Document</span>
+                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/upload/batch}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Batch Upload</span>
                                                 </div>
                                             </a>
                                         </li>
@@ -507,19 +491,19 @@
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="users">
                                         <li class="collapsed-nav-item-title d-none text-primary">System Users</li>
-                                        <li sec:authorize="hasRole('CREATE_APP_USER')" class="nav-item">
-                                            <a class="nav-link" th:href="@{/user/}">
-                                                <div class="d-flex align-items-center"><span class="nav-link-text">New User</span>
-                                                </div>
-                                            </a>
-                                        </li>
                                         <li sec:authorize="hasRole('CREATE_APP_USER')" class="nav-item"><a class="nav-link" th:href="@{/user/list}">
-                                                <div class="d-flex align-items-center"><span class="nav-link-text">User Listing</span>
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">App Users</span>
                                                 </div>
                                             </a>
                                         </li>
                                         <li sec:authorize="hasRole('MANAGE_APP_USER')" class="nav-item"><a class="nav-link" th:href="@{/user/update}">
-                                                <div class="d-flex align-items-center"><span class="nav-link-text">User Update</span>
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">User Maintenance</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li sec:authorize="hasRole('CREATE_APP_USER')" class="nav-item">
+                                            <a class="nav-link" th:href="@{/user/online}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Users Online</span>
                                                 </div>
                                             </a>
                                         </li>
@@ -591,6 +575,11 @@
                                                         </a>
                                                     </li>
                                                     <li sec:authorize="hasRole('REPORTS')" class="nav-item">
+                                                        <a class="nav-link" th:href="@{/report/document/access}">
+                                                            <div class="d-flex align-items-center"><span class="nav-link-text">Document By Access</span></div>
+                                                        </a>
+                                                    </li>
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document/pending}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Pending Document</span></div>
                                                         </a>
@@ -598,6 +587,11 @@
                                                     <li sec:authorize="hasRole('REPORTS')" class="nav-item">
                                                         <a class="nav-link" th:href="@{/report/document/digitized}">
                                                             <div class="d-flex align-items-center"><span class="nav-link-text">Digitized Document</span></div>
+                                                        </a>
+                                                    </li>
+                                                    <li sec:authorize="hasRole('REPORTS')" class="nav-item">
+                                                        <a class="nav-link" th:href="@{/report/document/company}">
+                                                            <div class="d-flex align-items-center"><span class="nav-link-text">Document By Company</span></div>
                                                         </a>
                                                     </li>
                                                     <li sec:authorize="hasRole('REPORTS')" class="nav-item">
@@ -656,6 +650,12 @@
                                                 </div>
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a sec:authorize="hasRole('REPORTS')" class="nav-link" th:href="@{/report/email}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Email Report</span>
+                                                </div>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -680,32 +680,13 @@
                         <span class="d-none d-sm-inline-block mx-1">|</span>
                         <br class="d-sm-none" />
                         <span th:text="'2024 - ' + ${#dates.year(#dates.createNow())}"></span> &copy;
-                        <a class="mx-1" href="https://entitysc.com">Entity Software Company</a>
+                        <a class="mx-1" th:href="@{${companyUrl}}" th:text="${companyName}">Entity Software Company</a>
                     </p>
                 </div>
                 <div class="col-12 col-sm-auto text-center">
-                    <p th:text="'v' + ${session.releaseVersion == null ? '' : session.releaseVersion}" class="mb-0 text-600">v1.0.0</p>
+                    <p th:text="'v' + ${session.releaseVersion == null ? '1.0' : session.releaseVersion}" class="mb-0 text-600">v1.0.0</p>
                 </div>
             </div>
-        </footer>
-
-        <div th:fragment="scriptfiles">
-            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-            <script th:src="@{/js/popper.min.js}"></script>
-            <script th:src="@{/js/bootstrap.min.js}"></script>
-            <script th:src="@{/js/anchor.min.js}"></script>
-            <script th:src="@{/js/is.min.js}"></script>
-            <script th:src="@{/js/all.min.js}"></script>
-            <script th:src="@{/js/lodash.min.js}"></script>
-            <script th:src="@{/js/list.min.js}"></script>
-            <script th:src="@{/js/feather.min.js}"></script>
-            <script th:src="@{/js/dayjs.min.js}"></script>
-            <script th:src="@{/js/phoenix.js}"></script>
-            <script th:src="@{/js/choices.min.js}"></script>
-            <script th:src="@{/js/echarts.min.js}"></script>
-            <script th:src="@{/js/sweetalert2.min.js}"></script>
-            <script th:src="@{/js/euclase.js}"></script>
-            <script th:src="@{/js/select2.js}"></script>
             <form id="advanceSearchModal" th:object="${euclasePayload}" th:action="@{/document/advanced/search}" method="POST">
                 <div class="modal fade" id="advanceSearch" tabindex="-1" role="dialog" aria-labelledby="advanceSearch" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -717,13 +698,13 @@
                                 <h6 class="text-primary mb-2">Advance Document Search</h6>
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text filter-label" id="startDate">Start Date</span>
-                                    <input class="form-control" type="date" aria-label="startDate" aria-describedby="startDate" th:field="*{startDate}" required="required" />
+                                    <input class="form-control" type="date" th:field="*{startDate}" aria-label="startDate" aria-describedby="startDate" required="required" />
                                     <span class="input-group-text filter-label" id="endDate">End Date</span>
-                                    <input class="form-control" type="date" aria-label="endDate" aria-describedby="endDate" th:field="*{endDate}" required="required"/>
+                                    <input class="form-control" type="date" th:field="*{endDate}" aria-label="endDate" aria-describedby="endDate" required="required"/>
                                 </div>
                                 <div class="input-group">
                                     <span class="input-group-text filter-label">Document Id</span>
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="documentIdOperator" th:field="*{documentIdOperator}">
+                                    <select class="form-select form-control-sm form-icon-input" th:field="*{documentIdOperator}" aria-label="documentIdOperator">
                                         <option value="">--select--</option>
                                         <option value="LK">Like</option>
                                         <option value="EQ">Equal</option>
@@ -744,7 +725,7 @@
                                 </div>
                                 <div class="input-group">
                                     <span class="input-group-text filter-label">Narration</span>
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="narrationOperator" th:field="*{narrationOperator}">
+                                    <select class="form-select form-control-sm form-icon-input" th:field="*{narrationOperator}" aria-label="narrationOperator">
                                         <option value="">--select--</option>
                                         <option value="LK">Like</option>
                                         <option value="EQ">Equal</option>
@@ -753,7 +734,7 @@
                                 </div>
                                 <div class="input-group">
                                     <span class="input-group-text filter-label">Amount</span>
-                                    <select class="form-select form-control-sm form-icon-input" aria-label="amountOperator" th:field="*{amountOperator}">
+                                    <select class="form-select form-control-sm form-icon-input" th:field="*{amountOperator}" aria-label="amountOperator">
                                         <option value="">--select--</option>
                                         <option value="GT">></option>
                                         <option value="GE">>=</option>
@@ -770,6 +751,25 @@
                     </div>
                 </div>
             </form>
+        </footer>
+
+        <div th:fragment="scriptfiles">
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script th:src="@{/js/popper.min.js}"></script>
+            <script th:src="@{/js/bootstrap.min.js}"></script>
+            <script th:src="@{/js/anchor.min.js}"></script>
+            <script th:src="@{/js/is.min.js}"></script>
+            <script th:src="@{/js/all.min.js}"></script>
+            <script th:src="@{/js/lodash.min.js}"></script>
+            <script th:src="@{/js/list.min.js}"></script>
+            <script th:src="@{/js/feather.min.js}"></script>
+            <script th:src="@{/js/dayjs.min.js}"></script>
+            <script th:src="@{/js/phoenix.js}"></script>
+            <script th:src="@{/js/choices.min.js}"></script>
+            <script th:src="@{/js/echarts.min.js}"></script>
+            <script th:src="@{/js/sweetalert2.min.js}"></script>
+            <script th:src="@{/js/euclase.js}"></script>
+            <script th:src="@{/js/select2.js}"></script>
             <form id="logoutForm" th:action="@{/logout}" method="POST">
                 <div class="modal fade" id="confirmLogout" tabindex="-1" role="dialog" aria-labelledby="confirmLogout" aria-hidden="true">
                     <div class="modal-dialog">

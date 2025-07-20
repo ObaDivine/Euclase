@@ -28,6 +28,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -52,6 +53,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 @PropertySource("classpath:application.yml")
 @EnableTransactionManagement
 @EnableCaching
+@EnableAsync
 public class AppConfig implements WebMvcConfigurer {
 
     @Autowired
@@ -146,7 +148,7 @@ public class AppConfig implements WebMvcConfigurer {
     public CacheManager cacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder()
-                .initialCapacity(20000)
+                .initialCapacity(200000)
                 .expireAfterAccess(1, TimeUnit.MINUTES)
                 .maximumSize(50000)
                 .weakKeys()

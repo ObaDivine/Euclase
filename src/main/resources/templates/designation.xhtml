@@ -24,7 +24,7 @@
                         <form th:object="${euclasePayload}" th:action="@{/setup/designation/}" method="POST">
                             <input type="hidden" th:field="*{id}" />
                             <div class="form-icon-container">
-                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{designationCode}" placeholder="Enter designation code" required="required"/>
+                                <input type="text" class="form-control form-control-sm form-icon-input" th:field="*{designationCode}" placeholder="Enter designation code" required="required" pattern="[a-zA-Z0-9]{1,4}" title="Enter maximum of 4 characters"/>
                                 <span class="text-primary asterisk">*</span>
                                 <span class="fas fa-terminal text-900 fs--1 form-icon text-primary"></span>
                             </div>

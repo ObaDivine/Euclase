@@ -34,7 +34,7 @@
                                             <input class="form-control" type="date" aria-label="endDate" aria-describedby="endDate" th:field="*{endDate}" required="required"/>
                                         </div>
                                         <div class="form-icon-container">
-                                            <select class="form-select form-icon-input" th:field="*{channel}">
+                                            <select class="form-select form-icon-input" th:field="*{channel}" required="required">
                                                 <option value="">---Select channel---</option>
                                                 <option th:each="fa : ${channelList}" th:value="${fa.id}" th:text="${fa.channel}"></option>
                                             </select>

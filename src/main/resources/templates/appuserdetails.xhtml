@@ -14,8 +14,8 @@
                                 <ol class="breadcrumb mb-0">
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                     <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/user}">New User</a></li>
-                                    <li class="breadcrumb-item"><a href="#" th:href="@{/user/list}">User Listing</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/user/}">New App User</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/user/list}">App User Listing</a></li>
                                     <li class="breadcrumb-item active">Application User Details</li>
                                 </ol>
                             </nav>
@@ -59,7 +59,7 @@
                                     <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Designation:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.designationName}"></span></div>
                                     <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Grade Level:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.gradeLevelName}"></span></div>
                                     <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Access Level:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.accessLevel}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Channel:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.channel}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Role:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.role}"></span></div>
                                 </div>
                                 <div class="row mb-2">
                                     <div class="col-lg-12"><span class="fs--1 text-800 fw-semi-bold mb-0">Login Days:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.loginDays}"></span></div>
@@ -67,11 +67,23 @@
                                 <div class="row mb-2">
                                     <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Start Time:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.startTime}"></span></div>
                                     <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">End Time:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.endTime}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Reset Time:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.resetTime}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Failed Login:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.failedLoginCount}"></span></div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Channel:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.channel}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Security Question:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.securityQuestion}"></span></div>
                                     <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Password Change:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.passwordChangeDate}"></span></div>
-                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Role:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.role}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Activated:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.activated}"></span></div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">AD Authenticated:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.useAdAuth}"></span></div>
+                                    <div class="col-lg-3"><span class="fs--1 text-800 fw-semi-bold mb-0">Use MFA (OTP):&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.useMfa}"></span></div>
+                                    <div class="col-lg-6"><span class="fs--1 text-800 fw-semi-bold mb-0">QR Code Link:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.qRCodeImageUrl}"></span></div>
                                 </div>
                                 <div class="row">
-
+                                    <div class="col-lg-6"><span class="fs--1 text-800 fw-semi-bold mb-0">Last Login Remote Address:&nbsp;</span> <span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.remoteAddress}"></span></div>
+                                    <div class="col-lg-6"><span class="fs--1 text-800 fw-semi-bold mb-0">Last Login Remote Host:&nbsp;</span><span class="fs--1 text-800 fw-semi-bold mb-0 text-primary" th:text="${euclasePayload.remoteHost}"></span></div>
                                 </div>
                             </div>
                         </div>

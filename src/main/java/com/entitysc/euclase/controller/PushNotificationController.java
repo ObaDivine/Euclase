@@ -9,10 +9,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.http.HttpSession;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -26,15 +30,25 @@ public class PushNotificationController {
 
     @Autowired
     Gson gson;
+    @Value("${euclase.client.name}")
+    private String companyName;
+    @Value("${euclase.client.url}")
+    private String companyUrl;
     String memberId = "";
     Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+
+    @ModelAttribute
+    public void addAttributes(Model model, Principal principal) {
+        model.addAttribute("companyName", companyName);
+        model.addAttribute("companyUrl", companyUrl);
+    }
 
     @GetMapping(value = "/events/subscribe", consumes = MediaType.ALL_VALUE)
     public SseEmitter subscribe(HttpSession httpSession) {
         memberId = httpSession.getId();
         SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
         try {
-            sseEmitter.send(SseEmitter.event().name("INIT")); 
+            sseEmitter.send(SseEmitter.event().name("INIT"));
         } catch (IOException ex) {
             Logger.getLogger(PushNotificationController.class.getName()).log(Level.SEVERE, null, ex);
         }

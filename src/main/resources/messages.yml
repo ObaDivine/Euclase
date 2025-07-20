@@ -1,6 +1,13 @@
 ######### Entity Software Euclase Messages ############
 ---
 appMessages:
+  invalid:
+    fileext: Only file with the extension {0} is supported
+    maxrecord: The number of records exceed the limit of {0}
+    columncount: The file contains {0} columns where {1} is required
+    emptyrecord: The file uploaded has no record
+    filemissing: The following {0} file is missing
+    recordmismatch: The number of records in {0} does not match {1}
   signature:
     notset: Your signature has not been set. Kindly update the signature
   failed:
@@ -8,6 +15,7 @@ appMessages:
       middleware: Unable to reach the middleware server
   success:
     fundwallet: Wallet funded successfully
+    fileprocessing: Your files have been processed.
   template:
     notformatted: Template not properly formatted. Expects a valid HTML string
   workflow:

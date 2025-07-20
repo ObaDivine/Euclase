@@ -1,7 +1,6 @@
 package com.entitysc.euclase.controller;
 
 import com.entitysc.euclase.constant.ResponseCodes;
-import com.entitysc.euclase.payload.DataListResponsePayload;
 import com.entitysc.euclase.payload.EuclasePayload;
 import com.entitysc.euclase.payload.EuclaseResponsePayload;
 import com.entitysc.euclase.service.BranchService;
@@ -10,7 +9,6 @@ import com.entitysc.euclase.service.DepartmentService;
 import com.entitysc.euclase.service.DepartmentUnitService;
 import com.entitysc.euclase.service.DesignationService;
 import com.entitysc.euclase.service.GradeLevelService;
-import com.entitysc.euclase.service.PushNotificationService;
 import com.entitysc.euclase.service.RolesService;
 import com.entitysc.euclase.service.UserService;
 import com.google.gson.Gson;
@@ -20,6 +18,7 @@ import jakarta.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,13 +53,20 @@ public class UserController {
     BranchService branchService;
     @Autowired
     RolesService rolesService;
-    @Autowired
-    PushNotificationService notificationService;
-
+    @Value("${euclase.client.name}")
+    private String companyName;
+    @Value("${euclase.client.url}")
+    private String companyUrl;
     @Autowired
     Gson gson;
     private String alertMessage = "";
     private String alertMessageType = "";
+
+    @ModelAttribute
+    public void addAttributes(Model model, Principal principal) {
+        model.addAttribute("companyName", companyName);
+        model.addAttribute("companyUrl", companyUrl);
+    }
 
     @GetMapping("/")
     @Secured("ROLE_CREATE_APP_USER")
@@ -71,9 +77,6 @@ public class UserController {
         model.addAttribute("gradeLevelList", gradeLevelService.fetchGradeLevelList().getData());
         model.addAttribute("roleList", rolesService.fetchRoleList().getData());
         model.addAttribute("userCount", userService.fetchAppUserList().getData().size());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         model.addAttribute("transType", "role");
@@ -97,9 +100,6 @@ public class UserController {
         model.addAttribute("gradeLevelList", gradeLevelService.fetchGradeLevelList().getData());
         model.addAttribute("roleList", rolesService.fetchRoleList().getData());
         model.addAttribute("userCount", userService.fetchAppUserList().getData().size());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         model.addAttribute("transType", "role");
@@ -111,9 +111,6 @@ public class UserController {
     public String userList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
         model.addAttribute("dataList", userService.fetchAppUserList().getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         model.addAttribute("transType", "role");
@@ -136,9 +133,6 @@ public class UserController {
         model.addAttribute("gradeLevelList", gradeLevelService.fetchGradeLevelList().getData());
         model.addAttribute("roleList", rolesService.fetchRoleList().getData());
         model.addAttribute("userCount", userService.fetchAppUserList().getData().size());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", alertMessageType);
         model.addAttribute("transType", "role");
@@ -162,9 +156,6 @@ public class UserController {
         model.addAttribute("branchList", branchService.fetchBranchList().getData());
         model.addAttribute("gradeLevelList", gradeLevelService.fetchGradeLevelList().getData());
         model.addAttribute("roleList", rolesService.fetchRoleList().getData());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", alertMessageType);
         model.addAttribute("transType", "role");
@@ -184,9 +175,6 @@ public class UserController {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("userList", userService.fetchAppUserList().getData());
         model.addAttribute("userCount", userService.fetchAppUserList().getData().size());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -198,12 +186,21 @@ public class UserController {
         EuclaseResponsePayload response = userService.processUpdateUserGenericDetails(requestPayload, principal.getName());
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("userList", userService.fetchAppUserList().getData());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
         return "appuserupdate";
+    }
+
+    @GetMapping("/online")
+    @Secured("ROLE_CREATE_APP_USER")
+    public String userOnline(HttpServletRequest httpRequest, HttpServletResponse httpResponse, Principal principal, Model model, HttpSession httpSession) {
+        model.addAttribute("dataList", userService.fetchAppUserOnline(principal.getName()).getData());
+        model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", alertMessageType);
+        model.addAttribute("transType", "role");
+        resetAlertMessage();
+        return "appuseronline";
     }
 
     private void resetAlertMessage() {

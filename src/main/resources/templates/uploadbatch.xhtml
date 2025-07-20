@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:replace="~{fragments/entityscFragments :: headerfiles}"></th:block>
+    <body onload="preloaderFunction()" style="margin: 0;">
+        <div id="loader"></div>
+        <main class="main animate-bottom" id="top" style="display:none;">
+            <th:block th:replace="~{fragments/entityscFragments :: leftMenu}"></th:block>
+            <th:block th:replace="~{fragments/entityscFragments :: topMenu}"></th:block>
+            <div class="content">
+                <div class="row">
+                    <div class="offset-lg-2 col-lg-8 col-md-12 col-sm-12">
+                        <div class="col-auto mb-3">
+                            <nav class="mb-3" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="#" th:href="@{/document/}">New Document</a></li>
+                                    <li class="breadcrumb-item active">Batch Upload</li>
+                                </ol>
+                            </nav>
+                            <h4 class="mb-2 text-secondary">Batch Document Upload</h4>
+                            <h6 class="text-700 fw-semi-bold">Upload batch document for archiving</h6>
+                        </div>
+                        <form th:object="${euclasePayload}" th:action="@{/document/upload/batch/process}" method="POST" enctype="multipart/form-data">
+                            <h6 class="text-700 fw-semi-bold text-secondary mt-5">Upload file with meta data (Only CSV format is accepted)</h6>
+                            <div class="form-icon-container">
+                                <input type="file" class="form-control form-control-sm form-icon-input" th:field="*{uploadedFile}" required="required" accept=".csv"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-signature text-900 fs--1 form-icon text-primary"></span>
+                            </div> 
+                            <p class="text-700 fw-semi-bold text-secondary mt-10">
+                                All document types including JPEG, PNG, TIFF, DOC, PPT, XLS, PDF & ZIP are supported
+                            </p>
+                            <h6 class="text-700 fw-semi-bold text-secondary mb-2">Upload all associated files</h6>
+                            <div class="form-icon-container">
+                                <input type="file" class="form-control form-control-sm form-icon-input" th:field="*{uploadedFiles}" required="required" multiple="multiple"/>
+                                <span class="text-primary asterisk">*</span>
+                                <span class="fas fa-signature text-900 fs--1 form-icon text-primary"></span>
+                            </div>                             
+                            <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="button" data-bs-target="#confirmTrans" data-bs-toggle="modal">Submit</button>
+                            <div class="modal fade" id="confirmTrans" tabindex="-1" role="dialog" aria-labelledby="confirmTrans" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h6 class="modal-title text-primary">Euclase</h6>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="mb-2">Document(s) would be archived. Proceed?</p>
+                                            <button type="submit" class="btn btn-primary btn-sm" data-bs-dismiss="modal">Submit</button>
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <th:block th:replace="~{fragments/entityscFragments :: footer}"></th:block>
+            </div>
+        </main>
+        <th:block th:replace="~{fragments/entityscFragments :: scriptfiles}"></th:block>
+
+    </body>
+</html>

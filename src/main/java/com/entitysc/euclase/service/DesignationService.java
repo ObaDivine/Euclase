@@ -7,7 +7,6 @@ import com.entitysc.euclase.payload.EuclaseResponsePayload;
 import com.entitysc.euclase.payload.ExceptionPayload;
 import com.google.gson.JsonSyntaxException;
 import java.util.Locale;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

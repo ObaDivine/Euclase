@@ -4,9 +4,10 @@ server:
     error:
         include-message: never
         include-binding-errors: always
-        include-exception: false
+        include-exception: true
         include-stacktrace: never
     tomcat:
+        max-swallow-size: 10GB
         basedir: C:/Euclase/Log
         accesslog:
             enabled: true
@@ -55,30 +56,32 @@ spring:
         open-in-view: false
     servlet:
         multipart:
-            max-file-size: 200MB
-            max-request-size: 250MB
-            file-size-threshold: 5MB
+            max-file-size: 20MB
         
 euclase:
+    commareplacement: '|'
     temp:
-        dir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\temp
+        dir: C:\Apps\EntitySC\Euclase\euclase\target\euclase-1.0\WEB-INF\classes\temp
     document:
+        upload:
+            maxrecord: 100
         allowkeyword:
             date: LEAVE, TRAINING, 
             amount: LOAN, PURCHASE, EXPENSE, INCOME, BUDGET, TRAINING, INVOICE
-        archivedir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\documents\archive
+        archivedir: C:\Apps\EntitySC\Euclase\euclase\target\euclase-1.0\WEB-INF\classes\documents\archive
         prefix:
             usegeneric: false
             generic: DOC
         id:
             allowuser: false
     image:
-        dir: C:\Apps\EntitySC\Web\euclase\target\euclase-1.0\WEB-INF\classes\images\profile
+        dir: C:\Apps\EntitySC\Euclase\euclase\target\euclase-1.0\WEB-INF\classes\images\profile
     default:
         password: Password12#
     client:
         name: Entity Software
-        address: 1 Ebun Otti Estate, Mende, Lagos, Nigeria
+        address: 1 Ebun Otti Street, Mende, Lagos, Nigeria
+        url: 'https://entitysc.com'
     reset:
         time: 1
     otp:
@@ -115,6 +118,8 @@ euclasews:
         image:
             url: http://localhost:8080/euclasews/images/qrcode/
     api:
+        key: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJXRUIiLCJhdWQiOiJbTUFOQUdFX1JPTEVTLCBNQU5BR0VfR1JBREVfTEVWRUwsIE1BTkFHRV9TTEEsIEFVRElUX0xPRywgTUFOQUdFX0RPQ1VNRU5UX1dPUktGTE9XLCBNQU5BR0VfQlJBTkNILCBNQU5BR0VfQklMTElORywgQkFDS1VQX1JFU1RPUkUsIE1BTkFHRV9QVUJMSUNfSE9MSURBWSwgQ1JFQVRFX0FQUF9VU0VSLCBTRUFSQ0hfRE9DVU1FTlQsIERPQ1VNRU5UX05PVElGSUNBVElPTiwgQVBQUk9WRV9ET0NVTUVOVCwgUkVQT1JUUywgTUFOQUdFX0FQUF9VU0VSLCBNQU5BR0VfRE9DVU1FTlRfR1JPVVAsIENSRUFURV9ET0NVTUVOVCwgTUFOQUdFX0RPQ1VNRU5UX1RFTVBMQVRFLCBNQU5BR0VfREVQQVJUTUVOVF9VTklULCBWSUVXX1BST1RFQ1RFRF9ET0NVTUVOVCwgTUFOQUdFX05PVElGSUNBVElPTiwgTUFOQUdFX0NIQU5ORUwsIE1BTkFHRV9ERVBBUlRNRU5ULCBNQU5BR0VfREVTSUdOQVRJT04sIE1BTkFHRV9DT01QQU5ZLCBNQU5BR0VfSVBfQUREUkVTU10iLCJlbmNrZXkiOiJ0WllKMXdpK0hCU1FsT3ZvMG5ELzIzL1lBY25tbE91bGlXSG41WW45TTZKUDZ3NHhXRWtsZHB1NExOeHAyb3Z0cDZpUGtWNDF0WHRTTkZnaCIsImNoYW5uZWwiOiJXRUIiLCJpcCI6IjA6MDowOjA6MDowOjA6MSIsImFwaWtleSI6IlJvTUxhQ1FEYzhwQ2E0QTFBays5STRMeldKalVOeGdtUkc2dVVweHNhY2xpcXBTUExJbTBuYkZzemxmaHU3TDZVZmxuQ1F4RXIvOWZBUG9pWXZTM2EwL09pakxzUFJPWiIsImlzcyI6IkVudGl0eSBTb2Z0d2FyZSBDb21wYW55IiwiaWF0IjoxNzQ4NzA5NzM3LCJleHAiOjI1NTM1MjU3Mzd9.g0V_1MiVOE_D6UOZmI2beckKZx0v4N2UaY8f11dPcwU
+        #key: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJXRUIiLCJhdWQiOiJbTUFOQUdFX1JPTEVTLCBNQU5BR0VfR1JBREVfTEVWRUwsIE1BTkFHRV9TTEEsIEFVRElUX0xPRywgTUFOQUdFX0RPQ1VNRU5UX1dPUktGTE9XLCBNQU5BR0VfQlJBTkNILCBNQU5BR0VfQklMTElORywgQkFDS1VQX1JFU1RPUkUsIE1BTkFHRV9QVUJMSUNfSE9MSURBWSwgQ1JFQVRFX0FQUF9VU0VSLCBTRUFSQ0hfRE9DVU1FTlQsIERPQ1VNRU5UX05PVElGSUNBVElPTiwgQVBQUk9WRV9ET0NVTUVOVCwgUkVQT1JUUywgTUFOQUdFX0FQUF9VU0VSLCBNQU5BR0VfRE9DVU1FTlRfR1JPVVAsIENSRUFURV9ET0NVTUVOVCwgTUFOQUdFX0RPQ1VNRU5UX1RFTVBMQVRFLCBNQU5BR0VfREVQQVJUTUVOVF9VTklULCBWSUVXX1BST1RFQ1RFRF9ET0NVTUVOVCwgTUFOQUdFX05PVElGSUNBVElPTiwgTUFOQUdFX0NIQU5ORUwsIE1BTkFHRV9ERVBBUlRNRU5ULCBNQU5BR0VfREVTSUdOQVRJT04sIE1BTkFHRV9DT01QQU5ZLCBNQU5BR0VfSVBfQUREUkVTU10iLCJlbmNrZXkiOiJqTWZXdWdKOFB0dkNEZnYxc0s2NDA1em8xUGIxN0dFOFlEQ0tvcVQrQlNRcEc5Ti9oWWJUOE9kZUEzd1lxZ0tOYmVCMDZ2b2NEQXRuamJwRyIsImNoYW5uZWwiOiJXRUIiLCJpcCI6IjA6MDowOjA6MDowOjA6MSIsImFwaWtleSI6IjVEcDVKTDlWcklvMUtuM2tYLzdqVysvejdGditJdTVqMUxXWWpkN1haUVNXWEVDWlN2YlkyZ014N3hYeHFNWTQzOXIvWXM0Zk9Vck9SUXlWL2VCRllvQ0hsNm1VaE5ONiIsImlzcyI6IkVudGl0eSBTb2Z0d2FyZSBDb21wYW55IiwiaWF0IjoxNzUxODkyMzk3LCJleHAiOjI1NTM1MTE1OTZ9.qehwDWgezjqlhr25lvl5rCRVJJeLsGvSo0BmCAARgRQ
         account:
             statement: http://localhost:8080/euclasews/api/v1/wallet/history
         twofactor:
@@ -123,7 +128,9 @@ euclasews:
         validate:
             pin: http://localhost:8080/euclasews/api/v1/app/user/validate/pin
             securityquestion: http://localhost:8080/euclasews/api/v1/app/user/validate/security-question
-        otp: http://localhost:8080/euclasews/api/v1/notification/otp
+        otp: 
+            notification: http://localhost:8080/euclasews/api/v1/notification/otp
+            validation: http://localhost:8080/euclasews/api/v1/app/user/validate/otp
         qrcode:
             generate: http://localhost:8080/euclasews/api/v1/qrcode
         beneficiary:
@@ -133,7 +140,7 @@ euclasews:
         dashboard: http://localhost:8080/euclasews/api/v1/dashboard
         signin: http://localhost:8080/euclasews/api/v1/app/user/signin
         signup: http://localhost:8080/euclasews/api/v1/app/user/signup/web
-        changedefaultpassword: http://localhost:8080/euclasews/api/v1/edms/password/default
+        changedefaultpassword: http://localhost:8080/euclasews/api/v1/app/user/default-password
         changepassword: http://localhost:8080/euclasews/api/v1/app/user/change-password
         forgotpassword: http://localhost:8080/euclasews/api/v1/app/user/forgot-password
         changepin: http://localhost:8080/euclasews/api/v1/app/user/change-pin
@@ -150,9 +157,10 @@ euclasews:
                update: http://localhost:8080/euclasews/api/v1/group/role/update
             list: http://localhost:8080/euclasews/api/v1/app/user/list
             create: http://localhost:8080/euclasews/api/v1/app/user/signup
-            update: http://localhost:8080/euclasews/api/v1/app/user/edms/update
+            update: http://localhost:8080/euclasews/api/v1/app/user/update
             delete: http://localhost:8080/euclasews/api/v1/app/user/delete
             fetch: http://localhost:8080/euclasews/api/v1/app/user/details
+            online: http://localhost:8080/euclasews/api/v1/app/user/online
             role:
               list: http://localhost:8080/euclasews/api/v1/role/group/list
               fetch: http://localhost:8080/euclasews/api/v1/role/group/details
@@ -220,6 +228,7 @@ euclasews:
             delete: http://localhost:8080/euclasews/api/v1/grade-level/delete
             fetch: http://localhost:8080/euclasews/api/v1/grade-level
         document:
+            access: http://localhost:8080/euclasews/api/v1/document/access
             report: http://localhost:8080/euclasews/api/v1/document/report
             group:
                 list: http://localhost:8080/euclasews/api/v1/document/group/list
@@ -279,6 +288,10 @@ euclasews:
             update: http://localhost:8080/euclasews/api/v1/document/notification/update
             delete: http://localhost:8080/euclasews/api/v1/document/notification/delete
             fetch: http://localhost:8080/euclasews/api/v1/document/notification
+            report: http://localhost:8080/euclasews/api/v1/notification/report
+            email:
+              retry: http://localhost:8080/euclasews/api/v1/notification/email/retry
+              delete: http://localhost:8080/euclasews/api/v1/notification/email/delete
         pushnotification:
             list: http://localhost:8080/euclasews/api/v1/notification/push/list
             create: http://localhost:8080/euclasews/api/v1/notification/push/create

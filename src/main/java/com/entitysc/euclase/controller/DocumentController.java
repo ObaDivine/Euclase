@@ -28,9 +28,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -46,9 +48,13 @@ public class DocumentController {
     @Autowired
     DocumentTypeService documentTypeService;
     @Autowired
-    SLAService slaService;
-    @Autowired
     PushNotificationService notificationService;
+    @Autowired
+    SLAService slaService;
+    @Value("${euclase.client.name}")
+    private String companyName;
+    @Value("${euclase.client.url}")
+    private String companyUrl;
     private String alertMessage = "";
     private String alertMessageType = "";
     @Value("${euclase.document.id.allowuser}")
@@ -60,6 +66,12 @@ public class DocumentController {
     @Autowired
     MessageSource messageSource;
 
+    @ModelAttribute
+    public void addAttributes(Model model, Principal principal) {
+        model.addAttribute("companyName", companyName);
+        model.addAttribute("companyUrl", companyUrl);
+    }
+
     @GetMapping("/")
     @Secured("ROLE_CREATE_DOCUMENT")
     public String document(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
@@ -67,9 +79,6 @@ public class DocumentController {
         model.addAttribute("documentTypes", documentTypeService.fetchDocumentTypeList("Company", httpSession.getAttribute("companyId").toString()).getData());
         model.addAttribute("addDate", false);
         model.addAttribute("addAmount", false);
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -85,11 +94,11 @@ public class DocumentController {
         requestPayload.setDocumentTypeName(response.getData().getDocumentTypeName());
         requestPayload.setDocumentType(String.valueOf(response.getData().getId())); //Pass document type id for lookup
         //Check if the signature is set. Index 11 holds the signature
-        Object signature = httpSession.getAttribute("signatureLink");
-        if (signature == null || (signature instanceof String && signature.toString().equalsIgnoreCase("NA"))) {
+        String signature = (String) httpSession.getAttribute("signatureLink");
+        if (signature == null || signature.equalsIgnoreCase("NA")) {
             alertMessage = messageSource.getMessage("appMessages.signature.notset", new Object[0], Locale.ENGLISH);
             alertMessageType = "error";
-            return "redirect:/document/";
+            return "redirect:/document/signature";
         }
 
         //Check if the template is well formatted
@@ -101,23 +110,21 @@ public class DocumentController {
 
         //Check if the template is well formatted
         if (!response.getData().isDocumentWorkflowFormatted()) {
-            alertMessage = messageSource.getMessage("appMessages.template.notformatted", new Object[0], Locale.ENGLISH);
+            alertMessage = messageSource.getMessage("appMessages.workflow.notformatted", new Object[0], Locale.ENGLISH);
             alertMessageType = "error";
             return "redirect:/document/";
         }
 
         requestPayload.setDocumentType(seid);
         //Generate document id
-        String documentId = documentService.generateDocumentId(response.getData().getDocumentGroupCode());
+        String documentId = documentService.generateDocumentId(response.getData().getCompanyCode(),
+                response.getData().getDocumentGroupCode(), response.getData().getDocumentTypeCode());
         requestPayload.setDocumentId(documentId);
         requestPayload.setAllowUserDocumentId(allowUserDocumentId);
         model.addAttribute("addDate", addDateField(response.getData().getDocumentTypeName()));
         model.addAttribute("addAmount", addAmountField(response.getData().getDocumentTypeName()));
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("slaList", slaService.fetchSLAList().getData());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -142,11 +149,8 @@ public class DocumentController {
         }
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("slaList", slaService.fetchSLAList().getData());
-        model.addAttribute("addDate", addDateField(requestPayload.getDocumentType()));
-        model.addAttribute("addAmount", addAmountField(requestPayload.getDocumentType()));
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
+        model.addAttribute("addDate", addDateField(requestPayload.getDocumentTypeName()));
+        model.addAttribute("addAmount", addAmountField(requestPayload.getDocumentTypeName()));
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         return "documentinit";
@@ -163,9 +167,6 @@ public class DocumentController {
         }
 
         model.addAttribute("euclasePayload", requestPayload);
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         resetAlertMessage();
@@ -177,9 +178,6 @@ public class DocumentController {
     public String myDocument(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("dataList", documentService.fetchMyDocuments(principal.getName()).getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -205,9 +203,6 @@ public class DocumentController {
         model.addAttribute("workflowList", response.getWorkflowData());
         model.addAttribute("documentList", response.getData());
         model.addAttribute("versionList", response.getVersions());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -219,9 +214,6 @@ public class DocumentController {
     public String pendingDocument(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("dataList", documentService.fetchPendingDocuments(principal.getName()).getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -233,9 +225,6 @@ public class DocumentController {
     public String draftDocument(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("dataList", documentService.fetchDraftDocuments(principal.getName()).getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -287,12 +276,12 @@ public class DocumentController {
             return "redirect:/document/pending";
         }
 
-        //Check if the signature is set. Index 11 holds the signature
-        Object signature = httpSession.getAttribute("signatureLink");
-        if (signature == null || (signature instanceof String && signature.toString().equalsIgnoreCase("NA"))) {
+        //Check if the signature is set.
+        String signature = (String) httpSession.getAttribute("signatureLink");
+        if (signature == null || signature.equalsIgnoreCase("NA")) {
             alertMessage = messageSource.getMessage("appMessages.signature.notset", new Object[0], Locale.ENGLISH);
             alertMessageType = "error";
-            return "redirect:/document/pending";
+            return "redirect:/document/signature";
         }
 
         requestPayload.setEditorData(response.getPayload().getDocumentTemplateBody());
@@ -303,9 +292,6 @@ public class DocumentController {
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("workflowList", response.getWorkflowData());
         model.addAttribute("documentList", response.getData());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -334,9 +320,6 @@ public class DocumentController {
 
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("workflowList", response.getWorkflowData());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -349,9 +332,6 @@ public class DocumentController {
         EuclasePayload requestPayload = new EuclasePayload();
         model.addAttribute("dataList", documentService.processSearchDocument(search, principal.getName()).getData());
         model.addAttribute("euclasePayload", requestPayload);
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -363,9 +343,6 @@ public class DocumentController {
         requestPayload.setUsername(principal.getName());
         model.addAttribute("dataList", documentService.processAdvancedSearchDocument(requestPayload).getData());
         model.addAttribute("euclasePayload", requestPayload);
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -377,9 +354,6 @@ public class DocumentController {
     public String signature(Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
         model.addAttribute("euclasePayload", requestPayload);
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -390,6 +364,8 @@ public class DocumentController {
     public String uploadSignature(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
         requestPayload.setUsername(principal.getName());
         EuclaseResponsePayload response = documentService.processDocumentSignature(requestPayload);
+        //Set the signature link in the session variable
+        httpSession.setAttribute("signatureLink", response.getData().getSignatureLink());
         alertMessage = response.getResponseMessage();
         alertMessageType = "success";
         return "redirect:/document/signature";
@@ -420,31 +396,61 @@ public class DocumentController {
         return "documentscan";
     }
 
-    @GetMapping("/archive")
+    @GetMapping("/upload/single")
     @Secured("ROLE_CREATE_DOCUMENT")
-    public String upload(Model model, Principal principal, HttpSession httpSession) {
+    public String singleUpload(Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
         requestPayload.setUsername(principal.getName());
-        String documentId = documentService.generateDocumentId((String) httpSession.getAttribute("documentArchiveGroupCode"));
+        String documentId = documentService.generateDocumentId((String) httpSession.getAttribute("companyCode"),
+                (String) httpSession.getAttribute("documentArchiveGroupCode"),
+                (String) httpSession.getAttribute("documentArchiveTypeCode"));
         requestPayload.setDocumentId(documentId);
         requestPayload.setAllowUserDocumentId(String.valueOf(false));
         model.addAttribute("euclasePayload", requestPayload);
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
-        return "documentarchive";
+        return "uploadsingle";
     }
 
-    @PostMapping("/archive/process")
-    public String uploadDocument(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+    @PostMapping("/upload/single/process")
+    public String singleUpload(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
         requestPayload.setUsername(principal.getName());
-        EuclaseResponsePayload response = documentService.processDocumentArchiving(requestPayload);
+        EuclaseResponsePayload response = documentService.processSingleDocumentUpload(requestPayload);
         alertMessage = response.getResponseMessage();
         alertMessageType = "success";
-        return "redirect:/document/archive";
+        return "redirect:/document/upload/single";
+    }
+
+    @GetMapping("/upload/batch")
+    @Secured("ROLE_CREATE_DOCUMENT")
+    public String batchUpload(Model model, Principal principal, HttpSession httpSession) {
+        EuclasePayload requestPayload = new EuclasePayload();
+        requestPayload.setUsername(principal.getName());
+        String documentId = documentService.generateDocumentId((String) httpSession.getAttribute("companyCode"),
+                (String) httpSession.getAttribute("documentArchiveGroupCode"),
+                (String) httpSession.getAttribute("documentArchiveTypeCode"));
+        requestPayload.setDocumentId(documentId);
+        requestPayload.setAllowUserDocumentId(String.valueOf(false));
+        model.addAttribute("euclasePayload", requestPayload);
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", alertMessageType);
+        resetAlertMessage();
+        return "uploadbatch";
+    }
+
+    @PostMapping("/upload/batch/process")
+    public String batchUpload(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
+        DataListResponsePayload response = documentService.parseBatchDocumentUpload(requestPayload);
+        if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
+            //The parse was successful. Call the method to process
+            documentService.processBatchDocumentUpload(response.getData(), principal.getName());
+        }
+
+        alertMessage = response.getResponseMessage();
+        alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
+        return "redirect:/document/upload/batch";
     }
 
     private boolean addDateField(String documentType) {
@@ -473,6 +479,12 @@ public class DocumentController {
         return keywordMatch;
     }
 
+    @GetMapping("/access/{id}")
+    @ResponseBody
+    public String documentAccess(@PathVariable("id") String id, Model model, Principal principal, HttpSession httpSession) {
+        return documentService.processDocumentAccess(id, principal.getName());
+    }
+
     /**
      * Document notification
      *
@@ -488,9 +500,6 @@ public class DocumentController {
         model.addAttribute("alertMessageType", alertMessageType);
         model.addAttribute("notificationList", notificationService.fetchNotificationList(principal.getName()).getData());
         model.addAttribute("documentCount", notificationService.fetchNotificationList(principal.getName()).getData().size());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         resetAlertMessage();
         return "documentnotification";
     }
@@ -506,9 +515,6 @@ public class DocumentController {
         }
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("documentCount", notificationService.fetchNotificationList(principal.getName()).getData().size());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         return "documentnotification";
@@ -519,9 +525,6 @@ public class DocumentController {
     public String notificationList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
         model.addAttribute("dataList", notificationService.fetchNotificationList(principal.getName()).getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -539,9 +542,6 @@ public class DocumentController {
         }
         model.addAttribute("euclasePayload", response.getData());
         model.addAttribute("documentCount", notificationService.fetchNotificationList(principal.getName()).getData().size());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();

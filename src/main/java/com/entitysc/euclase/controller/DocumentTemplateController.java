@@ -1,17 +1,14 @@
 package com.entitysc.euclase.controller;
 
 import com.entitysc.euclase.constant.ResponseCodes;
-import com.entitysc.euclase.payload.DataListResponsePayload;
 import com.entitysc.euclase.payload.EuclasePayload;
 import com.entitysc.euclase.payload.EuclaseResponsePayload;
 import com.entitysc.euclase.service.DocumentService;
 import com.entitysc.euclase.service.DocumentTypeService;
-import com.entitysc.euclase.service.PushNotificationService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,19 +30,24 @@ public class DocumentTemplateController {
     DocumentService documentService;
     @Autowired
     DocumentTypeService documentTypeService;
-    @Autowired
-    PushNotificationService notificationService;
+    @Value("${euclase.client.name}")
+    private String companyName;
+    @Value("${euclase.client.url}")
+    private String companyUrl;
     private String alertMessage = "";
     private String alertMessageType = "";
+
+    @ModelAttribute
+    public void addAttributes(Model model, Principal principal) {
+        model.addAttribute("companyName", companyName);
+        model.addAttribute("companyUrl", companyUrl);
+    }
 
     @GetMapping("/template")
     @Secured("ROLE_MANAGE_DOCUMENT_TEMPLATE")
     public String template(Model model, HttpSession httpSession, Principal principal) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("documentTypes", documentTypeService.fetchDocumentTypeList("All", "0").getData());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -56,9 +58,6 @@ public class DocumentTemplateController {
     public String templateCreate(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
         requestPayload.setUsername(principal.getName());
         EuclaseResponsePayload response = documentService.processUpdateDocumentTemplate(requestPayload);
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
         return "documenttemplate";
@@ -82,9 +81,6 @@ public class DocumentTemplateController {
             alertMessageType = "error";
             return "redirect:/setup/template";
         }
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -108,9 +104,6 @@ public class DocumentTemplateController {
             alertMessageType = "error";
             return "redirect:/setup/workflow";
         }
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -122,9 +115,6 @@ public class DocumentTemplateController {
         requestPayload.setUsername(principal.getName());
         EuclaseResponsePayload response = documentService.processUpdateDocumentWorkflow(requestPayload);
         model.addAttribute("euclasePayload", requestPayload);
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error");
         return "documentworkflow";

@@ -35,6 +35,10 @@ public class PushNotificationService extends EuclaseService {
     private String deleteNotificationUrl;
     @Value("${euclasews.api.notification.fetch}")
     private String fetchNotificationUrl;
+    @Value("${euclasews.api.notification.email.retry}")
+    private String retryEmailNotificationUrl;
+    @Value("${euclasews.api.notification.email.delete}")
+    private String deleteEmailNotificationUrl;
 
     @Value("${euclasews.api.pushnotification.list}")
     private String pushNotificationListUrl;
@@ -322,6 +326,70 @@ public class PushNotificationService extends EuclaseService {
             String encodedPrincipal = urlEncodeString(encryptString(principal.trim()));
             String encodedReadStatus = urlEncodeString(encryptString(readStatus));
             String response = callEuclaseWSAPI(updateSelfPushNotificationUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal + "&rstat=" + encodedReadStatus, "GET", generateEuclaseWSAPIToken(), "Notification Fetch");
+            //Check for error
+            if (response.contains("error")) {
+                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
+                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
+                exceptionResponse.setResponseCode(responsePayload.getStatus());
+                exceptionResponse.setResponseMessage(responsePayload.getMessage());
+                return exceptionResponse;
+            } else {
+                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
+                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+                }
+                return responsePayload;
+            }
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    public EuclaseResponsePayload retryEmailNotification(String id, String principal) {
+        try {
+            String encodedParam = urlEncodeString(encryptString(id.trim()));
+            String encodedPrincipal = urlEncodeString(encryptString(principal.trim()));
+            String response = callEuclaseWSAPI(retryEmailNotificationUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", generateEuclaseWSAPIToken(), "Email Notification Retry");
+            //Check for error
+            if (response.contains("error")) {
+                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
+                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
+                exceptionResponse.setResponseCode(responsePayload.getStatus());
+                exceptionResponse.setResponseMessage(responsePayload.getMessage());
+                return exceptionResponse;
+            } else {
+                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
+                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+                }
+                return responsePayload;
+            }
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    public EuclaseResponsePayload deleteEmailNotification(String id, String principal) {
+        try {
+            String encodedParam = urlEncodeString(encryptString(id.trim()));
+            String encodedPrincipal = urlEncodeString(encryptString(principal.trim()));
+            String response = callEuclaseWSAPI(deleteEmailNotificationUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", generateEuclaseWSAPIToken(), "Email Notification Delete");
             //Check for error
             if (response.contains("error")) {
                 ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);

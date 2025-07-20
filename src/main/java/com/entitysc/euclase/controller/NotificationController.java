@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,17 +30,24 @@ public class NotificationController {
 
     @Autowired
     PushNotificationService notificationService;
+    @Value("${euclase.client.name}")
+    private String companyName;
+    @Value("${euclase.client.url}")
+    private String companyUrl;
     private String alertMessage = "";
     private String alertMessageType = "";
+
+    @ModelAttribute
+    public void addAttributes(Model model, Principal principal) {
+        model.addAttribute("companyName", companyName);
+        model.addAttribute("companyUrl", companyUrl);
+    }
 
     @GetMapping("/")
     @Secured("ROLE_MANAGE_NOTIFICATION")
     public String pushNotification(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, Principal principal) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("documentCount", notificationService.fetchPushNotificationList().getData().size());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -47,19 +55,21 @@ public class NotificationController {
     }
 
     @PostMapping("/create")
-    public String pushNotification(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession session, Principal principal, Model model) {
+    public String pushNotification(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
         requestPayload.setUsername(principal.getName());
         EuclaseResponsePayload response = notificationService.processCreatePushNotification(requestPayload, principal.getName());
         if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
             alertMessage = response.getResponseMessage();
             alertMessageType = "success";
+
+            //Set the push notification for the user
+            DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
+            httpSession.setAttribute("notification", pushNotifications.getData());
+            httpSession.setAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
             return "redirect:/push/notification/";
         }
         model.addAttribute("euclasePayload", requestPayload);
         model.addAttribute("documentCount", notificationService.fetchPushNotificationList().getData().size());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", "error");
         return "pushnotification";
@@ -76,9 +86,6 @@ public class NotificationController {
         }
         model.addAttribute("euclasePayload", response.getData());
         model.addAttribute("documentCount", notificationService.fetchPushNotificationList().getData().size());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -96,9 +103,6 @@ public class NotificationController {
         }
         model.addAttribute("euclasePayload", response.getData());
         model.addAttribute("documentCount", notificationService.fetchPushNotificationList().getData().size());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", response.getResponseMessage());
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -110,9 +114,6 @@ public class NotificationController {
     public String pushNotification(Model model, Principal principal) {
         model.addAttribute("dataList", notificationService.fetchPushNotificationList().getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
-        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
-        model.addAttribute("notification", pushNotifications.getData());
-        model.addAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         model.addAttribute("alertMessage", alertMessage);
         model.addAttribute("alertMessageType", alertMessageType);
         resetAlertMessage();
@@ -121,10 +122,15 @@ public class NotificationController {
 
     @GetMapping("/delete")
     @Secured("ROLE_MANAGE_NOTIFICATION")
-    public String deletePushNotification(@RequestParam("seid") String seid, Model model, Principal principal) {
+    public String deletePushNotification(@RequestParam("seid") String seid, Model model, Principal principal, HttpSession httpSession) {
         EuclaseResponsePayload response = notificationService.processDeletePushNotification(seid, principal.getName(), false);
         alertMessage = response.getResponseMessage();
         alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
+
+        //Set the push notification for the user
+        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
+        httpSession.setAttribute("notification", pushNotifications.getData());
+        httpSession.setAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         return "redirect:/push/notification/list";
     }
 
@@ -149,11 +155,16 @@ public class NotificationController {
 
     @GetMapping("/update")
     @Secured("ROLE_MANAGE_NOTIFICATION")
-    public String pushNotificationRead(@RequestParam("seid") String seid, @RequestParam("rstat") String readStatus, Model model, Principal principal, HttpServletRequest httpRequest) {
+    public String pushNotificationRead(@RequestParam("seid") String seid, @RequestParam("rstat") String readStatus, Model model, Principal principal, HttpServletRequest httpRequest, HttpSession httpSession) {
         EuclaseResponsePayload response = notificationService.processUpdateSelfPushNotification(seid, principal.getName(), readStatus);
         alertMessage = response.getResponseMessage();
         alertMessageType = "success";
         String requestUri = httpRequest.getHeader("Referer");
+
+        //Set the push notification for the user
+        DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
+        httpSession.setAttribute("notification", pushNotifications.getData());
+        httpSession.setAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
         return "redirect:" + requestUri;
     }
 

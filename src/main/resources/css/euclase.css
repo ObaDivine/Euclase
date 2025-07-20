@@ -8,7 +8,7 @@
 
 html, body{
     font-family: "Montserrat" !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
     color: #36454F;
 }
 
@@ -63,7 +63,7 @@ h1,h2,h3,h4,h5,h6{
 
 #qrcode-image{
     position: relative;
-    height: 350px;
+    height: 300px;
     width: 320px;
 }
 
@@ -86,20 +86,20 @@ h1,h2,h3,h4,h5,h6{
 }
 @keyframes l5 {
     0%   {
-        background-position: 0    0,100% 0   ,100% 100%,0 100%
+        background-position: 0    0,100% 0   ,100% 100%,0 100% ;
     }
     33%  {
         background-position: 0    0,100% 0   ,100% 100%,0 100%;
         width:60px;
-        height: 60px
+        height: 60px;
     }
     66%  {
         background-position: 100% 0,100% 100%,0    100%,0 0   ;
         width:60px;
-        height: 60px
+        height: 60px;
     }
     100% {
-        background-position: 100% 0,100% 100%,0    100%,0 0
+        background-position: 100% 0,100% 100%,0    100%,0 0 ;
     }
 }
 
@@ -179,7 +179,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 #euclaseTable{
-    font-size: 14px !important;
+    font-size: 13px !important;
 }
 
 .action-icons{
@@ -200,4 +200,8 @@ h1,h2,h3,h4,h5,h6{
 .filter-label{
     min-width: 150px;
     color: #E31E25;
+}
+
+.dz-remove{
+    color: #E31E25 !important;
 }

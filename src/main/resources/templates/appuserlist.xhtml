@@ -16,7 +16,7 @@
                                     <ol class="breadcrumb mb-0">
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                        <li class="breadcrumb-item"><a href="#" th:href="@{/user}">Application User</a></li>
+                                        <li class="breadcrumb-item"><a href="#" th:href="@{/user/}">Application User</a></li>
                                         <li class="breadcrumb-item active">Application User List</li>
                                     </ol>
                                 </nav>
@@ -26,7 +26,7 @@
                             <div class="offset-lg-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                                 <div class="input-group mb-3">
                                     <input class="form-control form-control-sm search-input search" type="search" placeholder="Search table record" aria-label="Search" maxlength="150" />
-                                    <a class="btn btn-sm btn-primary" th:href="@{/user}">Add Application User</a>
+                                    <a class="btn btn-sm btn-primary" th:href="@{/user/}">Add Application User</a>
                                     <div class="input-group-append ml-10">
                                         <div class="dropdown d-inline-block">
                                             <button class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download Options</button>
@@ -58,7 +58,6 @@
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="hod">Department Head</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="teamLead">Team Lead</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="status">Status</th>
-                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="online">Online</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
                                         </tr>
                                     </thead>
@@ -78,8 +77,6 @@
                                             <td th:text="${rec.departmentHead}" class="hod align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.teamLead}" class="teamLead align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.status}" class="status align-middle white-space-nowrap start ps-3"></td>
-                                            <td th:if="${rec.userOnline == true}" class="online align-middle white-space-nowrap start ps-3 bg-success text-white">Online</td>
-                                            <td th:if="${rec.userOnline == false}" class="online align-middle white-space-nowrap start ps-3 bg-danger text-white">Offline</td>
                                             <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
                                                 <a class="text-info" href="#!" th:href="@{'/user/details?seid=' + ${rec.id}}">
                                                     <span class="fas fa-eye action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="View User Details"></span>

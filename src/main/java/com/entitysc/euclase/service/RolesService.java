@@ -190,7 +190,7 @@ public class RolesService extends EuclaseService {
         }
     }
 
-    @CachePut(value = "group", key = "#requestPayload.id")
+    @CachePut(value = "group", key = "{#a0.id}")
     public EuclaseResponsePayload processUpdateGroupRoles(EuclasePayload requestPayload) {
         try {
             requestPayload.setChannel("WEB");

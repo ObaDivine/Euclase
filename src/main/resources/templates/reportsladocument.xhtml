@@ -68,16 +68,15 @@
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Created By</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="id">Document Id</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="type">Document Type</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="tag">Tags</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="branch">Branch</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="department">Department</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="unit">Unit</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="access">Access Level</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="sla">SLA Name</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="expiry">SLA Expiry</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="violated">SLA Violated At</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="name">SLA Violated By</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="company">Company</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="branch">Branch</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="department">Department</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="unit">Unit</th>
                                             </tr>
                                         </thead>
                                         <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
@@ -88,16 +87,15 @@
                                                     <a th:href="@{'/document/details?seid=' + ${rec.documentId}}" th:text="${rec.documentId}"></a>
                                                 </td>
                                                 <td th:text="${rec.documentType}" class="type align-middle white-space-nowrap ps-3"></td>
-                                                <td th:text="${rec.tag}" class="tag align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.narration}" class="comment align-middle white-space-nowrap ps-3"></td>
-                                                <td th:text="${rec.branchName}" class="branch align-middle white-space-nowrap ps-3"></td>
-                                                <td th:text="${rec.departmentName}" class="department align-middle white-space-nowrap ps-3"></td>
-                                                <td th:text="${rec.departmentUnitName}" class="unit align-middle white-space-nowrap ps-3"></td>
-                                                <td th:text="${rec.accessLevel}" class="access align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.slaName}" class="sla align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.slaExpiry}" class="expiry align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.slaViolated}" class="violated align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.slaViolatedBy}" class="name align-middle white-space-nowrap ps-3"></td>
+                                                <td th:text="${rec.companyName}" class="company align-middle white-space-nowrap ps-3"></td>
+                                                <td th:text="${rec.branchName}" class="branch align-middle white-space-nowrap ps-3"></td>
+                                                <td th:text="${rec.departmentName}" class="department align-middle white-space-nowrap ps-3"></td>
+                                                <td th:text="${rec.departmentUnitName}" class="unit align-middle white-space-nowrap ps-3"></td>
                                             </tr>
                                         </tbody>
                                     </table>

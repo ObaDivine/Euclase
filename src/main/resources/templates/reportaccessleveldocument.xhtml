@@ -33,13 +33,14 @@
                                             <input class="form-control" type="date" aria-label="endDate" aria-describedby="endDate" th:field="*{endDate}" required="required"/>
                                         </div>
                                         <div class="form-icon-container">
-                                            <select class="form-select form-control-sm form-icon-input" aria-label="newValue" th:field="*{newValue}">
+                                            <select class="form-select form-control-sm form-icon-input" aria-label="newValue" th:field="*{newValue}" required="required">
                                                 <option value="">---Select access level---</option>
-                                                <option value="1">All Staff</option>
+                                                <option value="6">Executive Management Only</option>
+                                                <option value="5">Management Staff Only</option>
+                                                <option value="4">Branch Staff Only</option>
+                                                <option value="3">Department Staff Only</option>
                                                 <option value="2">Unit Staff Only</option>
-                                                <option value="3">Department Members Only</option>
-                                                <option value="4">Management Staff Only</option>
-                                                <option value="5">Executive Management Only</option>
+                                                <option value="1">All Staff</option>
                                             </select>
                                             <span class="fas fa-filter text-900 fs--1 form-icon text-primary"></span>
                                         </div>
@@ -72,12 +73,12 @@
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Created By</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="id">Document Id</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="type">Document Type</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="tag">Tags</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="access">Access Level</th>
+                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="company">Company</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="branch">Branch</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="department">Department</th>
                                                 <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="unit">Unit</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="access">Access Level</th>
                                             </tr>
                                         </thead>
                                         <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
@@ -88,12 +89,12 @@
                                                     <a th:href="@{'/document/details?seid=' + ${rec.documentId}}" th:text="${rec.documentId}"></a>
                                                 </td>
                                                 <td th:text="${rec.documentType}" class="type align-middle white-space-nowrap ps-3"></td>
-                                                <td th:text="${rec.tag}" class="tag align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.narration}" class="comment align-middle white-space-nowrap ps-3"></td>
+                                                <td th:text="${rec.accessLevel}" class="access align-middle white-space-nowrap ps-3"></td>
+                                                <td th:text="${rec.companyName}" class="company align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.branchName}" class="branch align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.departmentName}" class="department align-middle white-space-nowrap ps-3"></td>
                                                 <td th:text="${rec.departmentUnitName}" class="unit align-middle white-space-nowrap ps-3"></td>
-                                                <td th:text="${rec.accessLevel}" class="access align-middle white-space-nowrap ps-3"></td>
                                             </tr>
                                         </tbody>
                                     </table>

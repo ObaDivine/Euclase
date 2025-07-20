@@ -64,7 +64,8 @@
                                             <td th:text="${rec.tag}" class="tag align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.narration}" class="comment align-middle white-space-nowrap start ps-3"></td>
                                             <td>
-                                                <a href="" th:href="@{${rec.documentLink}}" th:text="${rec.documentName}" target="_blank"></a>
+                                                <span th:if="${!rec.allowAccess}" th:text="${rec.documentName}"></span>
+                                                <a th:if="${rec.allowAccess}" href="" th:href="@{${rec.documentLink}}" th:text="${rec.documentName}" target="_blank" th:onclick="|documentAccess(${rec.id})|"></a>
                                             </td>
                                             <td th:text="${rec.status}" class="name align-middle white-space-nowrap start ps-3" th:style="${rec.status} == 'Processing' ? 'color orange' : 'color: green'"></td>
                                         </tr>

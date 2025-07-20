@@ -45,16 +45,17 @@
                                     <thead>
                                         <tr>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
-                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="slaName">Backup Name</th>
-                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="sla">Folder</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="name">Backup Name</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="type">Backup Type</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="startDate">Start Date</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="endDate">End Date</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="frequency">Frequency</th>
-                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="type">Run Time</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="time">Run Time</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="location">Remote Host</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="username">Remote Host Username</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="password">Remote Host Password</th>
-                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="directory">Remote Directory</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="source">Source Directory</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="destination">Destination Directory</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Created By</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
                                         </tr>
@@ -62,16 +63,17 @@
                                     <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
                                         <tr th:each="rec : ${dataList}" class="position-static">
                                             <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                            <td th:text="${rec.backupName}" class="slaName align-middle white-space-nowrap start ps-3"></td>
-                                            <td th:text="${rec.folder}" class="sla align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.backupName}" class="name align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.backupType}" class="type align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.startDate}" class="startDate align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.endDate}" class="endDate align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.frequency}" class="frequency align-middle white-space-nowrap start ps-3"></td>
-                                            <td th:text="${rec.runtime}" class="type align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.runtime}" class="time align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.remoteHost}" class="location align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.remoteHostUsername}" class="username align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.remoteHostPassword}" class="password align-middle white-space-nowrap start ps-3"></td>
-                                            <td th:text="${rec.remoteDirectory}" class="directory align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.source}" class="destination align-middle white-space-nowrap start ps-3"></td>
+                                            <td th:text="${rec.destination}" class="destination align-middle white-space-nowrap start ps-3"></td>
                                             <td th:text="${rec.createdBy}" class="createdBy align-middle white-space-nowrap start ps-3"></td>
                                             <td class="align-middle white-space-nowrap start ps-3 btn-reveal-trigger">
                                                 <a class="text-success" href="#!" th:href="@{'/setup/backup/edit?seid=' + ${rec.id}}">
