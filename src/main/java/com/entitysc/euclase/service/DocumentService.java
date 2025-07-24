@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.BeansException;
@@ -28,7 +27,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,6 +57,8 @@ public class DocumentService extends EuclaseService {
     private String fetchDraftDocumentUrl;
     @Value("${euclasews.api.document.draft.delete}")
     private String processDeleteDraftDocumentUrl;
+    @Value("${euclasews.api.document.uploaddelete}")
+    private String processDeleteUploadDocumentUrl;
     @Value("${euclasews.api.document.approve}")
     private String processApproveDocumentUrl;
     @Value("${euclasews.api.document.search}")
@@ -437,6 +437,38 @@ public class DocumentService extends EuclaseService {
             String encodedParam = urlEncodeString(encryptString(id.trim()));
             String encodedPrincipal = urlEncodeString(encryptString(principal.trim()));
             String response = callEuclaseWSAPI(processDeleteDraftDocumentUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", generateEuclaseWSAPIToken(), "Delete Draft Documents");
+            //Check for error
+            if (response.contains("error")) {
+                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
+                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
+                exceptionResponse.setResponseCode(responsePayload.getStatus());
+                exceptionResponse.setResponseMessage(responsePayload.getMessage());
+                return exceptionResponse;
+            } else {
+                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
+                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+                }
+                return responsePayload;
+            }
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    public EuclaseResponsePayload processDeleteUploadDocument(String id, String principal) {
+        try {
+            String encodedParam = urlEncodeString(encryptString(id.trim()));
+            String encodedPrincipal = urlEncodeString(encryptString(principal.trim()));
+            String response = callEuclaseWSAPI(processDeleteUploadDocumentUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", generateEuclaseWSAPIToken(), "Delete Draft Documents");
             //Check for error
             if (response.contains("error")) {
                 ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);

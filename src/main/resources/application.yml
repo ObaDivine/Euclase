@@ -253,6 +253,7 @@ euclasews:
             details: http://localhost:8080/euclasews/api/v1/document/details
             self: http://localhost:8080/euclasews/api/v1/document/self
             pending: http://localhost:8080/euclasews/api/v1/document/pending
+            uploaddelete: http://localhost:8080/euclasews/api/v1/document/upload/delete
             draft:
                 fetch: http://localhost:8080/euclasews/api/v1/document/draft
                 delete: http://localhost:8080/euclasews/api/v1/document/draft/delete

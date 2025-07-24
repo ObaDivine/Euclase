@@ -243,8 +243,11 @@ public class DocumentController {
             requestPayload.setEditor(dataRecord.getPayload().getDocumentTemplateBody());
             requestPayload.setDocumentTemplateName(dataRecord.getPayload().getDocumentTemplateName());
             requestPayload.setDocumentTypeName(dataRecord.getPayload().getDocumentTypeName());
+            requestPayload.setRejected(dataRecord.getPayload().isRejected());
             model.addAttribute("euclasePayload", requestPayload);
             model.addAttribute("slaList", slaService.fetchSLAList().getData());
+            model.addAttribute("workflowList", dataRecord.getWorkflowData());
+            model.addAttribute("documentList", dataRecord.getData());
             model.addAttribute("alertMessage", dataRecord.getResponseMessage());
             model.addAttribute("alertMessageType", alertMessageType);
             resetAlertMessage();
@@ -263,6 +266,18 @@ public class DocumentController {
         alertMessage = response.getResponseMessage();
         alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
         return "redirect:/document/draft";
+    }
+
+    @GetMapping("/upload/delete")
+    @Secured("ROLE_CREATE_DOCUMENT")
+    public String deleteUploadDocument(@RequestParam("seid") String seid, @RequestParam("ref") String ref, @RequestParam("tt") String tt, Model model, Principal principal, HttpSession httpSession) {
+        EuclaseResponsePayload response = documentService.processDeleteUploadDocument(ref, principal.getName());
+        alertMessage = response.getResponseMessage();
+        alertMessageType = response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode()) ? "success" : "error";
+        if (tt.equalsIgnoreCase("dft")) {
+            return "redirect:/document/draft/details?seid=" + seid;
+        }
+        return "redirect:/document/approve/details?seid=" + seid;
     }
 
     @GetMapping("/approve/details")

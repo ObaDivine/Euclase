@@ -52,16 +52,38 @@
                                                 <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
                                                     <thead>
                                                         <tr>
-                                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Document</th>
+                                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
+                                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="document">Document</th>
                                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Upload By</th>
+                                                            <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="action">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="list" id="deal-tables-body" th:if="${documentList != null}">
                                                         <tr th:each="rec : ${documentList}" th:if="${rec.transType == 'Upload'}" class="position-static">
-                                                            <td class="code align-middle white-space-nowrap start ps-3">
+                                                            <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
+                                                            <td class="document align-middle white-space-nowrap start ps-3">
                                                                 <a th:href="@{${rec.documentLink}}" th:text="${rec.originalFileName}" target="_blank"></a>
                                                             </td>
                                                             <td th:text="${rec.createdBy}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                            <td  class="status align-middle white-space-nowrap start ps-3">
+                                                                <a th:if="${rec.allowAccess}" class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">
+                                                                    <span class="fas fa-trash action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Document"></span>
+                                                                </a>
+                                                                <div class="modal fade" th:id="'a' +${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h6 class="modal-title text-primary">Euclase</h6>                                                                   
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <p class="mb-2">Confirm you want to delete the uploaded document</p>
+                                                                                <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/document/upload/delete?seid=' + ${rec.documentId} + '&ref=' + ${rec.id}+ '&tt=apv'}">Delete</a>
+                                                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -76,6 +98,7 @@
                                                         <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
                                                         <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="approvingOfficer">Approving Officer</th>
                                                         <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
+                                                        <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="type">Type</th>
                                                         <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="signature">Signature</th>
                                                     </tr>
                                                 </thead>
@@ -84,6 +107,7 @@
                                                         <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
                                                         <td th:text="${rec.commentFrom}" class="code align-middle white-space-nowrap start ps-3"></td>
                                                         <td th:text="${rec.comment}" class="code align-middle white-space-nowrap start ps-3"></td>
+                                                        <td th:text="${rec.transType}" class="type align-middle white-space-nowrap start ps-3"></td>
                                                         <td class="code align-middle white-space-nowrap start ps-3">
                                                             <img  src="" alt="" class="img-thumbnail approval-signature" th:src="@{${rec.signatureLink}}" />
                                                         </td>
@@ -139,9 +163,10 @@
                                         <span class="fas fa-comments text-900 fs--1 form-icon text-primary"></span>
                                     </div>
                                     <div class="form-icon-container mt-1">                                    
-                                        <select class="form-select form-control-sm form-icon-input" aria-label="status" th:field="*{status}">
-                                            <option value="Approve">Approve</option>
-                                            <option value="Reject">Reject</option>
+                                        <select class="form-select form-control-sm form-icon-input" aria-label="status" th:field="*{status}" required="required">
+                                            <option value="">--Select status---</option>
+                                            <option value="Approve">Approve Document</option>
+                                            <option value="Reject">Reject Document</option>
                                         </select>
                                         <span class="fas fa-check-double text-900 fs--1 form-icon text-primary"></span>
                                     </div>
@@ -156,7 +181,7 @@
                                             <h6 class="modal-title text-primary">Euclase</h6>
                                         </div>
                                         <div class="modal-body">
-                                            <h6 class="text-secondary mb-2">Submit document for approval?</h6>
+                                            <p class="mb-2">Submit document for approval?</p>
                                             <button id="submitForm" type="submit" class="btn btn-primary btn-sm">Submit</button>
                                             <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                         </div>
@@ -173,23 +198,10 @@
         <script>
             tinymce.init({
                 selector: '#editor',
-                plugins: [
-                    'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
-                    'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code', 'fullscreen', 'insertdatetime',
-                    'media', 'table', 'emoticons', 'template', 'help'
-                ],
-                menu: {
-                    file: {title: 'File', items: 'newdocument restoredraft | preview | export print | deleteallconversations'},
-                    edit: {title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace'},
-                    view: {title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments'},
-                    insert: {title: 'Insert', items: 'image link media addcomment pageembed template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime'},
-                    format: {title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat'},
-                    tools: {title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount'},
-                    table: {title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable'},
-                    help: {title: 'Help', items: 'help'}
-                },
-                menubar: 'favs file edit view insert format tools table help',
-                noneditable_class: 'uneditable'
+                noneditable_class: 'uneditable',
+                branding: false,
+                menubar: false,
+                toolbar: false
             });
 
             $(document).ready(function () {

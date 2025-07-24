@@ -51,6 +51,7 @@
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="name">File Name</th>
                                             <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="name">Status</th>
+                                            <th class="sort align-middle ps-3 text-primary" scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="list" id="deal-tables-body" th:if="${dataList != null}">
@@ -67,7 +68,12 @@
                                                 <span th:if="${!rec.allowAccess}" th:text="${rec.documentName}"></span>
                                                 <a th:if="${rec.allowAccess}" href="" th:href="@{${rec.documentLink}}" th:text="${rec.documentName}" target="_blank" th:onclick="|documentAccess(${rec.id})|"></a>
                                             </td>
-                                            <td th:text="${rec.status}" class="name align-middle white-space-nowrap start ps-3" th:style="${rec.status} == 'Processing' ? 'color orange' : 'color: green'"></td>
+                                            <td th:text="${rec.status}" class="name align-middle white-space-nowrap start ps-3" th:style="${rec.status} == 'Completed' ? 'color: green' : 'color: orange'"></td>
+                                            <td th:if="${rec.rejected}" class="name align-middle white-space-nowrap start ps-3">
+                                                <a class="text-success"  href="#!" th:href="@{'/document/draft/details?seid=' + ${rec.documentId}}">
+                                                    <span  class="fas fa-eye action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="View Document Details"></span>
+                                                </a>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

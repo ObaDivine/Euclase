@@ -28,70 +28,6 @@
                             <div id="toolbar-container"></div>
                             <textarea class="tinymce"  th:field="*{editor}"></textarea>
                             <input type="hidden" th:field="*{editorData}" />
-                            <div  th:if="${euclasePayload.rejected}" class="card mt-4">
-                                <div class="card-body">
-                                    <h6 class="text-700 fw-semi-bold text-secondary mt-3">Previous Approval Comment</h6>
-                                    <div class="table-responsive ms-n1 ps-1 scrollbar">
-                                        <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
-                                            <thead>
-                                                <tr>
-                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
-                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="approvingOfficer">Approving Officer</th>
-                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="comment">Comment</th>
-                                                    <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="type">Type</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="list" id="deal-tables-body" th:if="${workflowList != null}">
-                                                <tr th:each="rec : ${workflowList}" class="position-static">
-                                                    <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                                    <td th:text="${rec.commentFrom}" class="code align-middle white-space-nowrap start ps-3"></td>
-                                                    <td th:text="${rec.comment}" class="code align-middle white-space-nowrap start ps-3"></td>
-                                                    <td th:text="${rec.transType}" class="type align-middle white-space-nowrap start ps-3"></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <h6 class="text-700 fw-semi-bold text-secondary mt-4">Previous Attached Files</h6>
-                                    <table class="table table-responsive table-sm table-striped fs--1 mb-0 border-top border-200" id="euclaseTable">
-                                        <thead>
-                                            <tr>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Date</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="date">Document</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="createdBy">Upload By</th>
-                                                <th class="sort align-middle ps-3 text-primary" scope="col" data-sort="action">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="list" id="deal-tables-body" th:if="${documentList != null}">
-                                            <tr th:each="rec : ${documentList}" th:if="${rec.transType == 'Upload'}" class="position-static">
-                                                <td th:text="${rec.createdAt}" class="date align-middle white-space-nowrap start ps-3"></td>
-                                                <td class="code align-middle white-space-nowrap start ps-3">
-                                                    <a th:href="@{${rec.documentLink}}" th:text="${rec.originalFileName}" target="_blank"></a>
-                                                </td>
-                                                <td th:text="${rec.createdBy}" class="code align-middle white-space-nowrap start ps-3"></td>
-                                                <td  class="status align-middle white-space-nowrap start ps-3">
-                                                    <a th:if="${rec.allowAccess}" class="text-danger" th:data-bs-target="'#a' + ${rec.id}" data-bs-toggle="modal">
-                                                        <span class="fas fa-trash action-icons" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Document"></span>
-                                                    </a>
-                                                    <div class="modal fade" th:id="'a' +${rec.id}" tabindex="-1" role="dialog" th:aria-labelledby="${rec.id}" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h6 class="modal-title text-primary">Euclase</h6>                                                                   
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <p class="mb-2">Confirm you want to delete the uploaded document</p>
-                                                                    <a class="btn btn-sm btn-danger" href="#!" th:href="@{'/document/upload/delete?seid=' + ${rec.documentId} + '&ref=' + ${rec.id}+ '&tt=dft'}">Delete</a>
-                                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
                             <h6 class="text-700 fw-semi-bold text-secondary mt-3">Attach Files</h6>
                             <div class="form-icon-container mt-2" id="uploadFiles">
                                 <div class="row">
@@ -150,8 +86,7 @@
                     help: {title: 'Help', items: 'help'}
                 },
                 menubar: 'favs file edit view insert format tools table help',
-                noneditable_class: 'uneditable',
-                branding: false
+                noneditable_class: 'uneditable'
             });
             $(document).ready(function () {
                 $(".add_file").click(function (e) {

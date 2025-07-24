@@ -270,6 +270,7 @@ public class EuclasePayload {
     private int accessCount;
     private String accessedBy;
     private boolean allowAccess;
+    private boolean rejected;
 
     /*
         Report
