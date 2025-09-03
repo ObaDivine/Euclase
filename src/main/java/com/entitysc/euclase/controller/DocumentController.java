@@ -412,7 +412,7 @@ public class DocumentController {
     }
 
     @GetMapping("/upload/single")
-    @Secured("ROLE_CREATE_DOCUMENT")
+    @Secured("ROLE_SINGLE_DOCUMENT_UPLOAD")
     public String singleUpload(Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
         requestPayload.setUsername(principal.getName());
@@ -438,7 +438,7 @@ public class DocumentController {
     }
 
     @GetMapping("/upload/batch")
-    @Secured("ROLE_CREATE_DOCUMENT")
+    @Secured("ROLE_BATCH_DOCUMENT_UPLOAD")
     public String batchUpload(Model model, Principal principal, HttpSession httpSession) {
         EuclasePayload requestPayload = new EuclasePayload();
         requestPayload.setUsername(principal.getName());
@@ -494,6 +494,28 @@ public class DocumentController {
         return keywordMatch;
     }
 
+    @GetMapping("/access")
+    @Secured("ROLE_DOCUMENT_ACCESS_NOTIFICATION")
+    public String documentAccess(Model model, HttpSession session, Principal principal) {
+        model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("dataList", null);
+        model.addAttribute("alertMessage", alertMessage);
+        model.addAttribute("alertMessageType", alertMessageType);
+        resetAlertMessage();
+        return "documentaccess";
+    }
+
+    @PostMapping("/access/")
+    public String documentAccess(@ModelAttribute("euclasePayload") EuclasePayload requestPayload, HttpSession httpSession, Principal principal, Model model) {
+        requestPayload.setUsername(principal.getName());
+        model.addAttribute("dataList", documentService.processReports(requestPayload).getData());
+        model.addAttribute("euclasePayload", new EuclasePayload());
+        model.addAttribute("alertMessage", "Report Processing complete");
+        model.addAttribute("alertMessageType", alertMessageType);
+        resetAlertMessage();
+        return "documentaccess";
+    }
+
     @GetMapping("/access/{id}")
     @ResponseBody
     public String documentAccess(@PathVariable("id") String id, Model model, Principal principal, HttpSession httpSession) {
@@ -508,7 +530,7 @@ public class DocumentController {
      * @return
      */
     @GetMapping("/notification")
-    @Secured("ROLE_DOCUMENT_NOTIFICATION")
+    @Secured("ROLE_DOCUMENT_ACCESS_NOTIFICATION")
     public String notification(Model model, HttpSession session, Principal principal) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);
@@ -536,7 +558,7 @@ public class DocumentController {
     }
 
     @GetMapping(value = "/notification/list")
-    @Secured("ROLE_DOCUMENT_NOTIFICATION")
+    @Secured("ROLE_DOCUMENT_ACCESS_NOTIFICATION")
     public String notificationList(Model model, HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal) {
         model.addAttribute("dataList", notificationService.fetchNotificationList(principal.getName()).getData());
         model.addAttribute("euclasePayload", new EuclasePayload());
@@ -547,7 +569,7 @@ public class DocumentController {
     }
 
     @GetMapping("/notification/edit")
-    @Secured("ROLE_DOCUMENT_NOTIFICATION")
+    @Secured("ROLE_DOCUMENT_ACCESS_NOTIFICATION")
     public String editNotification(@RequestParam("seid") String seid, Model model, Principal principal, HttpServletRequest httpRequest) {
         EuclaseResponsePayload response = notificationService.fetchNotification(seid);
         if (!response.getResponseCode().equalsIgnoreCase(ResponseCodes.SUCCESS_CODE.getResponseCode())) {
@@ -564,7 +586,7 @@ public class DocumentController {
     }
 
     @GetMapping("/notification/delete")
-    @Secured("ROLE_DOCUMENT_NOTIFICATION")
+    @Secured("ROLE_DOCUMENT_ACCESS_NOTIFICATION")
     public String deleteNotification(@RequestParam("seid") String seid, Model model, Principal principal) {
         EuclaseResponsePayload response = notificationService.processDeleteNotification(seid, principal.getName());
         alertMessage = response.getResponseMessage();

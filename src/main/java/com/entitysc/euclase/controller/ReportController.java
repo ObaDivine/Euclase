@@ -91,7 +91,7 @@ public class ReportController {
     }
 
     @GetMapping("/backup")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_BACKUP_REPORTS")
     public String backupAndRestore(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -112,7 +112,7 @@ public class ReportController {
     }
 
     @GetMapping("/document")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String documentReports(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -133,7 +133,7 @@ public class ReportController {
     }
 
     @GetMapping("/document/pending")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String pendingDocument(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         //Set the payload to have required values
         EuclasePayload requestPayload = new EuclasePayload();
@@ -150,7 +150,7 @@ public class ReportController {
     }
 
     @GetMapping("/document/digitized")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String digitizedDocument(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -171,7 +171,7 @@ public class ReportController {
     }
 
     @GetMapping("/document/company")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String documentByCompany(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -194,7 +194,7 @@ public class ReportController {
     }
 
     @GetMapping("/document/branch")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String documentByBranch(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -219,7 +219,7 @@ public class ReportController {
     }
 
     @GetMapping("/document/department")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String documentByDepartment(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -246,7 +246,7 @@ public class ReportController {
     }
 
     @GetMapping("/document/unit")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String documentByUnit(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -275,7 +275,7 @@ public class ReportController {
     }
 
     @GetMapping("/document/group")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String documentByGroup(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -300,7 +300,7 @@ public class ReportController {
     }
 
     @GetMapping("/document/type")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String documentByType(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -329,7 +329,7 @@ public class ReportController {
     }
 
     @GetMapping("/document/sla")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String documentBySla(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("slaList", slaService.fetchSLAList().getData());
@@ -351,7 +351,7 @@ public class ReportController {
     }
 
     @GetMapping("/document/access-level")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String documentByAccessLevel(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -372,7 +372,7 @@ public class ReportController {
     }
 
     @GetMapping("/document/access")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_DOCUMENT_REPORTS")
     public String documentByAccess(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -393,7 +393,7 @@ public class ReportController {
     }
 
     @GetMapping("/api/billing")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_BILLING_REPORTS")
     public String apiBilling(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("channelList", channelService.fetchChannelList().getData());
@@ -416,7 +416,7 @@ public class ReportController {
     }
 
     @GetMapping("/email")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_EMAIL_REPORTS")
     public String emailReport(Model model, HttpServletRequest request, HttpServletResponse response, Principal principal, HttpSession httpSession) {
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("dataList", null);
@@ -441,7 +441,7 @@ public class ReportController {
     }
 
     @GetMapping("/email/retry")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_EMAIL_REPORTS")
     public String retryEmailNotification(@RequestParam("seid") String seid, Model model, Principal principal) {
         EuclaseResponsePayload response = notificationService.retryEmailNotification(seid, principal.getName());
         EuclasePayload requestPayload = new EuclasePayload();
@@ -459,7 +459,7 @@ public class ReportController {
     }
 
     @GetMapping("/email/delete")
-    @Secured("ROLE_REPORTS")
+    @Secured("ROLE_EMAIL_REPORTS")
     public String deleteEmailNotification(@RequestParam("seid") String seid, Model model, Principal principal) {
         EuclaseResponsePayload response = notificationService.deleteEmailNotification(seid, principal.getName());
         EuclasePayload requestPayload = new EuclasePayload();

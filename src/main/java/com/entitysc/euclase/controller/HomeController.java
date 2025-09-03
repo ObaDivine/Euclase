@@ -110,17 +110,17 @@ public class HomeController implements ErrorController {
                     return "otp";
                 }
 
-                //Two factor authentication is not disabled
+                //Two factor authentication is not enabled
                 return "redirect:/dashboard";
             }
-            default -> {
+            case "37" -> {
                 //Check if password has expired or using the default password
-                if (response.getResponseCode().equalsIgnoreCase(ResponseCodes.PASSWORD_EXPIRED.getResponseCode())) {
-                    model.addAttribute("euclasePayload", requestPayload);
-                    model.addAttribute("alertMessage", response.getResponseMessage());
-                    model.addAttribute("alertMessageType", "error");
-                    return "changedefaultpassword";
-                }
+                model.addAttribute("euclasePayload", requestPayload);
+                model.addAttribute("alertMessage", response.getResponseMessage());
+                model.addAttribute("alertMessageType", "error");
+                return "changedefaultpassword";
+            }
+            default -> {
                 //Remove the Google Authenticator Code
                 requestPayload.setOtp("");
                 model.addAttribute("euclasePayload", requestPayload);
@@ -357,4 +357,5 @@ public class HomeController implements ErrorController {
         alertMessage = "";
         alertMessageType = "";
     }
+
 }

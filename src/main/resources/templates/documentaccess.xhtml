@@ -16,16 +16,16 @@
                                     <ol class="breadcrumb mb-0">
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/}">Home</a></li>
                                         <li class="breadcrumb-item"><a href="#" th:href="@{/dashboard}">Dashboard</a></li>
-                                        <li class="breadcrumb-item active">Report Document Access Listing</li>
+                                        <li class="breadcrumb-item active">User Document Access</li>
                                     </ol>
                                 </nav>
-                                <h4 class="mb-2 text-secondary">Document Access Report</h4>
-                                <h6 class="text-700 fw-semi-bold">Report of document filtered by user access</h6>
+                                <h4 class="mb-2 text-secondary">Document Access for User</h4>
+                                <h6 class="text-700 fw-semi-bold">Document access report for user</h6>
                             </div>                              
                             <div class="row g-3 mb-6">
                                 <div class="offset-lg-3 col-lg-6 col-sm-12 col-md-12">
-                                    <form th:object="${euclasePayload}" th:action="@{/report/document/access/}" method="POST">
-                                        <input type="hidden" id="transType" name="transType" value="DocumentAccess" />
+                                    <form th:object="${euclasePayload}" th:action="@{/document/access/}" method="POST">
+                                        <input type="hidden" id="transType" name="transType" value="UserDocumentAccess" />
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-text  filter-label" id="startDate">Start Date</span>
                                             <input class="form-control" type="date" aria-label="StartDate" aria-describedby="startDate" th:field="*{startDate}" required="required" />
@@ -33,8 +33,8 @@
                                             <input class="form-control" type="date" aria-label="endDate" aria-describedby="endDate" th:field="*{endDate}" required="required"/>
                                         </div>
                                         <div class="input-group input-group-sm">
-                                            <span class="input-group-text filter-label" id="searchIttem">Search Term</span>
-                                            <input class="form-control form-control-sm form-icon-input" type="text" aria-label="newValue" aria-describedby="newValue" th:field="*{newValue}" placeholder="Enter Username or Document Id" />
+                                            <span class="input-group-text filter-label" id="searchIttem">Document Id</span>
+                                            <input class="form-control form-control-sm form-icon-input" type="text" aria-label="newValue" aria-describedby="newValue" th:field="*{newValue}" placeholder="Enter full of partial document Id" />
                                         </div>
                                         <button class="btn btn-primary btn-sm w-40 mb-3 mt-2" type="submit">Submit</button>
                                     </form>

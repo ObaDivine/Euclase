@@ -3,7 +3,7 @@ var list = new List('listTable', {
         'branch', 'department', 'unit', 'designation', 'grade', 'code', 'location', 'position', 'type', 'tag', 'hod', 'teamLead', 'branchHead',
         'version', 'link', 'frequency', 'password', 'directory', 'access', 'expiry', 'violated', 'startDate', 'endDate', 'online', 'address',
         'daily', 'weekly', 'monthly', 'cost', 'band', 'url', 'channel', 'balanceBf', 'closingBalance', 'company', 'session', 'copy', 'subject', 'error', 'count',
-        'old', 'new', 'source', 'destination', 'time'
+        'old', 'new', 'source', 'destination', 'time', 'to', 'from', 'accessedBy'
     ],
     page: 10,
     pagination: true

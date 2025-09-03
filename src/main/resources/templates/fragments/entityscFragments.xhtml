@@ -81,7 +81,10 @@
                     <a class="navbar-brand me-1 me-sm-3" th:href="@{/dashboard}">
                         <div class="d-flex align-items-center">
                             <div class="d-flex align-items-center"><img th:src="@{/images/logo_nobg.png}" alt="Entity" width="27" />
-                                <p class="logo-text ms-2 d-none d-sm-block text-primary">Euclase</p>
+                                <p class="logo-text ms-2 d-none d-sm-block">
+                                    <span class="text-primary">Euclase :: </span>
+                                    <span class="text-secondary" th:text="${session.companyName}"></span>
+                                </p>
                             </div>
                         </div>
                     </a>
@@ -297,8 +300,13 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/notification}">
+                                        <li sec:authorize="hasRole('DOCUMENT_ACCESS_NOTIFICATION')" class="nav-item"><a class="nav-link" th:href="@{/document/notification}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Document Notification</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li sec:authorize="hasRole('DOCUMENT_ACCESS_NOTIFICATION')" class="nav-item"><a class="nav-link" th:href="@{/document/access}">
+                                                <div class="d-flex align-items-center"><span class="nav-link-text">Document Access</span>
                                                 </div>
                                             </a>
                                         </li>
@@ -350,12 +358,12 @@
                                 <div class="parent-wrapper label-1">
                                     <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="digitization">
                                         <li class="collapsed-nav-item-title d-none text-primary">Document Upload</li>
-                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/upload/single}">
+                                        <li sec:authorize="hasRole('SINGLE_DOCUMENT_UPLOAD')" class="nav-item"><a class="nav-link" th:href="@{/document/upload/single}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Single Upload</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li sec:authorize="hasRole('CREATE_DOCUMENT')" class="nav-item"><a class="nav-link" th:href="@{/document/upload/batch}">
+                                        <li sec:authorize="hasRole('BATCH_DOCUMENT_UPLOAD')" class="nav-item"><a class="nav-link" th:href="@{/document/upload/batch}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Batch Upload</span>
                                                 </div>
                                             </a>
@@ -633,7 +641,7 @@
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a sec:authorize="hasRole('REPORTS')" class="nav-link" th:href="@{/report/api/billing}">
+                                            <a sec:authorize="hasRole('BILLING_REPORTS')" class="nav-link" th:href="@{/report/api/billing}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">API Billing</span>
                                                 </div>
                                             </a>
@@ -645,13 +653,13 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a sec:authorize="hasRole('REPORTS')" class="nav-link" th:href="@{/report/backup}">
+                                            <a sec:authorize="hasRole('BACKUP_REPORTS')" class="nav-link" th:href="@{/report/backup}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Backup</span>
                                                 </div>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a sec:authorize="hasRole('REPORTS')" class="nav-link" th:href="@{/report/email}">
+                                            <a sec:authorize="hasRole('EMAIL_REPORTS')" class="nav-link" th:href="@{/report/email}">
                                                 <div class="d-flex align-items-center"><span class="nav-link-text">Email Report</span>
                                                 </div>
                                             </a>

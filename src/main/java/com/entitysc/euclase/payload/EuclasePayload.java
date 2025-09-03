@@ -269,6 +269,7 @@ public class EuclasePayload {
     private boolean useMfa;
     private int accessCount;
     private String accessedBy;
+    private String notificationTo;
     private boolean allowAccess;
     private boolean rejected;
 

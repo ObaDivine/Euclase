@@ -711,12 +711,12 @@ public abstract class EuclaseService {
                 payload.setToken(null);
             }
 
-            logger.info("EuclaseWS Service - " + app + " Request " + (payload == null ? requestBody : gson.toJson(payload)));
+            //logger.info("EuclaseWS Service - " + app + " Request " + (payload == null ? requestBody : gson.toJson(payload)));
             //Log the error
-            logger.info("EuclaseWS Service - " + app + " Response " + httpResponse.getBody());
+            //logger.info("EuclaseWS Service - " + app + " Response " + httpResponse.getBody());
             return httpResponse.getBody();
         } catch (Exception ex) {
-            logger.info("EuclaseWS Service Response " + ex.getMessage());
+            //logger.info("EuclaseWS Service Response " + ex.getMessage());
             return ex.getMessage();
         }
     }
@@ -758,12 +758,12 @@ public abstract class EuclaseService {
                 payload.setToken(null);
                 payload.setUploadedFiles(null);
             }
-            logger.info("EuclaseWS Service - " + app + " Request " + (payload == null ? requestBody : gson.toJson(payload)));
+            //logger.info("EuclaseWS Service - " + app + " Request " + (payload == null ? requestBody : gson.toJson(payload)));
             //Log the error
-            logger.info("EuclaseWS Service - " + app + " Response " + httpResponse.getBody());
+            //logger.info("EuclaseWS Service - " + app + " Response " + httpResponse.getBody());
             return httpResponse.getBody();
         } catch (Exception ex) {
-            logger.info("EuclaseWS Service Response " + ex.getMessage());
+            //logger.info("EuclaseWS Service Response " + ex.getMessage());
             return ex.getMessage();
         }
     }

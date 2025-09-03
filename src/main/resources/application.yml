@@ -1,6 +1,9 @@
 ####### Entity Software - Euclase Config #########
 ---
 server:
+    servlet:
+        session:
+          timeout: 5m #This is set to 5 minutes
     error:
         include-message: never
         include-binding-errors: always
