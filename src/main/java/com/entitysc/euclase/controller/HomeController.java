@@ -272,10 +272,7 @@ public class HomeController implements ErrorController {
     @GetMapping("/dashboard")
     public String dashboard(HttpServletRequest httpRequest, HttpServletResponse httpResponse, HttpSession httpSession, Principal principal, Model model) {
         DataListResponsePayload response = userService.fetchProfileDetails(principal.getName());
-        //Check if security question has been set
-        if (response.getPayload().getSecurityQuestion().equalsIgnoreCase("NA")) {
-            return "redirect:/security-question";
-        }
+
         //Set session variables
         httpSession.setAttribute("profileImage", response.getPayload().getUsername() + ".png");
         httpSession.setAttribute("firstName", response.getPayload().getFirstName());
@@ -307,6 +304,11 @@ public class HomeController implements ErrorController {
         DataListResponsePayload pushNotifications = notificationService.fetchUserPushNotification(principal.getName());
         httpSession.setAttribute("notification", pushNotifications.getData());
         httpSession.setAttribute("unreadMessageCount", pushNotifications.getData() == null ? 0 : pushNotifications.getData().stream().filter(t -> !t.isMessageRead()).count());
+
+        //Check if security question has been set
+        if (response.getPayload().getSecurityQuestion().equalsIgnoreCase("NA")) {
+            return "redirect:/security-question";
+        }
 
         model.addAttribute("euclasePayload", new EuclasePayload());
         model.addAttribute("alertMessage", alertMessage);

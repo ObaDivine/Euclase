@@ -95,6 +95,178 @@ public class UserService extends EuclaseService {
         }
     }
 
+    public EuclaseResponsePayload processCreateAppUser(String principal, EuclasePayload requestPayload) {
+        try {
+            requestPayload.setCompanyHead(requestPayload.getCompanyHead() == null ? "False" : "True");
+            requestPayload.setBranchHead(requestPayload.getBranchHead() == null ? "False" : "True");
+            requestPayload.setDepartmentHead(requestPayload.getDepartmentHead() == null ? "False" : "True");
+            requestPayload.setTeamLead(requestPayload.getTeamLead() == null ? "False" : "True");
+            requestPayload.setChannel("WEB");
+            requestPayload.setRequestBy(requestPayload.getUsername());
+            requestPayload.setRequestId(generateRequestId());
+            requestPayload.setToken(generateEuclaseWSAPIToken());
+            requestPayload.setRequestType("SignUp");
+            requestPayload.setHash(generateRequestString(generateEuclaseWSAPIToken(), requestPayload));
+            //Connect to EuclaseWS API
+            String response;
+            if (requestPayload.getId() == 0) {
+                response = callEuclaseWSAPI(createAppUserUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "App User");
+            } else {
+                response = callEuclaseWSAPI(updateAppUserUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "App User");
+            }
+            //Check for error
+            if (response.contains("error")) {
+                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
+                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
+                exceptionResponse.setResponseCode(responsePayload.getStatus());
+                exceptionResponse.setResponseMessage(responsePayload.getMessage());
+                return exceptionResponse;
+            } else {
+                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
+                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+                }
+                return responsePayload;
+            }
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Cacheable(value = "user", key = "#id")
+    public EuclaseResponsePayload fetchAppUser(String id) {
+        try {
+            String encodedParam = urlEncodeString(encryptString(id.trim()));
+            String response = callEuclaseWSAPI(fetchAppUserUrl + "?id=" + encodedParam, "GET", generateEuclaseWSAPIToken(), "App User Fetch");
+            //Check for error
+            if (response.contains("error")) {
+                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
+                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
+                exceptionResponse.setResponseCode(responsePayload.getStatus());
+                exceptionResponse.setResponseMessage(responsePayload.getMessage());
+                return exceptionResponse;
+            } else {
+                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
+                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+                }
+                return responsePayload;
+            }
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @CacheEvict(value = "user", key = "#id")
+    public EuclaseResponsePayload processDeleteAppUser(String id, String principal) {
+        try {
+            String encodedParam = urlEncodeString(encryptString(id.trim()));
+            String encodedPrincipal = urlEncodeString(encryptString(principal.trim()));
+            String response = callEuclaseWSAPI(deleteAppUserUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", generateEuclaseWSAPIToken(), "App User Delete");
+            //Check for error
+            if (response.contains("error")) {
+                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
+                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
+                exceptionResponse.setResponseCode(responsePayload.getStatus());
+                exceptionResponse.setResponseMessage(responsePayload.getMessage());
+                return exceptionResponse;
+            } else {
+                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
+                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+                }
+                return responsePayload;
+            }
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @Cacheable(value = "user")
+    public DataListResponsePayload fetchAppUserList() {
+        try {
+            EuclasePayload requestPayload = new EuclasePayload();
+            requestPayload.setChannel("WEB");
+            requestPayload.setRequestId(generateRequestId());
+            requestPayload.setToken(generateEuclaseWSAPIToken());
+            //Connect to EuclaseWS API
+            String response = callEuclaseWSAPI(appUserListUrl, "GET", generateEuclaseWSAPIToken(), "App User List");
+            return gson.fromJson(response, DataListResponsePayload.class);
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            DataListResponsePayload responsePayload = new DataListResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
+    @CachePut(value = "userUpdate", key = "{#a0.username}")
+    public EuclaseResponsePayload processUpdateUserGenericDetails(EuclasePayload requestPayload, String principal) {
+        try {
+            requestPayload.setChannel("WEB");
+            requestPayload.setAppType("Euclase");
+            requestPayload.setPrincipal(principal);
+            requestPayload.setRequestId(generateRequestId());
+            requestPayload.setToken(generateEuclaseWSAPIToken());
+            requestPayload.setRequestType("GenericUpdate");
+            requestPayload.setHash(generateRequestString(generateEuclaseWSAPIToken(), requestPayload));
+            //Connect to EuclaseWS API
+            String response = callEuclaseWSAPI(updateAppUserGenericUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "Document Workflow");
+            //Check for error
+            if (response.contains("error")) {
+                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
+                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
+                exceptionResponse.setResponseCode(responsePayload.getStatus());
+                exceptionResponse.setResponseMessage(responsePayload.getMessage());
+                return exceptionResponse;
+            } else {
+                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
+                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+                }
+                return responsePayload;
+            }
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
     public EuclaseResponsePayload processOtp(EuclasePayload requestPayload) {
         try {
             requestPayload.setToken(generateEuclaseWSAPIToken());
@@ -202,6 +374,44 @@ public class UserService extends EuclaseService {
         }
     }
 
+    public EuclaseResponsePayload processChangeDefaultPassword(EuclasePayload requestPayload) {
+        try {
+            requestPayload.setChannel("WEB");
+            requestPayload.setRequestBy(requestPayload.getUsername());
+            requestPayload.setRequestId(generateRequestId());
+            requestPayload.setTransType("DefaultPassword");
+            requestPayload.setToken(generateEuclaseWSAPIToken());
+            requestPayload.setRequestType("ChangePassword");
+            requestPayload.setHash(generateRequestString(generateEuclaseWSAPIToken(), requestPayload));
+            //Connect to EuclaseWS API
+            String response = callEuclaseWSAPI(changeDefaultPasswordUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "Change Password");
+            //Check for error
+            if (response.contains("error")) {
+                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
+                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
+                exceptionResponse.setResponseCode(responsePayload.getStatus());
+                exceptionResponse.setResponseMessage(responsePayload.getMessage());
+                return exceptionResponse;
+            } else {
+                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
+                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
+                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
+                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+                }
+                return responsePayload;
+            }
+        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
+            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
+            responsePayload.setResponseCode("500");
+            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
+                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
+            } else {
+                responsePayload.setResponseMessage(ex.getMessage());
+            }
+            return responsePayload;
+        }
+    }
+
     public EuclaseResponsePayload changeSecurityQuestion(EuclasePayload requestPayload) {
         try {
             requestPayload.setToken(generateEuclaseWSAPIToken());
@@ -276,17 +486,6 @@ public class UserService extends EuclaseService {
         }
     }
 
-    public EuclaseResponsePayload authenticateUser(EuclasePayload requestPayload) {
-        try {
-            return null;
-        } catch (Exception ex) {
-            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
-            responsePayload.setResponseCode("500");
-            responsePayload.setResponseMessage(ex.getMessage());
-            return responsePayload;
-        }
-    }
-
     public String changePassword(EuclasePayload requestPayload, String principal) {
         try {
             return "";
@@ -296,216 +495,6 @@ public class UserService extends EuclaseService {
 //            responsePayload.setResponseMessage(ex.getMessage());
 //            return responsePayload;
             return ex.getMessage();
-        }
-    }
-
-    @Cacheable(value = "user", key = "#id")
-    public EuclaseResponsePayload fetchAppUser(String id) {
-        try {
-            String encodedParam = urlEncodeString(encryptString(id.trim()));
-            String response = callEuclaseWSAPI(fetchAppUserUrl + "?id=" + encodedParam, "GET", generateEuclaseWSAPIToken(), "App User Fetch");
-            //Check for error
-            if (response.contains("error")) {
-                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
-                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
-                exceptionResponse.setResponseCode(responsePayload.getStatus());
-                exceptionResponse.setResponseMessage(responsePayload.getMessage());
-                return exceptionResponse;
-            } else {
-                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
-                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-                }
-                return responsePayload;
-            }
-        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
-            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
-            responsePayload.setResponseCode("500");
-            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            } else {
-                responsePayload.setResponseMessage(ex.getMessage());
-            }
-            return responsePayload;
-        }
-    }
-
-    @CacheEvict(value = "user", key = "#id")
-    public EuclaseResponsePayload processDeleteAppUser(String id, String principal) {
-        try {
-            String encodedParam = urlEncodeString(encryptString(id.trim()));
-            String encodedPrincipal = urlEncodeString(encryptString(principal.trim()));
-            String response = callEuclaseWSAPI(deleteAppUserUrl + "?id=" + encodedParam + "&prcp=" + encodedPrincipal, "GET", generateEuclaseWSAPIToken(), "App User Delete");
-            //Check for error
-            if (response.contains("error")) {
-                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
-                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
-                exceptionResponse.setResponseCode(responsePayload.getStatus());
-                exceptionResponse.setResponseMessage(responsePayload.getMessage());
-                return exceptionResponse;
-            } else {
-                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
-                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-                }
-                return responsePayload;
-            }
-        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
-            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
-            responsePayload.setResponseCode("500");
-            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            } else {
-                responsePayload.setResponseMessage(ex.getMessage());
-            }
-            return responsePayload;
-        }
-    }
-
-    @Cacheable(value = "user")
-    public DataListResponsePayload fetchAppUserList() {
-        try {
-            EuclasePayload requestPayload = new EuclasePayload();
-            requestPayload.setChannel("WEB");
-            requestPayload.setRequestId(generateRequestId());
-            requestPayload.setToken(generateEuclaseWSAPIToken());
-            //Connect to EuclaseWS API
-            String response = callEuclaseWSAPI(appUserListUrl, "GET", generateEuclaseWSAPIToken(), "App User List");
-            return gson.fromJson(response, DataListResponsePayload.class);
-        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
-            DataListResponsePayload responsePayload = new DataListResponsePayload();
-            responsePayload.setResponseCode("500");
-            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            } else {
-                responsePayload.setResponseMessage(ex.getMessage());
-            }
-            return responsePayload;
-        }
-    }
-
-    public EuclaseResponsePayload processCreateAppUser(String principal, EuclasePayload requestPayload) {
-        try {
-            requestPayload.setCompanyHead(requestPayload.getCompanyHead() == null ? "False" : "True");
-            requestPayload.setBranchHead(requestPayload.getBranchHead() == null ? "False" : "True");
-            requestPayload.setDepartmentHead(requestPayload.getDepartmentHead() == null ? "False" : "True");
-            requestPayload.setTeamLead(requestPayload.getTeamLead() == null ? "False" : "True");
-            requestPayload.setChannel("WEB");
-            requestPayload.setRequestBy(requestPayload.getUsername());
-            requestPayload.setRequestId(generateRequestId());
-            requestPayload.setToken(generateEuclaseWSAPIToken());
-            requestPayload.setRequestType("SignUp");
-            requestPayload.setHash(generateRequestString(generateEuclaseWSAPIToken(), requestPayload));
-            //Connect to EuclaseWS API
-            String response;
-            if (requestPayload.getId() == 0) {
-                response = callEuclaseWSAPI(createAppUserUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "App User");
-            } else {
-                response = callEuclaseWSAPI(updateAppUserUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "App User");
-            }
-            //Check for error
-            if (response.contains("error")) {
-                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
-                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
-                exceptionResponse.setResponseCode(responsePayload.getStatus());
-                exceptionResponse.setResponseMessage(responsePayload.getMessage());
-                return exceptionResponse;
-            } else {
-                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
-                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-                }
-                return responsePayload;
-            }
-        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
-            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
-            responsePayload.setResponseCode("500");
-            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            } else {
-                responsePayload.setResponseMessage(ex.getMessage());
-            }
-            return responsePayload;
-        }
-    }
-
-    @CachePut(value = "userUpdate", key = "{#a0.username}")
-    public EuclaseResponsePayload processUpdateUserGenericDetails(EuclasePayload requestPayload, String principal) {
-        try {
-            requestPayload.setChannel("WEB");
-            requestPayload.setAppType("Euclase");
-            requestPayload.setPrincipal(principal);
-            requestPayload.setRequestId(generateRequestId());
-            requestPayload.setToken(generateEuclaseWSAPIToken());
-            requestPayload.setRequestType("GenericUpdate");
-            requestPayload.setHash(generateRequestString(generateEuclaseWSAPIToken(), requestPayload));
-            //Connect to EuclaseWS API
-            String response = callEuclaseWSAPI(updateAppUserGenericUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "Document Workflow");
-            //Check for error
-            if (response.contains("error")) {
-                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
-                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
-                exceptionResponse.setResponseCode(responsePayload.getStatus());
-                exceptionResponse.setResponseMessage(responsePayload.getMessage());
-                return exceptionResponse;
-            } else {
-                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
-                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-                }
-                return responsePayload;
-            }
-        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
-            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
-            responsePayload.setResponseCode("500");
-            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            } else {
-                responsePayload.setResponseMessage(ex.getMessage());
-            }
-            return responsePayload;
-        }
-    }
-
-    public EuclaseResponsePayload processChangeDefaultPassword(EuclasePayload requestPayload) {
-        try {
-            requestPayload.setChannel("WEB");
-            requestPayload.setRequestBy(requestPayload.getUsername());
-            requestPayload.setRequestId(generateRequestId());
-            requestPayload.setTransType("DefaultPassword");
-            requestPayload.setToken(generateEuclaseWSAPIToken());
-            requestPayload.setRequestType("ChangePassword");
-            requestPayload.setHash(generateRequestString(generateEuclaseWSAPIToken(), requestPayload));
-            //Connect to EuclaseWS API
-            String response = callEuclaseWSAPI(changeDefaultPasswordUrl, gson.toJson(requestPayload), generateEuclaseWSAPIToken(), "Change Password");
-            //Check for error
-            if (response.contains("error")) {
-                ExceptionPayload responsePayload = gson.fromJson(response, ExceptionPayload.class);
-                EuclaseResponsePayload exceptionResponse = new EuclaseResponsePayload();
-                exceptionResponse.setResponseCode(responsePayload.getStatus());
-                exceptionResponse.setResponseMessage(responsePayload.getMessage());
-                return exceptionResponse;
-            } else {
-                EuclaseResponsePayload responsePayload = gson.fromJson(response, EuclaseResponsePayload.class);
-                if (responsePayload.getStatus() != null && responsePayload.getError() != null && responsePayload.getPath() != null) {
-                    responsePayload.setResponseCode(ResponseCodes.INTERNAL_SERVER_ERROR.getResponseCode());
-                    responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-                }
-                return responsePayload;
-            }
-        } catch (JsonSyntaxException | BeansException | NoSuchMessageException ex) {
-            EuclaseResponsePayload responsePayload = new EuclaseResponsePayload();
-            responsePayload.setResponseCode("500");
-            if (ex.getMessage().contains("Expected BEGIN_OBJECT but was STRING")) {
-                responsePayload.setResponseMessage(messageSource.getMessage("appMessages.failed.connect.middleware", new Object[0], Locale.ENGLISH));
-            } else {
-                responsePayload.setResponseMessage(ex.getMessage());
-            }
-            return responsePayload;
         }
     }
 
