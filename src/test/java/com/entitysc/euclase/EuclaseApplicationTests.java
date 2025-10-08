@@ -1,4 +1,4 @@
-package com.entitysc.euclase;
+package com.entitysc.euclase.fe;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

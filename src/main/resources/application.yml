@@ -1,307 +1,305 @@
-####### Entity Software - Euclase Config #########
----
+####### Entity Software - Euclase Front End #########
 server:
-    servlet:
-        session:
-          timeout: 5m #This is set to 5 minutes
-    error:
-        include-message: never
-        include-binding-errors: always
-        include-exception: true
-        include-stacktrace: never
-    tomcat:
-        max-swallow-size: 10GB
-        basedir: C:/Euclase/Log
-        accesslog:
-            enabled: true
-    temp:
-        dir: C:\Euclase\temp
-    connection-timeout: 120000
-
+  servlet:
+    session:
+      timeout: 5m
+  error:
+    include-message: never
+    include-binding-errors: always
+    include-exception: true
+    include-stacktrace: never
+  tomcat:
+    max-swallow-size: 10GB
+    basedir: 'C:/Euclase/Log'
+    accesslog:
+      enabled: true
+  temp:
+    dir: 'C:\Euclase\temp'
+  connection-timeout: 120000
 logging:
-    file:
-        name: C:/Euclase/logs/euclase.log
-    level:
-        root: INFO
+  file:
+    name: 'C:/Euclase/logs/euclase.log'
+  level:
+    root: INFO
 upload:
-    base:
-        dir: C:/Euclase/bulk/upload
-    max:
-        record: 100
+  base:
+    dir: 'C:/Euclase/bulk/upload'
+  max:
+    record: 100
 jwt:
-    security:
-        key: j3H5Ld5nYmGWyULy6xwpOgfSH++NgKXnJMq20vpfd+8=t
-    access:
-        validity: 60000
-             
+  security:
+    key: j3H5Ld5nYmGWyULy6xwpOgfSH++NgKXnJMq20vpfd+8=t
+  access:
+    validity: 60000
 spring:
-    cloud:
-        loadbalancer:
-            ribbon:
-                enabled: false
-    config:
-        activate:
-            profile: dev
-    datasource:
-        initialization-mode: ALWAYS
-        password: Anaconda1521@
-        username: entityscdbuser
-        driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver  
-        url: jdbc:sqlserver://localhost;databaseName=euclase;;encrypt=true;trustServerCertificate=true
-#        driverClassName: org.postgresql.Driver
-#        url: jdbc:postgresql://209.159.155.84/euclasews
-    jpa:
-        hibernate:
-            ddl-auto: update
-            dialect: org.hibernate.dialect.SQLServer2012Dialect
-            #dialect: org.hibernate.dialect.PostgreSQLDialect
-        show-sql: true
-        open-in-view: false
-    servlet:
-        multipart:
-            max-file-size: 20MB
-        
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+  config:
+    activate:
+      profile: dev
+  datasource:
+    initialization-mode: ALWAYS
+    password: Anaconda1521@
+    username: entityscdbuser
+    driverClassName: org.postgresql.Driver
+    url: 'jdbc:postgresql://localhost/euclase'
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        boot:
+          allow_jdbc_metadata_access: false
+  servlet:
+    multipart:
+      max-file-size: 20MB
 euclase:
-    commareplacement: '|'
-    temp:
-        dir: C:\Apps\EntitySC\Euclase\euclase\target\euclase-1.0\WEB-INF\classes\temp
-    document:
-        upload:
-            maxrecord: 100
-        allowkeyword:
-            date: LEAVE, TRAINING, 
-            amount: LOAN, PURCHASE, EXPENSE, INCOME, BUDGET, TRAINING, INVOICE
-        archivedir: C:\Apps\EntitySC\Euclase\euclase\target\euclase-1.0\WEB-INF\classes\documents\archive
-        prefix:
-            usegeneric: false
-            generic: DOC
-        id:
-            allowuser: false
-    image:
-        dir: C:\Apps\EntitySC\Euclase\euclase\target\euclase-1.0\WEB-INF\classes\images\profile
-    default:
-        password: Password12#
-    client:
-        name: Entity Software
-        address: 1 Ebun Otti Street, Mende, Lagos, Nigeria
-        url: 'https://entitysc.com'
-    reset:
-        time: 1
-    otp:
-        expiry:
-            insec: 60
-    encryption:
-        key:
-            mian: FLWSECK-f6be2996841f1da0dfb7e27b9a3bd5bf-X
-            web: onLi8HHFXqFwWBeh
-    password:
-        change:
-            days: 30
-        retry:
-            count: 3
-    mail:
-        username: info@entitysc.com
-        password: Anaconda1521@
-        host: smtp.zoho.com
-        port: 587
-        protocol: smtp
-        trust: smtp.zoho.com
+  commareplacement: '|'
+  temp:
+    dir: 'C:\Apps\EntitySC\Euclase\euclase\target\euclase-1.0\WEB-INF\classes\temp'
+  document:
+    upload:
+      maxrecord: 100
+    allowkeyword:
+      date: 'LEAVE, TRAINING,'
+      amount: 'LOAN, PURCHASE, EXPENSE, INCOME, BUDGET, TRAINING, INVOICE'
+    archivedir: >-
+      C:\Apps\EntitySC\Euclase\euclase\target\euclase-1.0\WEB-INF\classes\documents\archive
+    prefix:
+      usegeneric: false
+      generic: DOC
+    id:
+      allowuser: false
+  image:
+    dir: >-
+      C:\Apps\EntitySC\Euclase\euclase\target\euclase-1.0\WEB-INF\classes\images\profile
+  default:
+    password: 'Password12#'
+  client:
+    name: Entity Software
+    address: '1 Ebun Otti Street, Mende, Lagos, Nigeria'
+    url: 'https://entitysc.com'
+  reset:
+    time: 1
+  otp:
+    expiry:
+      insec: 60
+  encryption:
+    key:
+      mian: FLWSECK-f6be2996841f1da0dfb7e27b9a3bd5bf-X
+      web: onLi8HHFXqFwWBeh
+  password:
+    change:
+      days: 30
+    retry:
+      count: 3
+  mail:
+    username: info@entitysc.com
+    password: Anaconda1521@
+    host: smtp.zoho.com
+    port: 587
+    protocol: smtp
+    trust: smtp.zoho.com
 admin:
-    consol:
-        ip: 127.0.0.1,172.20.0.78
-        
+  consol:
+    ip: '127.0.0.1,172.20.0.78'
 euclasews:
-    test:
-        url: https://euclasews/api/
-    profile:
-        image:
-            url: http://localhost:8080/euclasews/images/profile/
+  test:
+    url: 'https://euclasews/api/'
+  profile:
+    image:
+      url: 'http://localhost:8080/euclasews/images/profile/'
+  qrcode:
+    issuer: Entity Software Euclase
+    image:
+      url: 'http://localhost:8080/euclasews/images/qrcode/'
+  api:
+    key: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJXRUIiLCJhdWQiOiJbTUFOQUdFX1JPTEVTLCBNQU5BR0VfR1JBREVfTEVWRUwsIE1BTkFHRV9TTEEsIERPQ1VNRU5UX0FDQ0VTU19OT1RJRklDQVRJT04sIEFVRElUX0xPRywgTUFOQUdFX0RPQ1VNRU5UX1dPUktGTE9XLCBNQU5BR0VfQlJBTkNILCBNQU5BR0VfQklMTElORywgQkFDS1VQX1JFU1RPUkUsIE1BTkFHRV9QVUJMSUNfSE9MSURBWSwgQ1JFQVRFX0FQUF9VU0VSLCBTRUFSQ0hfRE9DVU1FTlQsIERPQ1VNRU5UX05PVElGSUNBVElPTiwgQVBQUk9WRV9ET0NVTUVOVCwgTUFOQUdFX0FQUF9VU0VSLCBNQU5BR0VfRE9DVU1FTlRfR1JPVVAsIEJBVENIX0RPQ1VNRU5UX1VQTE9BRCwgQ1JFQVRFX0RPQ1VNRU5ULCBCSUxMSU5HX1JFUE9SVFMsIE1BTkFHRV9ET0NVTUVOVF9URU1QTEFURSwgTUFOQUdFX0RFUEFSVE1FTlRfVU5JVCwgVklFV19QUk9URUNURURfRE9DVU1FTlQsIE1BTkFHRV9OT1RJRklDQVRJT04sIE1BTkFHRV9DSEFOTkVMLCBFTUFJTF9SRVBPUlRTLCBCQUNLVVBfUkVQT1JUUywgU0lOR0xFX0RPQ1VNRU5UX1VQTE9BRCwgTUFOQUdFX0RFUEFSVE1FTlQsIE1BTkFHRV9ERVNJR05BVElPTiwgRE9DVU1FTlRfUkVQT1JUUywgTUFOQUdFX0NPTVBBTlksIE1BTkFHRV9JUF9BRERSRVNTXSIsImVuY2tleSI6ImovdHYwcmZUT2c2T09wMzMvUTBpWWd5cnUwTEhyTWlXYXdnSkZ5RGtBU3hJZDYxM2s0Mmd0MlRWcXNoeUE4VFhGZ0xIZFRyaWkyWFJCVE1tIiwiY2hhbm5lbCI6IldFQiIsImlwIjoiMDowOjA6MDowOjA6MDoxIiwiYXBpa2V5Ijoic3F0NXZRZkJzNDZ5RlIwbyt6ZWRwTlFWN2tORlE5bFdrLzNHZDFwcEFqWXR0MmkzbjUrM1BzVFlUdC8zNFJsT3pjUC8xTTJEelZlSU43eXJmMkUwYU4wZXRFYUJodVZKIiwiaXNzIjoiRW50aXR5IFNvZnR3YXJlIENvbXBhbnkiLCJpYXQiOjE3NTk4MzU3MjMsImV4cCI6MjU1MzUwNjEyM30.uIXcLiNSEA0UaikrxtcwfiFSqYMldxpbUSANvkC0o7k
+    #key: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJXRUIiLCJhdWQiOiJbTUFOQUdFX1JPTEVTLCBNQU5BR0VfR1JBREVfTEVWRUwsIE1BTkFHRV9TTEEsIEFVRElUX0xPRywgTUFOQUdFX0RPQ1VNRU5UX1dPUktGTE9XLCBNQU5BR0VfQlJBTkNILCBNQU5BR0VfQklMTElORywgQkFDS1VQX1JFU1RPUkUsIE1BTkFHRV9QVUJMSUNfSE9MSURBWSwgQ1JFQVRFX0FQUF9VU0VSLCBTRUFSQ0hfRE9DVU1FTlQsIERPQ1VNRU5UX05PVElGSUNBVElPTiwgQVBQUk9WRV9ET0NVTUVOVCwgUkVQT1JUUywgTUFOQUdFX0FQUF9VU0VSLCBNQU5BR0VfRE9DVU1FTlRfR1JPVVAsIENSRUFURV9ET0NVTUVOVCwgTUFOQUdFX0RPQ1VNRU5UX1RFTVBMQVRFLCBNQU5BR0VfREVQQVJUTUVOVF9VTklULCBWSUVXX1BST1RFQ1RFRF9ET0NVTUVOVCwgTUFOQUdFX05PVElGSUNBVElPTiwgTUFOQUdFX0NIQU5ORUwsIE1BTkFHRV9ERVBBUlRNRU5ULCBNQU5BR0VfREVTSUdOQVRJT04sIE1BTkFHRV9DT01QQU5ZLCBNQU5BR0VfSVBfQUREUkVTU10iLCJlbmNrZXkiOiJqTWZXdWdKOFB0dkNEZnYxc0s2NDA1em8xUGIxN0dFOFlEQ0tvcVQrQlNRcEc5Ti9oWWJUOE9kZUEzd1lxZ0tOYmVCMDZ2b2NEQXRuamJwRyIsImNoYW5uZWwiOiJXRUIiLCJpcCI6IjA6MDowOjA6MDowOjA6MSIsImFwaWtleSI6IjVEcDVKTDlWcklvMUtuM2tYLzdqVysvejdGditJdTVqMUxXWWpkN1haUVNXWEVDWlN2YlkyZ014N3hYeHFNWTQzOXIvWXM0Zk9Vck9SUXlWL2VCRllvQ0hsNm1VaE5ONiIsImlzcyI6IkVudGl0eSBTb2Z0d2FyZSBDb21wYW55IiwiaWF0IjoxNzUxODkyMzk3LCJleHAiOjI1NTM1MTE1OTZ9.qehwDWgezjqlhr25lvl5rCRVJJeLsGvSo0BmCAARgRQ
+    account:
+      statement: 'http://localhost:8080/euclasews/api/v1/wallet/history'
+    twofactor:
+      enable: 'http://localhost:8080/euclasews/api/v1/user/twofa'
+      validate: 'http://localhost:8080/euclasews/api/v1/user/validate/twofa'
+    validate:
+      pin: 'http://localhost:8080/euclasews/api/v1/app/user/validate/pin'
+      securityquestion: >-
+        http://localhost:8080/euclasews/api/v1/app/user/validate/security-question
+    otp:
+      notification: 'http://localhost:8080/euclasews/api/v1/notification/otp'
+      validation: 'http://localhost:8080/euclasews/api/v1/app/user/validate/otp'
     qrcode:
-        issuer: Entity Software Euclase
-        image:
-            url: http://localhost:8080/euclasews/images/qrcode/
-    api:
-        key: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJXRUIiLCJhdWQiOiJbTUFOQUdFX1JPTEVTLCBNQU5BR0VfR1JBREVfTEVWRUwsIE1BTkFHRV9TTEEsIEFVRElUX0xPRywgTUFOQUdFX0RPQ1VNRU5UX1dPUktGTE9XLCBNQU5BR0VfQlJBTkNILCBNQU5BR0VfQklMTElORywgQkFDS1VQX1JFU1RPUkUsIE1BTkFHRV9QVUJMSUNfSE9MSURBWSwgQ1JFQVRFX0FQUF9VU0VSLCBTRUFSQ0hfRE9DVU1FTlQsIERPQ1VNRU5UX05PVElGSUNBVElPTiwgQVBQUk9WRV9ET0NVTUVOVCwgUkVQT1JUUywgTUFOQUdFX0FQUF9VU0VSLCBNQU5BR0VfRE9DVU1FTlRfR1JPVVAsIENSRUFURV9ET0NVTUVOVCwgTUFOQUdFX0RPQ1VNRU5UX1RFTVBMQVRFLCBNQU5BR0VfREVQQVJUTUVOVF9VTklULCBWSUVXX1BST1RFQ1RFRF9ET0NVTUVOVCwgTUFOQUdFX05PVElGSUNBVElPTiwgTUFOQUdFX0NIQU5ORUwsIE1BTkFHRV9ERVBBUlRNRU5ULCBNQU5BR0VfREVTSUdOQVRJT04sIE1BTkFHRV9DT01QQU5ZLCBNQU5BR0VfSVBfQUREUkVTU10iLCJlbmNrZXkiOiJ0WllKMXdpK0hCU1FsT3ZvMG5ELzIzL1lBY25tbE91bGlXSG41WW45TTZKUDZ3NHhXRWtsZHB1NExOeHAyb3Z0cDZpUGtWNDF0WHRTTkZnaCIsImNoYW5uZWwiOiJXRUIiLCJpcCI6IjA6MDowOjA6MDowOjA6MSIsImFwaWtleSI6IlJvTUxhQ1FEYzhwQ2E0QTFBays5STRMeldKalVOeGdtUkc2dVVweHNhY2xpcXBTUExJbTBuYkZzemxmaHU3TDZVZmxuQ1F4RXIvOWZBUG9pWXZTM2EwL09pakxzUFJPWiIsImlzcyI6IkVudGl0eSBTb2Z0d2FyZSBDb21wYW55IiwiaWF0IjoxNzQ4NzA5NzM3LCJleHAiOjI1NTM1MjU3Mzd9.g0V_1MiVOE_D6UOZmI2beckKZx0v4N2UaY8f11dPcwU
-        #key: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJXRUIiLCJhdWQiOiJbTUFOQUdFX1JPTEVTLCBNQU5BR0VfR1JBREVfTEVWRUwsIE1BTkFHRV9TTEEsIEFVRElUX0xPRywgTUFOQUdFX0RPQ1VNRU5UX1dPUktGTE9XLCBNQU5BR0VfQlJBTkNILCBNQU5BR0VfQklMTElORywgQkFDS1VQX1JFU1RPUkUsIE1BTkFHRV9QVUJMSUNfSE9MSURBWSwgQ1JFQVRFX0FQUF9VU0VSLCBTRUFSQ0hfRE9DVU1FTlQsIERPQ1VNRU5UX05PVElGSUNBVElPTiwgQVBQUk9WRV9ET0NVTUVOVCwgUkVQT1JUUywgTUFOQUdFX0FQUF9VU0VSLCBNQU5BR0VfRE9DVU1FTlRfR1JPVVAsIENSRUFURV9ET0NVTUVOVCwgTUFOQUdFX0RPQ1VNRU5UX1RFTVBMQVRFLCBNQU5BR0VfREVQQVJUTUVOVF9VTklULCBWSUVXX1BST1RFQ1RFRF9ET0NVTUVOVCwgTUFOQUdFX05PVElGSUNBVElPTiwgTUFOQUdFX0NIQU5ORUwsIE1BTkFHRV9ERVBBUlRNRU5ULCBNQU5BR0VfREVTSUdOQVRJT04sIE1BTkFHRV9DT01QQU5ZLCBNQU5BR0VfSVBfQUREUkVTU10iLCJlbmNrZXkiOiJqTWZXdWdKOFB0dkNEZnYxc0s2NDA1em8xUGIxN0dFOFlEQ0tvcVQrQlNRcEc5Ti9oWWJUOE9kZUEzd1lxZ0tOYmVCMDZ2b2NEQXRuamJwRyIsImNoYW5uZWwiOiJXRUIiLCJpcCI6IjA6MDowOjA6MDowOjA6MSIsImFwaWtleSI6IjVEcDVKTDlWcklvMUtuM2tYLzdqVysvejdGditJdTVqMUxXWWpkN1haUVNXWEVDWlN2YlkyZ014N3hYeHFNWTQzOXIvWXM0Zk9Vck9SUXlWL2VCRllvQ0hsNm1VaE5ONiIsImlzcyI6IkVudGl0eSBTb2Z0d2FyZSBDb21wYW55IiwiaWF0IjoxNzUxODkyMzk3LCJleHAiOjI1NTM1MTE1OTZ9.qehwDWgezjqlhr25lvl5rCRVJJeLsGvSo0BmCAARgRQ
-        account:
-            statement: http://localhost:8080/euclasews/api/v1/wallet/history
-        twofactor:
-            enable: http://localhost:8080/euclasews/api/v1/user/twofa
-            validate: http://localhost:8080/euclasews/api/v1/user/validate/twofa
-        validate:
-            pin: http://localhost:8080/euclasews/api/v1/app/user/validate/pin
-            securityquestion: http://localhost:8080/euclasews/api/v1/app/user/validate/security-question
-        otp: 
-            notification: http://localhost:8080/euclasews/api/v1/notification/otp
-            validation: http://localhost:8080/euclasews/api/v1/app/user/validate/otp
-        qrcode:
-            generate: http://localhost:8080/euclasews/api/v1/qrcode
-        beneficiary:
-            list: http://localhost:8080/euclasews/api/v1/funds-transfer/beneficiary/list
-            add: http://localhost:8080/euclasews/api/v1/funds-transfer/beneficiary/add
-            delete: http://localhost:8080/euclasews/api/v1/funds-transfer/beneficiary/delete
-        dashboard: http://localhost:8080/euclasews/api/v1/dashboard
-        signin: http://localhost:8080/euclasews/api/v1/app/user/signin
-        signup: http://localhost:8080/euclasews/api/v1/app/user/signup/web
-        changedefaultpassword: http://localhost:8080/euclasews/api/v1/app/user/default-password
-        changepassword: http://localhost:8080/euclasews/api/v1/app/user/change-password
-        forgotpassword: http://localhost:8080/euclasews/api/v1/app/user/forgot-password
-        changepin: http://localhost:8080/euclasews/api/v1/app/user/change-pin
-        changesecurityquestion: http://localhost:8080/euclasews/api/v1/app/user/change-security-question
-        activation: http://localhost:8080/euclasews/api/v1/app/user/signup/activation
-        totp: http://localhost:8080/euclasews/api/v1/authenticator/google/otp
-        profile:
-            details: http://localhost:8080/euclasews/api/v1/dashboard
-        appuser:
-            generic:
-               update: http://localhost:8080/euclasews/api/v1/app/user/generic/update
-            group:
-               fetch: http://localhost:8080/euclasews/api/v1/group/role/details
-               update: http://localhost:8080/euclasews/api/v1/group/role/update
-            list: http://localhost:8080/euclasews/api/v1/app/user/list
-            create: http://localhost:8080/euclasews/api/v1/app/user/signup
-            update: http://localhost:8080/euclasews/api/v1/app/user/update
-            delete: http://localhost:8080/euclasews/api/v1/app/user/delete
-            fetch: http://localhost:8080/euclasews/api/v1/app/user/details
-            online: http://localhost:8080/euclasews/api/v1/app/user/online
-            role:
-              list: http://localhost:8080/euclasews/api/v1/role/group/list
-              fetch: http://localhost:8080/euclasews/api/v1/role/group/details
-              create: http://localhost:8080/euclasews/api/v1/role/group/create
-              update: http://localhost:8080/euclasews/api/v1/role/group/update
-              delete: http://localhost:8080/euclasews/api/v1/role/group/delete
-        company:
-            list: http://localhost:8080/euclasews/api/v1/company/list
-            create: http://localhost:8080/euclasews/api/v1/company/create
-            update: http://localhost:8080/euclasews/api/v1/company/update
-            delete: http://localhost:8080/euclasews/api/v1/company/delete
-            fetch: http://localhost:8080/euclasews/api/v1/company
-            branch: http://localhost:8080/euclasews/api/v1/company/branch
-            documentgroup: http://localhost:8080/euclasews/api/v1/company/document/group
-        channel:
-            list: http://localhost:8080/euclasews/api/v1/channel/list
-            create: http://localhost:8080/euclasews/api/v1/channel/create
-            update: http://localhost:8080/euclasews/api/v1/channel/update
-            delete: http://localhost:8080/euclasews/api/v1/channel/delete
-            fetch: http://localhost:8080/euclasews/api/v1/channel
-            topup: http://localhost:8080/euclasews/api/v1/channel/topup
-        ipaddress:
-            list: http://localhost:8080/euclasews/api/v1/ip/list
-            create: http://localhost:8080/euclasews/api/v1/ip/create
-            update: http://localhost:8080/euclasews/api/v1/ip/update
-            delete: http://localhost:8080/euclasews/api/v1/ip/delete
-            fetch: http://localhost:8080/euclasews/api/v1/ip
-        apiband:
-            list: http://localhost:8080/euclasews/api/v1/api/band/list
-            create: http://localhost:8080/euclasews/api/v1/api/band/create
-            update: http://localhost:8080/euclasews/api/v1/api/band/update
-            delete: http://localhost:8080/euclasews/api/v1/api/band/delete
-            fetch: http://localhost:8080/euclasews/api/v1/api/band
-        department:
-            list: http://localhost:8080/euclasews/api/v1/department/list
-            create: http://localhost:8080/euclasews/api/v1/department/create
-            update: http://localhost:8080/euclasews/api/v1/department/update
-            delete: http://localhost:8080/euclasews/api/v1/department/delete
-            fetch: http://localhost:8080/euclasews/api/v1/department
-            unit: http://localhost:8080/euclasews/api/v1/department/unit
-        designation:
-            list: http://localhost:8080/euclasews/api/v1/designation/list
-            create: http://localhost:8080/euclasews/api/v1/designation/create
-            update: http://localhost:8080/euclasews/api/v1/designation/update
-            delete: http://localhost:8080/euclasews/api/v1/designation/delete
-            fetch: http://localhost:8080/euclasews/api/v1/designation
-        departmentunit:
-            department: http://localhost:8080/euclasews/api/v1/department/unit
-            list: http://localhost:8080/euclasews/api/v1/unit/list
-            create: http://localhost:8080/euclasews/api/v1/unit/create
-            update: http://localhost:8080/euclasews/api/v1/unit/update
-            delete: http://localhost:8080/euclasews/api/v1/unit/delete
-            fetch: http://localhost:8080/euclasews/api/v1/unit
-        branch:
-            list: http://localhost:8080/euclasews/api/v1/branch/list
-            create: http://localhost:8080/euclasews/api/v1/branch/create
-            update: http://localhost:8080/euclasews/api/v1/branch/update
-            delete: http://localhost:8080/euclasews/api/v1/branch/delete
-            fetch: http://localhost:8080/euclasews/api/v1/branch
-            department: http://localhost:8080/euclasews/api/v1/branch/department
-        gradelevel:
-            list: http://localhost:8080/euclasews/api/v1/grade-level/list
-            create: http://localhost:8080/euclasews/api/v1/grade-level/create
-            update: http://localhost:8080/euclasews/api/v1/grade-level/update
-            delete: http://localhost:8080/euclasews/api/v1/grade-level/delete
-            fetch: http://localhost:8080/euclasews/api/v1/grade-level
-        document:
-            access: http://localhost:8080/euclasews/api/v1/document/access
-            report: http://localhost:8080/euclasews/api/v1/document/report
-            group:
-                list: http://localhost:8080/euclasews/api/v1/document/group/list
-                create: http://localhost:8080/euclasews/api/v1/document/group/create
-                update: http://localhost:8080/euclasews/api/v1/document/group/update
-                delete: http://localhost:8080/euclasews/api/v1/document/group/delete
-                fetch: http://localhost:8080/euclasews/api/v1/document/group
-                type: http://localhost:8080/euclasews/api/v1/document/group/type
-            type:
-                list: http://localhost:8080/euclasews/api/v1/document/type/list
-                create: http://localhost:8080/euclasews/api/v1/document/type/create
-                update: http://localhost:8080/euclasews/api/v1/document/type/update
-                delete: http://localhost:8080/euclasews/api/v1/document/type/delete
-                fetch: http://localhost:8080/euclasews/api/v1/document/type
-            create: http://localhost:8080/euclasews/api/v1/document
-            process: http://localhost:8080/euclasews/api/v1/document/process
-            search: http://localhost:8080/euclasews/api/v1/document/search
-            advancedsearch: http://localhost:8080/euclasews/api/v1/document/advanced/search
-            signature: http://localhost:8080/euclasews/api/v1/document/signature
-            archive: http://localhost:8080/euclasews/api/v1/document/archive
-            approve: http://localhost:8080/euclasews/api/v1/document/approve
-            details: http://localhost:8080/euclasews/api/v1/document/details
-            self: http://localhost:8080/euclasews/api/v1/document/self
-            pending: http://localhost:8080/euclasews/api/v1/document/pending
-            uploaddelete: http://localhost:8080/euclasews/api/v1/document/upload/delete
-            draft:
-                fetch: http://localhost:8080/euclasews/api/v1/document/draft
-                delete: http://localhost:8080/euclasews/api/v1/document/draft/delete
-            template:
-                update: http://localhost:8080/euclasews/api/v1/document/template/update
-            workflow:
-                update: http://localhost:8080/euclasews/api/v1/document/workflow/update
-                history: http://localhost:8080/euclasews/api/v1/document/workflow/history
-        holidays:
-            list: http://localhost:8080/euclasews/api/v1/holidays/list
-            create: http://localhost:8080/euclasews/api/v1/holidays/create
-            update: http://localhost:8080/euclasews/api/v1/holidays/update
-            delete: http://localhost:8080/euclasews/api/v1/holidays/delete
-            fetch: http://localhost:8080/euclasews/api/v1/holidays
-        sla:
-            list: http://localhost:8080/euclasews/api/v1/sla/list
-            create: http://localhost:8080/euclasews/api/v1/sla/create
-            update: http://localhost:8080/euclasews/api/v1/sla/update
-            delete: http://localhost:8080/euclasews/api/v1/sla/delete
-            fetch: http://localhost:8080/euclasews/api/v1/sla
-        backup:
-            list: http://localhost:8080/euclasews/api/v1/document/backup/list
-            create: http://localhost:8080/euclasews/api/v1/document/backup/create
-            update: http://localhost:8080/euclasews/api/v1/document/backup/update
-            delete: http://localhost:8080/euclasews/api/v1/document/backup/delete
-            fetch: http://localhost:8080/euclasews/api/v1/document/backup
-        restore:
-            list: http://localhost:8080/euclasews/api/v1/document/restore/list
-            create: http://localhost:8080/euclasews/api/v1/document/restore/create
-        notification:
-            list: http://localhost:8080/euclasews/api/v1/document/notification/list
-            create: http://localhost:8080/euclasews/api/v1/document/notification/create
-            update: http://localhost:8080/euclasews/api/v1/document/notification/update
-            delete: http://localhost:8080/euclasews/api/v1/document/notification/delete
-            fetch: http://localhost:8080/euclasews/api/v1/document/notification
-            report: http://localhost:8080/euclasews/api/v1/notification/report
-            email:
-              retry: http://localhost:8080/euclasews/api/v1/notification/email/retry
-              delete: http://localhost:8080/euclasews/api/v1/notification/email/delete
-        pushnotification:
-            list: http://localhost:8080/euclasews/api/v1/notification/push/list
-            create: http://localhost:8080/euclasews/api/v1/notification/push/create
-            update: http://localhost:8080/euclasews/api/v1/notification/push/update
-            delete: http://localhost:8080/euclasews/api/v1/notification/push/delete
-            fetch: http://localhost:8080/euclasews/api/v1/notification/push
-            selfupdate: http://localhost:8080/euclasews/api/v1/notification/push/update/status
-            selflist: http://localhost:8080/euclasews/api/v1/notification/push/user
-
+      generate: 'http://localhost:8080/euclasews/api/v1/qrcode'
+    beneficiary:
+      list: 'http://localhost:8080/euclasews/api/v1/funds-transfer/beneficiary/list'
+      add: 'http://localhost:8080/euclasews/api/v1/funds-transfer/beneficiary/add'
+      delete: 'http://localhost:8080/euclasews/api/v1/funds-transfer/beneficiary/delete'
+    dashboard: 'http://localhost:8080/euclasews/api/v1/dashboard'
+    signin: 'http://localhost:8080/euclasews/api/v1/app/user/signin'
+    signup: 'http://localhost:8080/euclasews/api/v1/app/user/signup/web'
+    changedefaultpassword: 'http://localhost:8080/euclasews/api/v1/app/user/default-password'
+    changepassword: 'http://localhost:8080/euclasews/api/v1/app/user/change-password'
+    forgotpassword: 'http://localhost:8080/euclasews/api/v1/app/user/forgot-password'
+    changepin: 'http://localhost:8080/euclasews/api/v1/app/user/change-pin'
+    changesecurityquestion: 'http://localhost:8080/euclasews/api/v1/app/user/change-security-question'
+    activation: 'http://localhost:8080/euclasews/api/v1/app/user/signup/activation'
+    totp: 'http://localhost:8080/euclasews/api/v1/authenticator/google/otp'
+    profile:
+      details: 'http://localhost:8080/euclasews/api/v1/dashboard'
+    appuser:
+      generic:
+        update: 'http://localhost:8080/euclasews/api/v1/app/user/generic/update'
+      group:
+        fetch: 'http://localhost:8080/euclasews/api/v1/group/role/details'
+        update: 'http://localhost:8080/euclasews/api/v1/group/role/update'
+      list: 'http://localhost:8080/euclasews/api/v1/app/user/list'
+      create: 'http://localhost:8080/euclasews/api/v1/app/user/signup'
+      update: 'http://localhost:8080/euclasews/api/v1/app/user/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/app/user/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/app/user/details'
+      online: 'http://localhost:8080/euclasews/api/v1/app/user/online'
+      role:
+        list: 'http://localhost:8080/euclasews/api/v1/role/group/list'
+        fetch: 'http://localhost:8080/euclasews/api/v1/role/group/details'
+        create: 'http://localhost:8080/euclasews/api/v1/role/group/create'
+        update: 'http://localhost:8080/euclasews/api/v1/role/group/update'
+        delete: 'http://localhost:8080/euclasews/api/v1/role/group/delete'
+    company:
+      list: 'http://localhost:8080/euclasews/api/v1/company/list'
+      create: 'http://localhost:8080/euclasews/api/v1/company/create'
+      update: 'http://localhost:8080/euclasews/api/v1/company/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/company/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/company'
+      branch: 'http://localhost:8080/euclasews/api/v1/company/branch'
+      documentgroup: 'http://localhost:8080/euclasews/api/v1/company/document/group'
+    channel:
+      list: 'http://localhost:8080/euclasews/api/v1/channel/list'
+      create: 'http://localhost:8080/euclasews/api/v1/channel/create'
+      update: 'http://localhost:8080/euclasews/api/v1/channel/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/channel/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/channel'
+      topup: 'http://localhost:8080/euclasews/api/v1/channel/topup'
+    ipaddress:
+      list: 'http://localhost:8080/euclasews/api/v1/ip/list'
+      create: 'http://localhost:8080/euclasews/api/v1/ip/create'
+      update: 'http://localhost:8080/euclasews/api/v1/ip/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/ip/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/ip'
+    apiband:
+      list: 'http://localhost:8080/euclasews/api/v1/api/band/list'
+      create: 'http://localhost:8080/euclasews/api/v1/api/band/create'
+      update: 'http://localhost:8080/euclasews/api/v1/api/band/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/api/band/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/api/band'
+    department:
+      list: 'http://localhost:8080/euclasews/api/v1/department/list'
+      create: 'http://localhost:8080/euclasews/api/v1/department/create'
+      update: 'http://localhost:8080/euclasews/api/v1/department/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/department/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/department'
+      unit: 'http://localhost:8080/euclasews/api/v1/department/unit'
+    designation:
+      list: 'http://localhost:8080/euclasews/api/v1/designation/list'
+      create: 'http://localhost:8080/euclasews/api/v1/designation/create'
+      update: 'http://localhost:8080/euclasews/api/v1/designation/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/designation/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/designation'
+    departmentunit:
+      department: 'http://localhost:8080/euclasews/api/v1/department/unit'
+      list: 'http://localhost:8080/euclasews/api/v1/unit/list'
+      create: 'http://localhost:8080/euclasews/api/v1/unit/create'
+      update: 'http://localhost:8080/euclasews/api/v1/unit/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/unit/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/unit'
+    branch:
+      list: 'http://localhost:8080/euclasews/api/v1/branch/list'
+      create: 'http://localhost:8080/euclasews/api/v1/branch/create'
+      update: 'http://localhost:8080/euclasews/api/v1/branch/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/branch/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/branch'
+      department: 'http://localhost:8080/euclasews/api/v1/branch/department'
+    gradelevel:
+      list: 'http://localhost:8080/euclasews/api/v1/grade-level/list'
+      create: 'http://localhost:8080/euclasews/api/v1/grade-level/create'
+      update: 'http://localhost:8080/euclasews/api/v1/grade-level/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/grade-level/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/grade-level'
+    document:
+      access: 'http://localhost:8080/euclasews/api/v1/document/access'
+      report: 'http://localhost:8080/euclasews/api/v1/document/report'
+      group:
+        list: 'http://localhost:8080/euclasews/api/v1/document/group/list'
+        create: 'http://localhost:8080/euclasews/api/v1/document/group/create'
+        update: 'http://localhost:8080/euclasews/api/v1/document/group/update'
+        delete: 'http://localhost:8080/euclasews/api/v1/document/group/delete'
+        fetch: 'http://localhost:8080/euclasews/api/v1/document/group'
+        type: 'http://localhost:8080/euclasews/api/v1/document/group/type'
+      type:
+        list: 'http://localhost:8080/euclasews/api/v1/document/type/list'
+        create: 'http://localhost:8080/euclasews/api/v1/document/type/create'
+        update: 'http://localhost:8080/euclasews/api/v1/document/type/update'
+        delete: 'http://localhost:8080/euclasews/api/v1/document/type/delete'
+        fetch: 'http://localhost:8080/euclasews/api/v1/document/type'
+      create: 'http://localhost:8080/euclasews/api/v1/document'
+      process: 'http://localhost:8080/euclasews/api/v1/document/process'
+      search: 'http://localhost:8080/euclasews/api/v1/document/search'
+      advancedsearch: 'http://localhost:8080/euclasews/api/v1/document/advanced/search'
+      signature: 'http://localhost:8080/euclasews/api/v1/document/signature'
+      archive: 'http://localhost:8080/euclasews/api/v1/document/archive'
+      approve: 'http://localhost:8080/euclasews/api/v1/document/approve'
+      details: 'http://localhost:8080/euclasews/api/v1/document/details'
+      self: 'http://localhost:8080/euclasews/api/v1/document/self'
+      pending: 'http://localhost:8080/euclasews/api/v1/document/pending'
+      uploaddelete: 'http://localhost:8080/euclasews/api/v1/document/upload/delete'
+      draft:
+        fetch: 'http://localhost:8080/euclasews/api/v1/document/draft'
+        delete: 'http://localhost:8080/euclasews/api/v1/document/draft/delete'
+      template:
+        update: 'http://localhost:8080/euclasews/api/v1/document/template/update'
+      workflow:
+        update: 'http://localhost:8080/euclasews/api/v1/document/workflow/update'
+        history: 'http://localhost:8080/euclasews/api/v1/document/workflow/history'
+    holidays:
+      list: 'http://localhost:8080/euclasews/api/v1/holidays/list'
+      create: 'http://localhost:8080/euclasews/api/v1/holidays/create'
+      update: 'http://localhost:8080/euclasews/api/v1/holidays/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/holidays/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/holidays'
+    sla:
+      list: 'http://localhost:8080/euclasews/api/v1/sla/list'
+      create: 'http://localhost:8080/euclasews/api/v1/sla/create'
+      update: 'http://localhost:8080/euclasews/api/v1/sla/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/sla/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/sla'
+    backup:
+      list: 'http://localhost:8080/euclasews/api/v1/document/backup/list'
+      create: 'http://localhost:8080/euclasews/api/v1/document/backup/create'
+      update: 'http://localhost:8080/euclasews/api/v1/document/backup/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/document/backup/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/document/backup'
+    restore:
+      list: 'http://localhost:8080/euclasews/api/v1/document/restore/list'
+      create: 'http://localhost:8080/euclasews/api/v1/document/restore/create'
+    notification:
+      list: 'http://localhost:8080/euclasews/api/v1/document/notification/list'
+      create: 'http://localhost:8080/euclasews/api/v1/document/notification/create'
+      update: 'http://localhost:8080/euclasews/api/v1/document/notification/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/document/notification/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/document/notification'
+      report: 'http://localhost:8080/euclasews/api/v1/notification/report'
+      email:
+        retry: 'http://localhost:8080/euclasews/api/v1/notification/email/retry'
+        delete: 'http://localhost:8080/euclasews/api/v1/notification/email/delete'
+    pushnotification:
+      list: 'http://localhost:8080/euclasews/api/v1/notification/push/list'
+      create: 'http://localhost:8080/euclasews/api/v1/notification/push/create'
+      update: 'http://localhost:8080/euclasews/api/v1/notification/push/update'
+      delete: 'http://localhost:8080/euclasews/api/v1/notification/push/delete'
+      fetch: 'http://localhost:8080/euclasews/api/v1/notification/push'
+      selfupdate: 'http://localhost:8080/euclasews/api/v1/notification/push/update/status'
+      selflist: 'http://localhost:8080/euclasews/api/v1/notification/push/user'
